@@ -9,7 +9,6 @@ class BalanceModel with _$BalanceModel {
   const factory BalanceModel({
     required int actualBalance,
     required String currentMonth,
-    required int id,
 }) = _BalanceModel;
 
 

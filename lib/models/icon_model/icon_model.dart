@@ -9,8 +9,6 @@ class IconModel with _$IconModel {
   const factory IconModel({
     required String color,
     required String pathToIcon,
-    required String nameIcon,
-    required int id,
 }) = _IconModel;
 
   factory IconModel.fromJson(Map<String, dynamic> json) => _$IconModelFromJson(json);

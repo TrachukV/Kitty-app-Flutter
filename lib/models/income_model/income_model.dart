@@ -9,7 +9,6 @@ class IncomeModel with _$IncomeModel {
   const factory IncomeModel({
     required int income,
     required String currentMonth,
-    required int id,
   }) = _IncomeModel;
 
   factory IncomeModel.fromJson(Map<String, dynamic> json) => _$IncomeModelFromJson(json);

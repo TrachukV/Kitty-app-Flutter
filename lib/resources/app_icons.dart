@@ -44,4 +44,24 @@ class AppIcons {
   static SvgPicture coloredElectronics = SvgPicture.asset('$_path/colored_electronics.svg');
   static SvgPicture coloredEducation = SvgPicture.asset('$_path/colored_education.svg');
   static SvgPicture coloredDonate = SvgPicture.asset('$_path/colored_cafe.svg');
+  // categories
+  static const String cafe = '$_path/colored_cafe.svg';
+  static const String donate = '$_path/colored_donate.svg';
+  static const String education = '$_path/colored_education.svg';
+  static const String electronics = '$_path/colored_electronics.svg';
+  static const String fuel = '$_path/colored_fuel.svg';
+  static const String gifts = '$_path/colored_gifts.svg';
+  static const String groceries = '$_path/colored_groceries.svg';
+  static const String health = '$_path/colored_health.svg';
+  static const String institute = '$_path/colored_institute.svg';
+  static const String laundry = '$_path/colored_laundry.svg';
+  static const String liquor = '$_path/colored_liquor.svg';
+  static const String maintenance = '$_path/colored_maintenance.svg';
+  static const String money = '$_path/colored_money.svg';
+  static const String party = '$_path/colored_party.svg';
+  static const String restaurant = '$_path/colored_restaurant.svg';
+  static const String savings = '$_path/colored_savings.svg';
+  static const String selfDevelopment = '$_path/colored_self_development.svg';
+  static const String sport = '$_path/colored_sport.svg';
+  static const String transportation = '$_path/colored_transportation.svg';
 }

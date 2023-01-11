@@ -9,7 +9,6 @@ class ExpensesModel with _$ExpensesModel {
   const factory ExpensesModel({
     required int totalExpenses,
     required String currentMonth,
-    required int id,
   }) = _ExpensesModel;
 
   factory ExpensesModel.fromJson(Map<String, dynamic> json) => _$ExpensesModelFromJson(json);

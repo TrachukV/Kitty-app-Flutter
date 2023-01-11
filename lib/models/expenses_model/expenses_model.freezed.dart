@@ -22,7 +22,6 @@ ExpensesModel _$ExpensesModelFromJson(Map<String, dynamic> json) {
 mixin _$ExpensesModel {
   int get totalExpenses => throw _privateConstructorUsedError;
   String get currentMonth => throw _privateConstructorUsedError;
-  int get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +35,7 @@ abstract class $ExpensesModelCopyWith<$Res> {
           ExpensesModel value, $Res Function(ExpensesModel) then) =
       _$ExpensesModelCopyWithImpl<$Res, ExpensesModel>;
   @useResult
-  $Res call({int totalExpenses, String currentMonth, int id});
+  $Res call({int totalExpenses, String currentMonth});
 }
 
 /// @nodoc
@@ -54,7 +53,6 @@ class _$ExpensesModelCopyWithImpl<$Res, $Val extends ExpensesModel>
   $Res call({
     Object? totalExpenses = null,
     Object? currentMonth = null,
-    Object? id = null,
   }) {
     return _then(_value.copyWith(
       totalExpenses: null == totalExpenses
@@ -65,10 +63,6 @@ class _$ExpensesModelCopyWithImpl<$Res, $Val extends ExpensesModel>
           ? _value.currentMonth
           : currentMonth // ignore: cast_nullable_to_non_nullable
               as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
     ) as $Val);
   }
 }
@@ -81,7 +75,7 @@ abstract class _$$_ExpensesModelCopyWith<$Res>
       __$$_ExpensesModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int totalExpenses, String currentMonth, int id});
+  $Res call({int totalExpenses, String currentMonth});
 }
 
 /// @nodoc
@@ -97,7 +91,6 @@ class __$$_ExpensesModelCopyWithImpl<$Res>
   $Res call({
     Object? totalExpenses = null,
     Object? currentMonth = null,
-    Object? id = null,
   }) {
     return _then(_$_ExpensesModel(
       totalExpenses: null == totalExpenses
@@ -108,10 +101,6 @@ class __$$_ExpensesModelCopyWithImpl<$Res>
           ? _value.currentMonth
           : currentMonth // ignore: cast_nullable_to_non_nullable
               as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
@@ -120,9 +109,7 @@ class __$$_ExpensesModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ExpensesModel implements _ExpensesModel {
   const _$_ExpensesModel(
-      {required this.totalExpenses,
-      required this.currentMonth,
-      required this.id});
+      {required this.totalExpenses, required this.currentMonth});
 
   factory _$_ExpensesModel.fromJson(Map<String, dynamic> json) =>
       _$$_ExpensesModelFromJson(json);
@@ -131,12 +118,10 @@ class _$_ExpensesModel implements _ExpensesModel {
   final int totalExpenses;
   @override
   final String currentMonth;
-  @override
-  final int id;
 
   @override
   String toString() {
-    return 'ExpensesModel(totalExpenses: $totalExpenses, currentMonth: $currentMonth, id: $id)';
+    return 'ExpensesModel(totalExpenses: $totalExpenses, currentMonth: $currentMonth)';
   }
 
   @override
@@ -147,13 +132,12 @@ class _$_ExpensesModel implements _ExpensesModel {
             (identical(other.totalExpenses, totalExpenses) ||
                 other.totalExpenses == totalExpenses) &&
             (identical(other.currentMonth, currentMonth) ||
-                other.currentMonth == currentMonth) &&
-            (identical(other.id, id) || other.id == id));
+                other.currentMonth == currentMonth));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, totalExpenses, currentMonth, id);
+  int get hashCode => Object.hash(runtimeType, totalExpenses, currentMonth);
 
   @JsonKey(ignore: true)
   @override
@@ -172,8 +156,7 @@ class _$_ExpensesModel implements _ExpensesModel {
 abstract class _ExpensesModel implements ExpensesModel {
   const factory _ExpensesModel(
       {required final int totalExpenses,
-      required final String currentMonth,
-      required final int id}) = _$_ExpensesModel;
+      required final String currentMonth}) = _$_ExpensesModel;
 
   factory _ExpensesModel.fromJson(Map<String, dynamic> json) =
       _$_ExpensesModel.fromJson;
@@ -182,8 +165,6 @@ abstract class _ExpensesModel implements ExpensesModel {
   int get totalExpenses;
   @override
   String get currentMonth;
-  @override
-  int get id;
   @override
   @JsonKey(ignore: true)
   _$$_ExpensesModelCopyWith<_$_ExpensesModel> get copyWith =>

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kitty_app/blocs/navigation_bloc.dart';
+import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
+import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
@@ -39,6 +40,12 @@ class MainScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => DatabaseBloc()
+            ..add(
+              DatabaseInitial(),
+            ),
+        ),
+        BlocProvider(
           create: (context) => NavigationBloc(),
         ),
       ],
@@ -67,8 +74,6 @@ class MainScreen extends StatelessWidget {
                   )
                 : null,
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-            extendBody: true,
-            extendBodyBehindAppBar: true,
             bottomNavigationBar: state.currentIndex == 3
                 ? null
                 : BottomBar(

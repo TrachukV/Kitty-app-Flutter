@@ -22,8 +22,6 @@ IconModel _$IconModelFromJson(Map<String, dynamic> json) {
 mixin _$IconModel {
   String get color => throw _privateConstructorUsedError;
   String get pathToIcon => throw _privateConstructorUsedError;
-  String get nameIcon => throw _privateConstructorUsedError;
-  int get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +34,7 @@ abstract class $IconModelCopyWith<$Res> {
   factory $IconModelCopyWith(IconModel value, $Res Function(IconModel) then) =
       _$IconModelCopyWithImpl<$Res, IconModel>;
   @useResult
-  $Res call({String color, String pathToIcon, String nameIcon, int id});
+  $Res call({String color, String pathToIcon});
 }
 
 /// @nodoc
@@ -54,8 +52,6 @@ class _$IconModelCopyWithImpl<$Res, $Val extends IconModel>
   $Res call({
     Object? color = null,
     Object? pathToIcon = null,
-    Object? nameIcon = null,
-    Object? id = null,
   }) {
     return _then(_value.copyWith(
       color: null == color
@@ -66,14 +62,6 @@ class _$IconModelCopyWithImpl<$Res, $Val extends IconModel>
           ? _value.pathToIcon
           : pathToIcon // ignore: cast_nullable_to_non_nullable
               as String,
-      nameIcon: null == nameIcon
-          ? _value.nameIcon
-          : nameIcon // ignore: cast_nullable_to_non_nullable
-              as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
     ) as $Val);
   }
 }
@@ -85,7 +73,7 @@ abstract class _$$_IconModelCopyWith<$Res> implements $IconModelCopyWith<$Res> {
       __$$_IconModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String color, String pathToIcon, String nameIcon, int id});
+  $Res call({String color, String pathToIcon});
 }
 
 /// @nodoc
@@ -101,8 +89,6 @@ class __$$_IconModelCopyWithImpl<$Res>
   $Res call({
     Object? color = null,
     Object? pathToIcon = null,
-    Object? nameIcon = null,
-    Object? id = null,
   }) {
     return _then(_$_IconModel(
       color: null == color
@@ -113,14 +99,6 @@ class __$$_IconModelCopyWithImpl<$Res>
           ? _value.pathToIcon
           : pathToIcon // ignore: cast_nullable_to_non_nullable
               as String,
-      nameIcon: null == nameIcon
-          ? _value.nameIcon
-          : nameIcon // ignore: cast_nullable_to_non_nullable
-              as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
@@ -128,11 +106,7 @@ class __$$_IconModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_IconModel implements _IconModel {
-  const _$_IconModel(
-      {required this.color,
-      required this.pathToIcon,
-      required this.nameIcon,
-      required this.id});
+  const _$_IconModel({required this.color, required this.pathToIcon});
 
   factory _$_IconModel.fromJson(Map<String, dynamic> json) =>
       _$$_IconModelFromJson(json);
@@ -141,14 +115,10 @@ class _$_IconModel implements _IconModel {
   final String color;
   @override
   final String pathToIcon;
-  @override
-  final String nameIcon;
-  @override
-  final int id;
 
   @override
   String toString() {
-    return 'IconModel(color: $color, pathToIcon: $pathToIcon, nameIcon: $nameIcon, id: $id)';
+    return 'IconModel(color: $color, pathToIcon: $pathToIcon)';
   }
 
   @override
@@ -158,15 +128,12 @@ class _$_IconModel implements _IconModel {
             other is _$_IconModel &&
             (identical(other.color, color) || other.color == color) &&
             (identical(other.pathToIcon, pathToIcon) ||
-                other.pathToIcon == pathToIcon) &&
-            (identical(other.nameIcon, nameIcon) ||
-                other.nameIcon == nameIcon) &&
-            (identical(other.id, id) || other.id == id));
+                other.pathToIcon == pathToIcon));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, color, pathToIcon, nameIcon, id);
+  int get hashCode => Object.hash(runtimeType, color, pathToIcon);
 
   @JsonKey(ignore: true)
   @override
@@ -185,9 +152,7 @@ class _$_IconModel implements _IconModel {
 abstract class _IconModel implements IconModel {
   const factory _IconModel(
       {required final String color,
-      required final String pathToIcon,
-      required final String nameIcon,
-      required final int id}) = _$_IconModel;
+      required final String pathToIcon}) = _$_IconModel;
 
   factory _IconModel.fromJson(Map<String, dynamic> json) =
       _$_IconModel.fromJson;
@@ -196,10 +161,6 @@ abstract class _IconModel implements IconModel {
   String get color;
   @override
   String get pathToIcon;
-  @override
-  String get nameIcon;
-  @override
-  int get id;
   @override
   @JsonKey(ignore: true)
   _$$_IconModelCopyWith<_$_IconModel> get copyWith =>

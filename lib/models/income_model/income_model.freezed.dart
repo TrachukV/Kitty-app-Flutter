@@ -22,7 +22,6 @@ IncomeModel _$IncomeModelFromJson(Map<String, dynamic> json) {
 mixin _$IncomeModel {
   int get income => throw _privateConstructorUsedError;
   String get currentMonth => throw _privateConstructorUsedError;
-  int get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +35,7 @@ abstract class $IncomeModelCopyWith<$Res> {
           IncomeModel value, $Res Function(IncomeModel) then) =
       _$IncomeModelCopyWithImpl<$Res, IncomeModel>;
   @useResult
-  $Res call({int income, String currentMonth, int id});
+  $Res call({int income, String currentMonth});
 }
 
 /// @nodoc
@@ -54,7 +53,6 @@ class _$IncomeModelCopyWithImpl<$Res, $Val extends IncomeModel>
   $Res call({
     Object? income = null,
     Object? currentMonth = null,
-    Object? id = null,
   }) {
     return _then(_value.copyWith(
       income: null == income
@@ -65,10 +63,6 @@ class _$IncomeModelCopyWithImpl<$Res, $Val extends IncomeModel>
           ? _value.currentMonth
           : currentMonth // ignore: cast_nullable_to_non_nullable
               as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
     ) as $Val);
   }
 }
@@ -81,7 +75,7 @@ abstract class _$$_IncomeModelCopyWith<$Res>
       __$$_IncomeModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int income, String currentMonth, int id});
+  $Res call({int income, String currentMonth});
 }
 
 /// @nodoc
@@ -97,7 +91,6 @@ class __$$_IncomeModelCopyWithImpl<$Res>
   $Res call({
     Object? income = null,
     Object? currentMonth = null,
-    Object? id = null,
   }) {
     return _then(_$_IncomeModel(
       income: null == income
@@ -108,10 +101,6 @@ class __$$_IncomeModelCopyWithImpl<$Res>
           ? _value.currentMonth
           : currentMonth // ignore: cast_nullable_to_non_nullable
               as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
@@ -119,8 +108,7 @@ class __$$_IncomeModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_IncomeModel implements _IncomeModel {
-  const _$_IncomeModel(
-      {required this.income, required this.currentMonth, required this.id});
+  const _$_IncomeModel({required this.income, required this.currentMonth});
 
   factory _$_IncomeModel.fromJson(Map<String, dynamic> json) =>
       _$$_IncomeModelFromJson(json);
@@ -129,12 +117,10 @@ class _$_IncomeModel implements _IncomeModel {
   final int income;
   @override
   final String currentMonth;
-  @override
-  final int id;
 
   @override
   String toString() {
-    return 'IncomeModel(income: $income, currentMonth: $currentMonth, id: $id)';
+    return 'IncomeModel(income: $income, currentMonth: $currentMonth)';
   }
 
   @override
@@ -144,13 +130,12 @@ class _$_IncomeModel implements _IncomeModel {
             other is _$_IncomeModel &&
             (identical(other.income, income) || other.income == income) &&
             (identical(other.currentMonth, currentMonth) ||
-                other.currentMonth == currentMonth) &&
-            (identical(other.id, id) || other.id == id));
+                other.currentMonth == currentMonth));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, income, currentMonth, id);
+  int get hashCode => Object.hash(runtimeType, income, currentMonth);
 
   @JsonKey(ignore: true)
   @override
@@ -169,8 +154,7 @@ class _$_IncomeModel implements _IncomeModel {
 abstract class _IncomeModel implements IncomeModel {
   const factory _IncomeModel(
       {required final int income,
-      required final String currentMonth,
-      required final int id}) = _$_IncomeModel;
+      required final String currentMonth}) = _$_IncomeModel;
 
   factory _IncomeModel.fromJson(Map<String, dynamic> json) =
       _$_IncomeModel.fromJson;
@@ -179,8 +163,6 @@ abstract class _IncomeModel implements IncomeModel {
   int get income;
   @override
   String get currentMonth;
-  @override
-  int get id;
   @override
   @JsonKey(ignore: true)
   _$$_IncomeModelCopyWith<_$_IncomeModel> get copyWith =>
