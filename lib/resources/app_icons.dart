@@ -9,6 +9,8 @@ class AppIcons {
   static SvgPicture logo = SvgPicture.asset(
     '$_path/logo.svg',
   );
+  //[START] Black Icons
+  static SvgPicture blackDrag = SvgPicture.asset('$_path/black_drag.svg');
   static SvgPicture blackChartNotPressed = SvgPicture.asset('$_path/black_chart_not_pressed.svg');
   static SvgPicture blackChartPressed = SvgPicture.asset('$_path/black_chart_pressed.svg');
   static SvgPicture blackSettingsPressed = SvgPicture.asset('$_path/black_settings_pressed.svg');
@@ -26,6 +28,9 @@ class AppIcons {
   static SvgPicture blackBalance = SvgPicture.asset('$_path/black_balance.svg');
   static SvgPicture blackIncome = SvgPicture.asset('$_path/black_income.svg');
   static SvgPicture blackExpenses = SvgPicture.asset('$_path/black_expenses.svg');
+  //[END] Black Icons
+
+  //[Start] Colored Icons
   static SvgPicture coloredTransportation = SvgPicture.asset('$_path/colored_transportation.svg');
   static SvgPicture coloredSport = SvgPicture.asset('$_path/colored_sport.svg');
   static SvgPicture coloredSelfDevelopment = SvgPicture.asset('$_path/colored_self_development.svg');
@@ -44,7 +49,9 @@ class AppIcons {
   static SvgPicture coloredElectronics = SvgPicture.asset('$_path/colored_electronics.svg');
   static SvgPicture coloredEducation = SvgPicture.asset('$_path/colored_education.svg');
   static SvgPicture coloredDonate = SvgPicture.asset('$_path/colored_cafe.svg');
-  // categories
+  //[END] Colored Icons
+
+  //[Start] Categories Icons
   static const String cafe = '$_path/colored_cafe.svg';
   static const String donate = '$_path/colored_donate.svg';
   static const String education = '$_path/colored_education.svg';
@@ -64,4 +71,5 @@ class AppIcons {
   static const String selfDevelopment = '$_path/colored_self_development.svg';
   static const String sport = '$_path/colored_sport.svg';
   static const String transportation = '$_path/colored_transportation.svg';
+//[END] Categories Icons
 }

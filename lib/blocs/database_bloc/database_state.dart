@@ -7,8 +7,14 @@ class DatabaseState extends Equatable {
   final ExpensesModel expenses;
   final BalanceModel balance;
   final List<IconModel> icons;
+  final String transactionType;
+  final String category;
+  final double amount;
 
   const DatabaseState({
+    this.amount = 0,
+    this.category = '',
+    this.transactionType = '',
     this.expensesCategories = const [],
     this.incomeCategories = const [],
     this.incomes = const IncomeModel(
@@ -26,25 +32,29 @@ class DatabaseState extends Equatable {
     ),
   });
 
-  DatabaseState copyWith({
-    List<ExpenseCategoryModel>? expensesCategories,
-    List<IncomeCategoryModel>? incomeCategories,
-    BalanceModel? balance,
-    IncomeModel? income,
-    ExpensesModel? expenses,
-    List<IconModel>? icons
-
-
-  }) {
-   return DatabaseState(
-     expensesCategories: expensesCategories ?? this.expensesCategories,
-     incomeCategories: incomeCategories ?? this.incomeCategories,
-     balance: balance ?? this.balance,
-     expenses: expenses ?? this.expenses,
-     icons: icons ?? this.icons,
-   );
+  DatabaseState copyWith(
+      {String? category,
+      String? transactionType,
+      double? amount,
+      List<ExpenseCategoryModel>? expensesCategories,
+      List<IncomeCategoryModel>? incomeCategories,
+      BalanceModel? balance,
+      IncomeModel? income,
+      ExpensesModel? expenses,
+      List<IconModel>? icons}) {
+    return DatabaseState(
+      amount: amount ?? this.amount,
+      category: category ?? this.category,
+      transactionType: transactionType ?? this.transactionType,
+      expensesCategories: expensesCategories ?? this.expensesCategories,
+      incomeCategories: incomeCategories ?? this.incomeCategories,
+      balance: balance ?? this.balance,
+      expenses: expenses ?? this.expenses,
+      icons: icons ?? this.icons,
+    );
   }
 
   @override
-  List<Object?> get props => [expensesCategories, incomeCategories, icons, expenses, balance];
+  List<Object?> get props =>
+      [expensesCategories, incomeCategories, icons, expenses, balance, transactionType, category, amount];
 }

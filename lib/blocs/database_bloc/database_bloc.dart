@@ -17,21 +17,43 @@ part 'database_event.dart';
 part 'database_state.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
-
-  DatabaseBloc() : super(const DatabaseState()) {
-on<DatabaseInitial>((event, emit) async {
-  // await _getExpensesCategoryModels(emit);
-  // await _getIncomesCategoryModels(emit);
-  add(GetIncomesCategories());
-  add(GetExpensesCategories());
-  print('It worked');
-
-});
-    on<GetExpensesCategories>((event, emit) async {
+  DatabaseBloc() : super(DatabaseState()) {
+    on<DatabaseInitialEvent>((event, emit) async {
+      // await _getExpensesCategoryModels(emit);
+      // await _getIncomesCategoryModels(emit);
+      add(GetIncomesCategoriesEvent());
+      add(GetExpensesCategoriesEvent());
+    });
+    on<GetExpensesCategoriesEvent>((event, emit) async {
       await _getExpensesCategoryModels(emit);
     });
-    on<GetIncomesCategories>((event, emit) async {
-     await _getIncomesCategoryModels(emit);
+    on<GetIncomesCategoriesEvent>((event, emit) async {
+      await _getIncomesCategoryModels(emit);
+    });
+    on<GetTitleCategoryEvent>((event, emit) {
+      print(event.title);
+      emit(state.copyWith(
+        transactionType: event.title,
+      ));
+    });
+    on<GetAmountCategoryEvent>((event, emit) {
+      print('${state.expensesCategories.length} Expenses length ');
+      print('${state.incomeCategories.length} Income length ');
+      final doubleAmount = double.parse(event.amount);
+      print(doubleAmount);
+      emit(state.copyWith(
+        amount: doubleAmount
+      ));
+    });
+    on<GetDescriptionCategoryEvent>((event, emit) {
+
+    });
+    on<GetCategoryEvent>((event, emit) {
+      emit(state.copyWith(category: event.category));
+
+    });
+    on<ClearDatabaseEvent>((event, emit) {
+      emit(state.copyWith(transactionType: ''));
     });
   }
 
@@ -75,8 +97,5 @@ on<DatabaseInitial>((event, emit) async {
     emit(
       state.copyWith(expensesCategories: expensesCategoryModels),
     );
-
   }
-
-
 }

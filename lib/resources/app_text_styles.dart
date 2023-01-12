@@ -71,6 +71,13 @@ class AppTextStyles {
     fontWeight: AppFonts.extraRegular,
     letterSpacing: 0,
   );
+  static TextStyle greyRegular = TextStyle(
+    fontFamily: AppFonts.fontFamily,
+    fontSize: 14,
+    color: AppColors.silver,
+    fontWeight: AppFonts.extraRegular,
+    letterSpacing: 0,
+  );
   static TextStyle blackTitle = TextStyle(
     fontFamily: AppFonts.fontFamily,
     fontSize: 10,

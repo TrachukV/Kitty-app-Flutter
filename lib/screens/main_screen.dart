@@ -42,7 +42,7 @@ class MainScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => DatabaseBloc()
             ..add(
-              DatabaseInitial(),
+              DatabaseInitialEvent(),
             ),
         ),
         BlocProvider(
