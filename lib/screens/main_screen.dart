@@ -12,6 +12,7 @@ import 'package:kitty_app/screens/settings_screen/settings_screen.dart';
 import 'package:kitty_app/screens/transaction_screen/transaction_screen.dart';
 import 'package:kitty_app/screens/widgets/bottom_bar_widget.dart';
 
+
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
 
@@ -26,11 +27,16 @@ class MainScreen extends StatelessWidget {
     TransactionScreen.routeName,
   ];
 
-  void _onSelectTab(String route) {
+
+  Future<bool> _maybePop() async {
+    return await _navigatorKey.currentState!.maybePop();
+  }
+
+  void _onSelectTab(int index) {
     if (_navigatorKey.currentState != null) {
       _navigatorKey.currentState!.pushNamedAndRemoveUntil(
-        route,
-        (route) => false,
+        _pages[index],
+        (_) => false,
       );
     }
   }
@@ -52,47 +58,56 @@ class MainScreen extends StatelessWidget {
       child: BlocConsumer<NavigationBloc, NavigationState>(
         listener: (context, state) {
           if (state.status == NavigationStateStatus.tab) {
-            _onSelectTab(state.route);
+            _onSelectTab(state.currentIndex);
           }
         },
         builder: (context, state) {
-          return Scaffold(
-            key: _key,
-            floatingActionButton: state.currentIndex == 0
-                ? FloatingActionButton.extended(
-                    onPressed: () {
-                      context.read<NavigationBloc>().add(
-                            NavigateTab(
-                              tabIndex: 3,
-                              route: TransactionScreen.routeName,
-                            ),
-                          );
-                    },
-                    label: Text('Add new', style: AppTextStyles.whiteRegular),
-                    icon: AppIcons.whiteAddPlus,
-                    backgroundColor: AppColors.blue,
-                  )
-                : null,
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-            bottomNavigationBar: state.currentIndex == 3
-                ? null
-                : BottomBar(
-                    onSelect: (index) {
-                      if (state.currentIndex != index) {
+          return WillPopScope(
+            onWillPop: () async {
+              final bool maybePop = await _maybePop();
+              if (!maybePop) {
+                context.read<NavigationBloc>().add(NavigationPopEvent());
+              }
+              return maybePop;
+            },
+            child: Scaffold(
+              key: _key,
+              floatingActionButton: state.currentIndex == 0
+                  ? FloatingActionButton.extended(
+                      onPressed: () {
                         context.read<NavigationBloc>().add(
-                              NavigateTab(
-                                tabIndex: index,
-                                route: _pages[index],
+                              NavigateTabEvent(
+                                tabIndex: 3,
+                                route: TransactionScreen.routeName,
                               ),
                             );
-                      }
-                    },
-                    currentTab: state.currentIndex,
-                  ),
-            body: Navigator(
-              key: _navigatorKey,
-              initialRoute: HomeScreen.routeName,
-              onGenerateRoute: AppRouter.generateRoute,
+                      },
+                      label: Text('Add new', style: AppTextStyles.whiteRegular),
+                      icon: AppIcons.whiteAddPlus,
+                      backgroundColor: AppColors.blue,
+                    )
+                  : null,
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+              bottomNavigationBar: state.currentIndex == 3
+                  ? null
+                  : BottomBar(
+                      onSelect: (index) {
+                        if (state.currentIndex != index) {
+                          context.read<NavigationBloc>().add(
+                                NavigateTabEvent(
+                                  tabIndex: index,
+                                  route: _pages[index],
+                                ),
+                              );
+                        }
+                      },
+                      currentTab: state.currentIndex,
+                    ),
+              body: Navigator(
+                key: _navigatorKey,
+                initialRoute: HomeScreen.routeName,
+                onGenerateRoute: AppRouter.generateRoute,
+              ),
             ),
           );
         },

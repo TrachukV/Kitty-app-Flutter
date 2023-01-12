@@ -6,7 +6,7 @@ import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
-import 'package:kitty_app/screens/home_screen/home_screen.dart';
+
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({Key? key}) : super(key: key);
@@ -34,211 +34,214 @@ class _TransactionScreenState extends State<TransactionScreen> {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: AppColors.grey,
-        elevation: 0,
-        leadingWidth: 104,
-        leading: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: GestureDetector(
-                child: AppIcons.blackBack,
-                onTap: () {
-                  context.read<NavigationBloc>().add(
-                        NavigateTab(
-                          tabIndex: 0,
-                          route: HomeScreen.routeName,
-                        ),
-                      );
-                },
+    return WillPopScope(
+      onWillPop: () async {
+        _closeBottomSheet();
+        return true;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: AppColors.grey,
+          elevation: 0,
+          leadingWidth: 104,
+          leading: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: GestureDetector(
+                  child: AppIcons.blackBack,
+                  onTap: () {
+                    _closeBottomSheet();
+                    context.read<NavigationBloc>().add(
+                          NavigationPopEvent(),
+                        );
+                  },
+                ),
               ),
-            ),
-            Text(
-              'Add new',
-              style: AppTextStyles.blackRegular,
-            ),
-          ],
+              Text(
+                'Add new',
+                style: AppTextStyles.blackRegular,
+              ),
+            ],
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        reverse: true,
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Center(
-          child: BlocBuilder<DatabaseBloc, DatabaseState>(
-            builder: (context, state) {
-              return Column(
-                children: [
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: width / 1.1,
-                    height: height / 11.1,
-                    child: DropdownButtonFormField(
-                      onTap: _closeBottomSheet,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(color: AppColors.grey, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.blue, width: 2)),
-                      ),
-                      hint: const Text(
-                        'Select category',
-
-                      ),
-                      borderRadius: BorderRadius.circular(4),
-                      elevation: 1,
-                      isExpanded: true,
-                      icon: AppIcons.blackDropDown,
-                      items: typeTransaction.map(buildMenuItem).toList(),
-                      onChanged: (value) {
-                        if (state.transactionType.isNotEmpty) {
-                          context.read<DatabaseBloc>().add(ClearDatabaseEvent());
-                        }
-                        setState(() {
-                          this.value = value!;
-                          context.read<DatabaseBloc>().add(GetCategoryEvent(category: value));
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: width / 1.1,
-                    child: TextFormField(
-                      controller: _categoryController..text = state.transactionType,
-                      onTap: () {
-                        _bottomSheetController = showBottomSheet(
-                            elevation: 2.0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            context: context,
-                            constraints: BoxConstraints(maxHeight: height / 2),
-                            // isScrollControlled: true,
-                            enableDrag: false,
-                            builder: (_) {
-                              return (state.category == 'Expenses')
-                                  ? CategorySelections(
-                                      categories: state.expensesCategories,
-                                      addCategoryButton: OutlinedButton(
-                                          onPressed: () {},
-                                          child: Text(
-                                            'Add new category',
-                                            style: AppTextStyles.blueRegular,
-                                          )),
-
-                                    )
-                                  : CategorySelections(
-                                      categories: state.incomeCategories,
-
-                                    );
-                            });
-                      },
-                      style: AppTextStyles.blackRegular,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(color: AppColors.grey, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.blue, width: 2)),
-                        labelText: 'Category name',
-                      ),
-                      readOnly: true,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: width / 1.1,
-                    child: TextFormField(
-                      textInputAction: TextInputAction.go,
-                      onChanged: (amount) {
-                        context.read<DatabaseBloc>().add(GetAmountCategoryEvent(
-                              amount: amount,
-                            ));
-                      },
-                      onTap: () {},
-                      keyboardType: TextInputType.phone,
-                      style: AppTextStyles.blackRegular,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(color: AppColors.grey, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.blue, width: 2)),
-                        labelText: 'Amount',
-                        hintText: 'Enter amount',
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: width / 1.1,
-                    child: TextFormField(
-                      maxLength: 15,
-                      textInputAction: TextInputAction.go,
-                      onChanged: (description) {
-                        context.read<DatabaseBloc>().add(
-                              GetDescriptionCategoryEvent(description: description),
-                            );
-                      },
-                      onTap: () {},
-                      style: AppTextStyles.blackRegular,
-                      decoration: InputDecoration(
-                        counterText: '',
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(color: AppColors.grey, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(color: AppColors.blue, width: 2),
-                        ),
-                        labelText: 'Description',
-                        hintText: 'Description (Optional)',
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: height / 10,
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 15),
-                      height: height / 14,
+        body: SingleChildScrollView(
+          reverse: true,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Center(
+            child: BlocBuilder<DatabaseBloc, DatabaseState>(
+              builder: (context, state) {
+                return Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    SizedBox(
                       width: width / 1.1,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: state.transactionType.isEmpty || state.amount == 0 || state.category.isEmpty
-                            ? AppColors.sonicSilver
-                            : AppColors.blue,
+                      height: height / 11.1,
+                      child: DropdownButtonFormField(
+                        onTap: _closeBottomSheet,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            borderSide: BorderSide(color: AppColors.grey, width: 2),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                              borderSide: BorderSide(color: AppColors.blue, width: 2)),
+                        ),
+                        hint: const Text(
+                          'Select category',
+                        ),
+                        borderRadius: BorderRadius.circular(4),
+                        elevation: 1,
+                        isExpanded: true,
+                        icon: AppIcons.blackDropDown,
+                        items: typeTransaction.map(buildMenuItem).toList(),
+                        onChanged: (value) {
+                          if (state.transactionType.isNotEmpty) {
+                            context.read<DatabaseBloc>().add(ClearDatabaseEvent());
+                          }
+                          setState(() {
+                            this.value = value!;
+                            context.read<DatabaseBloc>().add(GetCategoryEvent(category: value));
+                          });
+                        },
                       ),
-                      child: Center(
-                          child: Text(
-                        state.transactionType.isEmpty || state.amount == 0 || state.category.isEmpty
-                            ? 'Complete the field'
-                            : state.category == 'Income'
-                                ? 'Add new income'
-                                : 'Add new expense',
-
-                        style: AppTextStyles.whiteRegular,
-                      )),
                     ),
-                  ),
-                ],
-              );
-            },
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: width / 1.1,
+                      child: TextFormField(
+                        controller: _categoryController..text = state.transactionType,
+                        onTap: () {
+                          _bottomSheetController = showBottomSheet(
+                              elevation: 2.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              context: context,
+                              constraints: BoxConstraints(maxHeight: height / 2),
+                              // isScrollControlled: true,
+                              enableDrag: false,
+                              builder: (_) { if(state.category == 'Expenses') {
+                                CategorySelections(
+                                  categories: state.expensesCategories,
+                                  addCategoryButton: OutlinedButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        'Add new category',
+                                        style: AppTextStyles.blueRegular,
+                                      )),
+                                );
+                              }
+                              if(state.category == 'Income') {
+                                return CategorySelections(
+                                  categories: state.incomeCategories,
+                                );
+                              }
+                                return const SizedBox.shrink();
+                              });
+                        },
+                        style: AppTextStyles.blackRegular,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            borderSide: BorderSide(color: AppColors.grey, width: 2),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                              borderSide: BorderSide(color: AppColors.blue, width: 2)),
+                          labelText: 'Category name',
+                        ),
+                        readOnly: true,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: width / 1.1,
+                      child: TextFormField(
+                        textInputAction: TextInputAction.go,
+                        onChanged: (amount) {
+                          context.read<DatabaseBloc>().add(GetAmountCategoryEvent(
+                                amount: amount,
+                              ));
+                        },
+                        onTap: () {},
+                        keyboardType: TextInputType.phone,
+                        style: AppTextStyles.blackRegular,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            borderSide: BorderSide(color: AppColors.grey, width: 2),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                              borderSide: BorderSide(color: AppColors.blue, width: 2)),
+                          labelText: 'Amount',
+                          hintText: 'Enter amount',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: width / 1.1,
+                      child: TextFormField(
+                        maxLength: 15,
+                        textInputAction: TextInputAction.go,
+                        onChanged: (description) {
+                          context.read<DatabaseBloc>().add(
+                                GetDescriptionCategoryEvent(description: description),
+                              );
+                        },
+                        onTap: () {},
+                        style: AppTextStyles.blackRegular,
+                        decoration: InputDecoration(
+                          counterText: '',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            borderSide: BorderSide(color: AppColors.grey, width: 2),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            borderSide: BorderSide(color: AppColors.blue, width: 2),
+                          ),
+                          labelText: 'Description',
+                          hintText: 'Description (Optional)',
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: height / 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 15),
+                        height: height / 14,
+                        width: width / 1.1,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: state.transactionType.isEmpty || state.amount == 0 || state.category.isEmpty
+                              ? AppColors.sonicSilver
+                              : AppColors.blue,
+                        ),
+                        child: Center(
+                            child: Text(
+                          state.transactionType.isEmpty || state.amount == 0 || state.category.isEmpty
+                              ? 'Complete the field'
+                              : state.category == 'Income'
+                                  ? 'Add new income'
+                                  : 'Add new expense',
+                          style: AppTextStyles.whiteRegular,
+                        )),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -289,12 +292,10 @@ class CategorySelections extends StatelessWidget {
   final List categories;
   final Widget? addCategoryButton;
 
-
   const CategorySelections({
     Key? key,
     required this.categories,
     this.addCategoryButton,
-
   }) : super(key: key);
 
   @override

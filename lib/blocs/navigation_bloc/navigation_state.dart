@@ -1,6 +1,6 @@
 part of 'navigation_bloc.dart';
 
-enum NavigationStateStatus { initial, menu, tab, noUser }
+enum NavigationStateStatus { initial, tab, zero, pop }
 
 @immutable
 class NavigationState {
