@@ -10,8 +10,14 @@ class DatabaseState extends Equatable {
   final String transactionType;
   final String category;
   final double amount;
+  final List allModels;
+  final String pathToIcon;
+  final String newCategory;
 
   const DatabaseState({
+    this.newCategory = '',
+    this.pathToIcon = '',
+    this.allModels = const [],
     this.amount = 0,
     this.category = '',
     this.transactionType = '',
@@ -34,6 +40,8 @@ class DatabaseState extends Equatable {
 
   DatabaseState copyWith(
       {String? category,
+      String? newCategory,
+      String? pathToIcon,
       String? transactionType,
       double? amount,
       List<ExpenseCategoryModel>? expensesCategories,
@@ -41,8 +49,12 @@ class DatabaseState extends Equatable {
       BalanceModel? balance,
       IncomeModel? income,
       ExpensesModel? expenses,
-      List<IconModel>? icons}) {
+      List<IconModel>? icons,
+      List? allModels}) {
     return DatabaseState(
+      newCategory: newCategory ?? this.newCategory,
+      pathToIcon: pathToIcon ?? this.pathToIcon,
+      allModels: allModels ?? this.allModels,
       amount: amount ?? this.amount,
       category: category ?? this.category,
       transactionType: transactionType ?? this.transactionType,
@@ -55,6 +67,17 @@ class DatabaseState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [expensesCategories, incomeCategories, icons, expenses, balance, transactionType, category, amount];
+  List<Object?> get props => [
+        expensesCategories,
+        incomeCategories,
+        icons,
+        expenses,
+        balance,
+        transactionType,
+        category,
+        amount,
+        allModels,
+        pathToIcon,
+        newCategory,
+      ];
 }

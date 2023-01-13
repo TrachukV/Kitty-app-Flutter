@@ -22,6 +22,7 @@ class AppIcons {
   static SvgPicture pointerLeft = SvgPicture.asset('$_path/pointer_left.svg');
   static SvgPicture blackBack = SvgPicture.asset('$_path/black_back.svg');
   static SvgPicture blackDropDown = SvgPicture.asset('$_path/black_dropdown.svg');
+  static SvgPicture blackAddPlus = SvgPicture.asset('$_path/black_add_plus.svg');
   static SvgPicture whiteAddPlus = SvgPicture.asset('$_path/black_add_plus.svg', color: AppColors.white,);
   static SvgPicture pointerRight = SvgPicture.asset('$_path/pointer_right.svg');
   static SvgPicture blackCalendar = SvgPicture.asset('$_path/black_calendar.svg');

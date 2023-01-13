@@ -6,7 +6,7 @@ import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
-
+import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({Key? key}) : super(key: key);
@@ -24,6 +24,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   void _closeBottomSheet() {
     if (_bottomSheetController != null) {
       _bottomSheetController!.close();
+
     }
   }
 
@@ -79,7 +80,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     const SizedBox(height: 20),
                     SizedBox(
                       width: width / 1.1,
-                      height: height / 11.1,
+                      // height: height / 11.1,
                       child: DropdownButtonFormField(
                         onTap: _closeBottomSheet,
                         decoration: InputDecoration(
@@ -125,22 +126,27 @@ class _TransactionScreenState extends State<TransactionScreen> {
                               constraints: BoxConstraints(maxHeight: height / 2),
                               // isScrollControlled: true,
                               enableDrag: false,
-                              builder: (_) { if(state.category == 'Expenses') {
-                                CategorySelections(
-                                  categories: state.expensesCategories,
-                                  addCategoryButton: OutlinedButton(
-                                      onPressed: () {},
-                                      child: Text(
-                                        'Add new category',
-                                        style: AppTextStyles.blueRegular,
-                                      )),
-                                );
-                              }
-                              if(state.category == 'Income') {
-                                return CategorySelections(
-                                  categories: state.incomeCategories,
-                                );
-                              }
+                              builder: (_) {
+                                if (state.category == 'Expenses') {
+                                  return CategorySelections(
+                                    categories: state.expensesCategories,
+                                    addCategoryButton: OutlinedButton(
+                                        onPressed: () {
+                                          context.read<DatabaseBloc>().add(GetAllModelsEvent());
+                                          context.read<NavigationBloc>().add(
+                                                NavigateTabEvent(tabIndex: 4, route: CreateCategoryScreen.routeName),
+                                              );
+                                        },
+                                        child: Text(
+                                          'Add new category',
+                                          style: AppTextStyles.blueRegular,
+                                        )),
+                                  );
+                                } else if (state.category == 'Income') {
+                                  return CategorySelections(
+                                    categories: state.incomeCategories,
+                                  );
+                                }
                                 return const SizedBox.shrink();
                               });
                         },
@@ -168,7 +174,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                 amount: amount,
                               ));
                         },
-                        onTap: () {},
+                        onTap: _closeBottomSheet,
                         keyboardType: TextInputType.phone,
                         style: AppTextStyles.blackRegular,
                         decoration: InputDecoration(
