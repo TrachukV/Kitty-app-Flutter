@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:kitty_app/database/database_data.dart';
 import 'package:kitty_app/database/local_database.dart';
 import 'package:kitty_app/models/balance_model/balance_model.dart';
 import 'package:kitty_app/models/expense_category_model/expense_category.dart';
@@ -35,7 +36,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       await _getIncomesCategoryModels(emit);
     });
     on<GetTitleCategoryEvent>((event, emit) {
-      print(event.title);
+
       emit(state.copyWith(
         transactionType: event.title,
       ));
@@ -54,7 +55,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     });
     on<GetIconEvent>((event, emit) {
 
-      print(state.newCategory);
       emit(state.copyWith(
         pathToIcon: event.pathToIcon,
       ));
@@ -68,9 +68,14 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     });
   }
 
-  _getAllModels(Emitter emit) {
+  // void _getAllIcons(Emitter emitter) {
+  //   final converted = DatabaseData.allIcons.values.forEach((element) {
+  //     element['icon']
+  //   });
+  //
+  // }
+ void _getAllModels(Emitter emit) {
     List allModels = [...state.incomeCategories, ...state.expensesCategories];
-    print('${allModels.length} length');
     emit(state.copyWith(
       allModels: allModels,
     ));

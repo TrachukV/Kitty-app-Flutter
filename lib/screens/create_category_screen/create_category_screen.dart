@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
+import 'package:kitty_app/database/database_data.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
@@ -17,6 +18,7 @@ class CreateCategoryScreen extends StatefulWidget {
 }
 
 class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
+
   PersistentBottomSheetController? _bottomSheetController;
   bool isActive = false;
 
@@ -182,6 +184,7 @@ class IconSelections extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final allIcons = DatabaseData.allIcons.values.toList();
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
@@ -214,17 +217,17 @@ class IconSelections extends StatelessWidget {
                     crossAxisSpacing: 20,
                     childAspectRatio: 1.7,
                   ),
-                  itemCount: categories.length,
+                  itemCount: allIcons.length,
                   padding: const EdgeInsets.all(10),
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
                         context.read<DatabaseBloc>().add(
-                              GetIconEvent(pathToIcon: categories[index].icon.pathToIcon),
+                              GetIconEvent(pathToIcon: allIcons[index]['icon']!),
                             );
                       },
-                      child: SvgPicture.asset(categories[index].icon.pathToIcon),
+                      child: SvgPicture.asset(allIcons[index]['icon']!),
                     );
                   }),
             ),
