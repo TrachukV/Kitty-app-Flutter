@@ -7,6 +7,8 @@ part 'balance_model.g.dart';
 @freezed
 class BalanceModel with _$BalanceModel {
   const factory BalanceModel({
+    required int income,
+    required int expenses,
     required int actualBalance,
     required String currentMonth,
 }) = _BalanceModel;

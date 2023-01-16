@@ -85,4 +85,14 @@ class AppTextStyles {
     fontWeight: AppFonts.extraRegular,
     letterSpacing: 1.5,
   );
+  static ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+    disabledBackgroundColor: AppColors.grey,
+    disabledForegroundColor: AppColors.silver,
+    padding: const EdgeInsets.symmetric(vertical: 12),
+    backgroundColor: AppColors.blue,
+    textStyle: AppTextStyles.whiteRegular,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(50),
+    ),
+  );
 }

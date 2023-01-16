@@ -1,68 +1,45 @@
 part of 'database_bloc.dart';
 
 class DatabaseState extends Equatable {
-  final List<ExpenseCategoryModel> expensesCategories;
-  final List<IncomeCategoryModel> incomeCategories;
-  final IncomeModel incomes;
-  final ExpensesModel expenses;
-  final BalanceModel balance;
+  final List<TransactionsCategoriesModel> expensesCategories;
+  final List<TransactionsCategoriesModel> incomeCategories;
+  final List<TransactionModel> transaction;
   final List<IconModel> icons;
-  final String transactionType;
-  final String category;
-  final double amount;
-  final List allModels;
-  final String pathToIcon;
-  final String newCategory;
+  final TransactionsCategoriesModel? createdCategory;
+  final IconModel? selectedIcon;
+  final BalanceModel balance;
 
   const DatabaseState({
-    this.newCategory = '',
-    this.pathToIcon = '',
-    this.allModels = const [],
-    this.amount = 0,
-    this.category = '',
-    this.transactionType = '',
-    this.expensesCategories = const [],
     this.incomeCategories = const [],
-    this.incomes = const IncomeModel(
-      income: 0,
-      currentMonth: '01',
-    ),
+    this.expensesCategories = const [],
+    this.transaction = const [],
     this.icons = const [],
+    this.createdCategory,
+    this.selectedIcon,
     this.balance = const BalanceModel(
+      income: 0,
+      expenses: 0,
       actualBalance: 0,
-      currentMonth: '01',
-    ),
-    this.expenses = const ExpensesModel(
-      totalExpenses: 0,
-      currentMonth: '01',
+      currentMonth: 'bez date',
     ),
   });
 
-  DatabaseState copyWith(
-      {String? category,
-      String? newCategory,
-      String? pathToIcon,
-      String? transactionType,
-      double? amount,
-      List<ExpenseCategoryModel>? expensesCategories,
-      List<IncomeCategoryModel>? incomeCategories,
-      BalanceModel? balance,
-      IncomeModel? income,
-      ExpensesModel? expenses,
-      List<IconModel>? icons,
-      List? allModels}) {
+  DatabaseState copyWith({
+    List<TransactionsCategoriesModel>? expensesCategories,
+    List<TransactionsCategoriesModel>? incomeCategories,
+    List<TransactionModel>? transaction,
+    List<IconModel>? icons,
+    IconModel? selectedIcon,
+    TransactionsCategoriesModel? createdCategory,
+    BalanceModel? balance,
+  }) {
     return DatabaseState(
-      newCategory: newCategory ?? this.newCategory,
-      pathToIcon: pathToIcon ?? this.pathToIcon,
-      allModels: allModels ?? this.allModels,
-      amount: amount ?? this.amount,
-      category: category ?? this.category,
-      transactionType: transactionType ?? this.transactionType,
       expensesCategories: expensesCategories ?? this.expensesCategories,
       incomeCategories: incomeCategories ?? this.incomeCategories,
-      balance: balance ?? this.balance,
-      expenses: expenses ?? this.expenses,
+      transaction: transaction ?? this.transaction,
       icons: icons ?? this.icons,
+      createdCategory: createdCategory ?? this.createdCategory,
+      selectedIcon: selectedIcon ?? this.selectedIcon,
     );
   }
 
@@ -71,13 +48,8 @@ class DatabaseState extends Equatable {
         expensesCategories,
         incomeCategories,
         icons,
-        expenses,
-        balance,
-        transactionType,
-        category,
-        amount,
-        allModels,
-        pathToIcon,
-        newCategory,
+        selectedIcon,
+        transaction,
+        createdCategory,
       ];
 }

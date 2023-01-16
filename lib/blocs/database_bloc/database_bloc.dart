@@ -1,135 +1,134 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:kitty_app/database/database_data.dart';
+
 import 'package:kitty_app/database/local_database.dart';
 import 'package:kitty_app/models/balance_model/balance_model.dart';
-import 'package:kitty_app/models/expense_category_model/expense_category.dart';
-import 'package:kitty_app/models/expenses_model/expenses_model.dart';
+import 'package:kitty_app/models/expense_category_model/transactions_categories_models.dart';
+import 'package:kitty_app/models/expenses_model/transaction_model.dart';
 import 'package:kitty_app/models/icon_model/icon_model.dart';
-import 'package:kitty_app/models/income_category_model/income_category_model.dart';
-import 'package:kitty_app/models/income_model/income_model.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:intl/intl.dart';
 
 part 'database_event.dart';
 
 part 'database_state.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
-  DatabaseBloc() : super(DatabaseState()) {
-    on<ClearEvent>((event, emit) {
-      clearState(emit);
-    });
+  DatabaseBloc(this.database) : super(const DatabaseState()) {
     on<DatabaseInitialEvent>((event, emit) async {
-      add(GetIncomesCategoriesEvent());
-      add(GetExpensesCategoriesEvent());
+      await _getAllIcons(emit);
+      await _getTransactionCategories(emit);
+      await _getAllTransaction(emit);
     });
-    on<GetAllModelsEvent>((event, emit) {
-      _getAllModels(emit);
-    });
-    on<GetExpensesCategoriesEvent>((event, emit) async {
-      await _getExpensesCategoryModels(emit);
-    });
-    on<GetIncomesCategoriesEvent>((event, emit) async {
-      await _getIncomesCategoryModels(emit);
-    });
-    on<GetTitleCategoryEvent>((event, emit) {
-
-      emit(state.copyWith(
-        transactionType: event.title,
-      ));
-      ;
-    });
-    on<GetAmountCategoryEvent>((event, emit) {
-      final doubleAmount = double.parse(event.amount);
-      emit(state.copyWith(amount: doubleAmount));
-    });
-    on<GetDescriptionCategoryEvent>((event, emit) {});
     on<GetCategoryEvent>((event, emit) {
-      emit(state.copyWith(category: event.category));
+      emit(state.copyWith(createdCategory: event.transactionCategory));
     });
     on<ClearDatabaseEvent>((event, emit) {
-      emit(state.copyWith(transactionType: ''));
+      emit(state.copyWith(createdCategory: null));
+      emit(state.copyWith(selectedIcon: null));
+      print('state :${state.selectedIcon}');
     });
     on<GetIconEvent>((event, emit) {
-
-      emit(state.copyWith(
-        pathToIcon: event.pathToIcon,
-      ));
-
+      emit(state.copyWith(selectedIcon: event.selectedIcon));
     });
-    on<GetNewCategoryEvent>((event, emit) {
-      print(state.pathToIcon);
-      emit(state.copyWith(
-        newCategory: event.newCategory,
-      ));
+    on<CreateCategoryEvent>((event, emit) async {
+      print('sdsdsdsdsd');
+      await _createCategory(categoryName: event.categoryName, iconId: state.selectedIcon!.iconId);
+      add(DatabaseInitialEvent());
+    });
+    on<GetCreatedTransaction>((event, emit) async {
+      print(state.createdCategory!.title);
+      await _createTransaction(
+        categoryId: state.createdCategory!.categoryId,
+        amount: event.amount,
+        description: event.description,
+      );
+      await _getAllTransaction(emit);
     });
   }
 
-  // void _getAllIcons(Emitter emitter) {
-  //   final converted = DatabaseData.allIcons.values.forEach((element) {
-  //     element['icon']
-  //   });
-  //
-  // }
- void _getAllModels(Emitter emit) {
-    List allModels = [...state.incomeCategories, ...state.expensesCategories];
-    emit(state.copyWith(
-      allModels: allModels,
-    ));
-  }
+  DBProvider database;
 
-  final DBProvider databaseProvider = DBProvider();
-
-  Future<void> _getIncomesCategoryModels(Emitter emit) async {
-    List<IncomeCategoryModel> incomesCategoryModels = [];
-    final Database database = await databaseProvider.database;
-    await database.transaction((txn) async {
-      await txn.query(databaseProvider.inCatTable).then((data) {
+  Future<void> _getAllTransaction(Emitter emit) async {
+    List<TransactionModel> transactions = [];
+    final db = await database.database;
+    await db.transaction((txn) async {
+      transactions = await txn.query(database.transactionTable).then((data) {
         final converted = List<Map<String, dynamic>>.from(data);
-        incomesCategoryModels = converted.map((element) {
-          final iconData = json.decode(element['icon']);
-          return IncomeCategoryModel(
-            title: element['title'],
-            icon: IconModel.fromJson(iconData),
+        return converted.map((e) => TransactionModel.fromJson(e)).toList();
+      });
+    });
+    emit(state.copyWith(transaction: transactions));
+  }
+
+  Future<void> _getTransactionCategories(Emitter emit) async {
+    List<TransactionsCategoriesModel> categories = [];
+    final db = await database.database;
+    await db.transaction((txn) async {
+      await txn.query(database.categoryTable).then((data) {
+        final converted = List<Map<String, dynamic>>.from(data);
+        categories = converted.map((e) {
+          return TransactionsCategoriesModel(
+            categoryId: e['categoryId'],
+            title: e['title'],
+            icon: state.icons.firstWhere((icon) => icon.iconId == e['iconId']),
+            type: e['type'],
+            totalAmount: double.parse(e['totalAmount']),
+            amount: 0,
           );
         }).toList();
       });
     });
-    emit(
-      state.copyWith(incomeCategories: incomesCategoryModels),
-    );
+    emit(state.copyWith(
+      expensesCategories: categories.where((element) => element.type == 'Expenses').toList(),
+      incomeCategories: categories.where((element) => element.type == 'Income').toList(),
+    ));
   }
 
-  Future<void> _getExpensesCategoryModels(Emitter emit) async {
-    List<ExpenseCategoryModel> expensesCategoryModels = [];
-    final Database database = await databaseProvider.database;
-    await database.transaction((txn) async {
-      await txn.query(databaseProvider.exCatTable).then((data) {
+  Future<void> _getAllIcons(Emitter emit) async {
+    List<IconModel> icons = [];
+    final db = await database.database;
+    await db.transaction((txn) async {
+      icons = await txn.query(database.iconTable).then((data) {
         final converted = List<Map<String, dynamic>>.from(data);
-        expensesCategoryModels = converted.map((element) {
-          final iconData = json.decode(element['icon']);
-          return ExpenseCategoryModel(
-            title: element['title'],
-            icon: IconModel.fromJson(iconData),
-          );
-        }).toList();
+        return converted.map((e) => IconModel.fromJson(e)).toList();
       });
     });
-    emit(
-      state.copyWith(expensesCategories: expensesCategoryModels),
-    );
-  }
-  void clearState(Emitter emit){
     emit(state.copyWith(
-      pathToIcon: '',
-      newCategory: '',
-      transactionType: '',
-      category: '',
+      icons: icons,
     ));
+  }
 
+  Future<void> _createCategory({
+    required String categoryName,
+    required int iconId,
+  }) async {
+    final db = await database.database;
+    await db.transaction((txn) async {
+      await txn.insert(database.categoryTable, {
+        'type': 'Expenses',
+        'title': categoryName,
+        'totalAmount': 0.0.toString(),
+        'entries': 0,
+        'iconId': iconId,
+      });
+    });
+  }
 
+  Future<void> _createTransaction({
+    required int categoryId,
+    required String amount,
+    required String description,
+  }) async {
+    final db = await database.database;
+    await db.transaction((txn) async {
+      await txn.insert(database.transactionTable, {
+        'description': description,
+        'amount': int.parse(amount),
+        'currentMonth': DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
+        'categoryId': categoryId,
+      });
+    });
   }
 }

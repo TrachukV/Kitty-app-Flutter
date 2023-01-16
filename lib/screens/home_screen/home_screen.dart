@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
@@ -14,6 +16,8 @@ class HomeScreen extends StatelessWidget {
 
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
+    return BlocBuilder<DatabaseBloc, DatabaseState>(
+  builder: (context, state) {
     return Scaffold(
 
       appBar: AppBar(
@@ -102,19 +106,12 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: height * 0.025,
             ),
-            DayTransactionsWidget(
-              width: width * 0.88,
-            ),
-            SizedBox(
-              height: height * 0.025,
-            ),
-            DayTransactionsWidget(
-              width: width * 0.88,
-            ),
           ],
         ),
       ),
     );
+  },
+);
   }
 }
 

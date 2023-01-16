@@ -7,6 +7,7 @@ import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
+import 'package:kitty_app/screens/home_screen/home_screen.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({Key? key}) : super(key: key);
@@ -18,14 +19,61 @@ class TransactionScreen extends StatefulWidget {
 
 class _TransactionScreenState extends State<TransactionScreen> {
   final TextEditingController _categoryController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  String _amount = '';
+  String _description = '';
+  final TextEditingController _descriptionController = TextEditingController();
   PersistentBottomSheetController? _bottomSheetController;
   final FocusNode focusNode = FocusNode();
+  String selectedType = 'type';
 
   void _closeBottomSheet() {
     if (_bottomSheetController != null) {
       _bottomSheetController!.close();
-
     }
+  }
+
+  void _editingComplete() {
+    setState(() {
+      if (FocusScope.of(context).hasFocus) {
+        FocusScope.of(context).unfocus();
+      }
+    });
+  }
+
+  PersistentBottomSheetController<dynamic> bottomSheet(BuildContext context, DatabaseState state) {
+    final height = MediaQuery.of(context).size.height;
+    return showBottomSheet(
+        elevation: 2.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+        context: context,
+        constraints: BoxConstraints(maxHeight: height / 2),
+        // isScrollControlled: true,
+        enableDrag: false,
+        builder: (_) {
+          if (selectedType == 'Expenses') {
+            return CategorySelections(
+              categories: state.expensesCategories,
+              addCategoryButton: OutlinedButton(
+                  onPressed: () {
+                    context.read<NavigationBloc>().add(
+                          NavigateTabEvent(tabIndex: 4, route: CreateCategoryScreen.routeName),
+                        );
+                  },
+                  child: Text(
+                    'Add new category',
+                    style: AppTextStyles.blueRegular,
+                  )),
+            );
+          } else if (selectedType == 'Income') {
+            return CategorySelections(
+              categories: state.incomeCategories,
+            );
+          }
+          return const SizedBox.shrink();
+        });
   }
 
   List<String> typeTransaction = ['Expenses', 'Income'];
@@ -33,7 +81,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return WillPopScope(
       onWillPop: () async {
@@ -75,176 +122,115 @@ class _TransactionScreenState extends State<TransactionScreen> {
           child: Center(
             child: BlocBuilder<DatabaseBloc, DatabaseState>(
               builder: (context, state) {
-                return Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: width / 1.1,
-                      // height: height / 11.1,
-                      child: DropdownButtonFormField(
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      DropdownButtonFormField(
                         onTap: _closeBottomSheet,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.grey, width: 2),
+                            borderSide: BorderSide(color: AppColors.grey, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4),
-                              borderSide: BorderSide(color: AppColors.blue, width: 2)),
+                              borderSide: BorderSide(color: AppColors.blue, width: 1)),
                         ),
                         hint: const Text(
                           'Select category',
                         ),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(8),
                         elevation: 1,
                         isExpanded: true,
                         icon: AppIcons.blackDropDown,
                         items: typeTransaction.map(buildMenuItem).toList(),
                         onChanged: (value) {
-                          if (state.transactionType.isNotEmpty) {
+                          if (state.createdCategory != null) {
                             context.read<DatabaseBloc>().add(ClearDatabaseEvent());
                           }
                           setState(() {
-                            this.value = value!;
-                            context.read<DatabaseBloc>().add(GetCategoryEvent(category: value));
+                            selectedType = value!;
                           });
                         },
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: width / 1.1,
-                      child: TextFormField(
-                        controller: _categoryController..text = state.transactionType,
-                        onTap: () {
-                          _bottomSheetController = showBottomSheet(
-                              elevation: 2.0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              context: context,
-                              constraints: BoxConstraints(maxHeight: height / 2),
-                              // isScrollControlled: true,
-                              enableDrag: false,
-                              builder: (_) {
-                                if (state.category == 'Expenses') {
-                                  return CategorySelections(
-                                    categories: state.expensesCategories,
-                                    addCategoryButton: OutlinedButton(
-                                        onPressed: () {
-                                          context.read<DatabaseBloc>().add(GetAllModelsEvent());
-                                          context.read<NavigationBloc>().add(
-                                                NavigateTabEvent(tabIndex: 4, route: CreateCategoryScreen.routeName),
-                                              );
-                                        },
-                                        child: Text(
-                                          'Add new category',
-                                          style: AppTextStyles.blueRegular,
-                                        )),
-                                  );
-                                } else if (state.category == 'Income') {
-                                  return CategorySelections(
-                                    categories: state.incomeCategories,
-                                  );
-                                }
-                                return const SizedBox.shrink();
-                              });
-                        },
-                        style: AppTextStyles.blackRegular,
+                      const SizedBox(height: 20),
+                      TextField(
                         decoration: InputDecoration(
+                          labelText: 'Category name',
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.grey, width: 2),
+                            borderSide: BorderSide(color: AppColors.grey, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4),
-                              borderSide: BorderSide(color: AppColors.blue, width: 2)),
-                          labelText: 'Category name',
+                              borderSide: BorderSide(color: AppColors.blue, width: 1)),
                         ),
                         readOnly: true,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: width / 1.1,
-                      child: TextFormField(
-                        textInputAction: TextInputAction.go,
-                        onChanged: (amount) {
-                          context.read<DatabaseBloc>().add(GetAmountCategoryEvent(
-                                amount: amount,
-                              ));
+                        controller: _categoryController..text = (state.createdCategory?.title ?? ''),
+                        onTap: () {
+                          _bottomSheetController = bottomSheet(context, state);
                         },
-                        onTap: _closeBottomSheet,
-                        keyboardType: TextInputType.phone,
-                        style: AppTextStyles.blackRegular,
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        onChanged: (amount) {
+                          _amount = amount;
+                        },
                         decoration: InputDecoration(
+                          labelText: 'Amount',
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.grey, width: 2),
+                            borderSide: BorderSide(color: AppColors.grey, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4),
-                              borderSide: BorderSide(color: AppColors.blue, width: 2)),
-                          labelText: 'Amount',
-                          hintText: 'Enter amount',
+                              borderSide: BorderSide(color: AppColors.blue, width: 1)),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: width / 1.1,
-                      child: TextFormField(
-                        maxLength: 15,
+                        onTap: _closeBottomSheet,
                         textInputAction: TextInputAction.go,
+                        onEditingComplete: _editingComplete,
+                        keyboardType: TextInputType.number,
+                        controller: _amountController,
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
                         onChanged: (description) {
-                          context.read<DatabaseBloc>().add(
-                                GetDescriptionCategoryEvent(description: description),
-                              );
+                          _description = description;
                         },
-                        onTap: () {},
-                        style: AppTextStyles.blackRegular,
                         decoration: InputDecoration(
-                          counterText: '',
+                          labelText: 'Description',
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.grey, width: 2),
+                            borderSide: BorderSide(color: AppColors.grey, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.blue, width: 2),
-                          ),
-                          labelText: 'Description',
-                          hintText: 'Description (Optional)',
+                              borderRadius: BorderRadius.circular(4),
+                              borderSide: BorderSide(color: AppColors.blue, width: 1)),
                         ),
+                        onTap: _closeBottomSheet,
+                        onEditingComplete: _editingComplete,
+                        controller: _descriptionController,
                       ),
-                    ),
-                    SizedBox(
-                      height: height / 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 15),
-                        height: height / 14,
-                        width: width / 1.1,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: state.transactionType.isEmpty || state.amount == 0 || state.category.isEmpty
-                              ? AppColors.sonicSilver
-                              : AppColors.blue,
-                        ),
-                        child: Center(
-                            child: Text(
-                          state.transactionType.isEmpty || state.amount == 0 || state.category.isEmpty
-                              ? 'Complete the field'
-                              : state.category == 'Income'
-                                  ? 'Add new income'
-                                  : 'Add new expense',
-                          style: AppTextStyles.whiteRegular,
-                        )),
+                      SizedBox(
+                        height: height / 10,
                       ),
-                    ),
-                  ],
+                      ValueListenableBuilder(
+                        valueListenable: _amountController,
+                        builder: (BuildContext context, TextEditingValue value, Widget? child) {
+                          print(_amount);
+                          print(_description);
+                          return BlueButton(
+                            selectedType: selectedType,
+                            check: state.createdCategory != null && selectedType != 'type' && _amount != '',
+                            amount: _amount,
+                            description: _description,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
@@ -320,48 +306,42 @@ class CategorySelections extends StatelessWidget {
                   offset: const Offset(0, -5),
                 ),
               ]),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                AppIcons.blackDrag,
-                const SizedBox(height: 10),
-                Text(
-                  'CHOOSE CATEGORY',
-                  style: AppTextStyles.blackTitle,
-                ),
-                const SizedBox(height: 10),
-                SingleChildScrollView(
-                  child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 5,
-                        crossAxisSpacing: 5,
-                      ),
-                      itemCount: categories.length,
-                      padding: const EdgeInsets.all(10),
-                      itemBuilder: (context, index) {
-                        return ChoiceCategoryWidget(
-                          onTap: () {
-                            context.read<DatabaseBloc>().add(
-                                  GetTitleCategoryEvent(
-                                    title: categories[index].title,
-                                  ),
-                                );
-                            Navigator.pop(context);
-                          },
-                          // icon: SvgPicture.asset(state.expensesCategories[index].icon.pathToIcon),
-                          // nameCategory: state.expensesCategories[index].title);
-
-                          icon: SvgPicture.asset(categories[index].icon.pathToIcon),
-                          nameCategory: categories[index].title,
-                        );
-                      }),
-                ),
-                addCategoryButton ?? const SizedBox.shrink(),
-              ],
-            ),
+          child: Column(
+            children: [
+              AppIcons.blackDrag,
+              const SizedBox(height: 10),
+              Text(
+                'CHOOSE CATEGORY',
+                style: AppTextStyles.blackTitle,
+              ),
+              const SizedBox(height: 10),
+              Flexible(
+                child: GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 5,
+                      crossAxisSpacing: 5,
+                    ),
+                    itemCount: categories.length,
+                    padding: const EdgeInsets.all(10),
+                    itemBuilder: (context, index) {
+                      return ChoiceCategoryWidget(
+                        onTap: () {
+                          context.read<DatabaseBloc>().add(
+                                GetCategoryEvent(
+                                  transactionCategory: categories[index],
+                                ),
+                              );
+                          Navigator.pop(context);
+                        },
+                        icon: SvgPicture.asset(categories[index].icon.pathToIcon),
+                        nameCategory: categories[index].title,
+                      );
+                    }),
+              ),
+              addCategoryButton ?? const SizedBox.shrink(),
+            ],
           ),
         );
       },
@@ -394,6 +374,45 @@ class ChoiceCategoryWidget extends StatelessWidget {
             style: AppTextStyles.blackBottom,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BlueButton extends StatelessWidget {
+  const BlueButton({
+    Key? key,
+    required this.selectedType,
+    required this.check,
+    required this.amount,
+    required this.description,
+  }) : super(key: key);
+
+  final String selectedType;
+  final bool check;
+  final String amount;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.width;
+    return ElevatedButton(
+      style: AppTextStyles.buttonStyle,
+      onPressed: check
+          ? () {
+              context.read<DatabaseBloc>().add(
+                    GetCreatedTransaction(amount: amount, description: description),
+                  );
+              context.read<NavigationBloc>().add(NavigateTabEvent(tabIndex: 0, route: HomeScreen.routeName));
+            }
+          : null,
+      child: SizedBox(
+        height: height / 14,
+        width: width / 1.1,
+        child: Center(
+          child: Text('Add new $selectedType'),
+        ),
       ),
     );
   }

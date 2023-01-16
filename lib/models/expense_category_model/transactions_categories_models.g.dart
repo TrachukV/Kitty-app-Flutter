@@ -1,23 +1,29 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'expense_category.dart';
+part of 'transactions_categories_models.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ExpenseCategory _$$_ExpenseCategoryFromJson(Map<String, dynamic> json) =>
-    _$_ExpenseCategory(
+_$_TransactionsCategoriesModel _$$_TransactionsCategoriesModelFromJson(
+        Map<String, dynamic> json) =>
+    _$_TransactionsCategoriesModel(
+      categoryId: json['categoryId'] as int,
       title: json['title'] as String,
       totalAmount: (json['totalAmount'] as num?)?.toDouble() ?? 0.0,
-      entries: json['entries'] as int? ?? 0,
+      amount: json['amount'] as int? ?? 0,
       icon: IconModel.fromJson(json['icon'] as Map<String, dynamic>),
+      type: json['type'] as String,
     );
 
-Map<String, dynamic> _$$_ExpenseCategoryToJson(_$_ExpenseCategory instance) =>
+Map<String, dynamic> _$$_TransactionsCategoriesModelToJson(
+        _$_TransactionsCategoriesModel instance) =>
     <String, dynamic>{
+      'categoryId': instance.categoryId,
       'title': instance.title,
       'totalAmount': instance.totalAmount,
-      'entries': instance.entries,
+      'amount': instance.amount,
       'icon': instance.icon.toJson(),
+      'type': instance.type,
     };

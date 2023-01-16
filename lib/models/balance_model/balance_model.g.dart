@@ -8,12 +8,16 @@ part of 'balance_model.dart';
 
 _$_BalanceModel _$$_BalanceModelFromJson(Map<String, dynamic> json) =>
     _$_BalanceModel(
+      income: json['income'] as int,
+      expenses: json['expenses'] as int,
       actualBalance: json['actualBalance'] as int,
       currentMonth: json['currentMonth'] as String,
     );
 
 Map<String, dynamic> _$$_BalanceModelToJson(_$_BalanceModel instance) =>
     <String, dynamic>{
+      'income': instance.income,
+      'expenses': instance.expenses,
       'actualBalance': instance.actualBalance,
       'currentMonth': instance.currentMonth,
     };

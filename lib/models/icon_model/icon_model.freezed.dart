@@ -20,6 +20,7 @@ IconModel _$IconModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$IconModel {
+  int get iconId => throw _privateConstructorUsedError;
   String get color => throw _privateConstructorUsedError;
   String get pathToIcon => throw _privateConstructorUsedError;
 
@@ -34,7 +35,7 @@ abstract class $IconModelCopyWith<$Res> {
   factory $IconModelCopyWith(IconModel value, $Res Function(IconModel) then) =
       _$IconModelCopyWithImpl<$Res, IconModel>;
   @useResult
-  $Res call({String color, String pathToIcon});
+  $Res call({int iconId, String color, String pathToIcon});
 }
 
 /// @nodoc
@@ -50,10 +51,15 @@ class _$IconModelCopyWithImpl<$Res, $Val extends IconModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? iconId = null,
     Object? color = null,
     Object? pathToIcon = null,
   }) {
     return _then(_value.copyWith(
+      iconId: null == iconId
+          ? _value.iconId
+          : iconId // ignore: cast_nullable_to_non_nullable
+              as int,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -73,7 +79,7 @@ abstract class _$$_IconModelCopyWith<$Res> implements $IconModelCopyWith<$Res> {
       __$$_IconModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String color, String pathToIcon});
+  $Res call({int iconId, String color, String pathToIcon});
 }
 
 /// @nodoc
@@ -87,10 +93,15 @@ class __$$_IconModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? iconId = null,
     Object? color = null,
     Object? pathToIcon = null,
   }) {
     return _then(_$_IconModel(
+      iconId: null == iconId
+          ? _value.iconId
+          : iconId // ignore: cast_nullable_to_non_nullable
+              as int,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -106,11 +117,14 @@ class __$$_IconModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_IconModel implements _IconModel {
-  const _$_IconModel({required this.color, required this.pathToIcon});
+  const _$_IconModel(
+      {required this.iconId, required this.color, required this.pathToIcon});
 
   factory _$_IconModel.fromJson(Map<String, dynamic> json) =>
       _$$_IconModelFromJson(json);
 
+  @override
+  final int iconId;
   @override
   final String color;
   @override
@@ -118,7 +132,7 @@ class _$_IconModel implements _IconModel {
 
   @override
   String toString() {
-    return 'IconModel(color: $color, pathToIcon: $pathToIcon)';
+    return 'IconModel(iconId: $iconId, color: $color, pathToIcon: $pathToIcon)';
   }
 
   @override
@@ -126,6 +140,7 @@ class _$_IconModel implements _IconModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_IconModel &&
+            (identical(other.iconId, iconId) || other.iconId == iconId) &&
             (identical(other.color, color) || other.color == color) &&
             (identical(other.pathToIcon, pathToIcon) ||
                 other.pathToIcon == pathToIcon));
@@ -133,7 +148,7 @@ class _$_IconModel implements _IconModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, color, pathToIcon);
+  int get hashCode => Object.hash(runtimeType, iconId, color, pathToIcon);
 
   @JsonKey(ignore: true)
   @override
@@ -151,12 +166,15 @@ class _$_IconModel implements _IconModel {
 
 abstract class _IconModel implements IconModel {
   const factory _IconModel(
-      {required final String color,
+      {required final int iconId,
+      required final String color,
       required final String pathToIcon}) = _$_IconModel;
 
   factory _IconModel.fromJson(Map<String, dynamic> json) =
       _$_IconModel.fromJson;
 
+  @override
+  int get iconId;
   @override
   String get color;
   @override

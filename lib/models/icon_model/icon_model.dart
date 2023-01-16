@@ -7,6 +7,7 @@ part 'icon_model.g.dart';
 @freezed
 class IconModel with _$IconModel {
   const factory IconModel({
+    required int iconId,
     required String color,
     required String pathToIcon,
 }) = _IconModel;
