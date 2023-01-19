@@ -9,6 +9,7 @@ import 'package:kitty_app/models/expense_category_model/transactions_categories_
 import 'package:kitty_app/models/expenses_model/transaction_model.dart';
 import 'package:kitty_app/models/icon_model/icon_model.dart';
 import 'package:intl/intl.dart';
+import 'package:kitty_app/utils/helpers/helpers.dart';
 
 part 'database_event.dart';
 
@@ -27,13 +28,11 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     on<ClearDatabaseEvent>((event, emit) {
       emit(state.copyWith(createdCategory: null));
       emit(state.copyWith(selectedIcon: null));
-      print('state :${state.selectedIcon}');
     });
     on<GetIconEvent>((event, emit) {
       emit(state.copyWith(selectedIcon: event.selectedIcon));
     });
     on<CreateCategoryEvent>((event, emit) async {
-      print('sdsdsdsdsd');
       await _createCategory(categoryName: event.categoryName, iconId: state.selectedIcon!.iconId);
       add(DatabaseInitialEvent());
     });
@@ -54,12 +53,21 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     List<TransactionModel> transactions = [];
     final db = await database.database;
     await db.transaction((txn) async {
-      transactions = await txn.query(database.transactionTable).then((data) {
+      transactions = await txn.query(database.transactionTable, orderBy: 'expenseId DESC').then((data) {
         final converted = List<Map<String, dynamic>>.from(data);
-        return converted.map((e) => TransactionModel.fromJson(e)).toList();
+        return converted.map((e) {
+          return TransactionModel(
+            expenseId: e['expenseId'],
+            amount: e['amount'],
+            currentMonth: DateFormat('dd-MMM-yyyy').parse(e['currentMonth']),
+            description: e['description'],
+            categoryId: e['categoryId'],
+            timeStamp: e['timeStamp'],
+          );
+        }).toList();
       });
     });
-    emit(state.copyWith(transaction: transactions));
+    emit(state.copyWith(transaction: transactions, mapTransactions: groupByTimeStampHelper(transactions)));
   }
 
   Future<void> _getTransactionCategories(Emitter emit) async {
@@ -126,7 +134,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       await txn.insert(database.transactionTable, {
         'description': description,
         'amount': int.parse(amount),
-        'currentMonth': DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
+        'currentMonth': DateFormat('dd-MMM-yyyy').format(DateTime.now()),
+        'timeStamp': DateTime.now().millisecondsSinceEpoch,
         'categoryId': categoryId,
       });
     });

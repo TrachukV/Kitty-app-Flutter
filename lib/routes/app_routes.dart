@@ -27,7 +27,7 @@ class AppRouter {
         builder = (_) => MainScreen();
         break;
       case HomeScreen.routeName:
-        builder = (_) => const HomeScreen();
+        builder = (_) =>  HomeScreen();
         break;
       case ChartScreen.routeName:
         builder = (_) => const ChartScreen();

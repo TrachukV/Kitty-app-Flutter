@@ -9,7 +9,8 @@ class TransactionModel with _$TransactionModel {
   const factory TransactionModel({
     required int expenseId,
     required int amount,
-    required String currentMonth,
+    required DateTime currentMonth,
+    required int timeStamp,
     required String description,
     required int categoryId,
 

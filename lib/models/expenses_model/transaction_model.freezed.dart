@@ -22,7 +22,8 @@ TransactionModel _$TransactionModelFromJson(Map<String, dynamic> json) {
 mixin _$TransactionModel {
   int get expenseId => throw _privateConstructorUsedError;
   int get amount => throw _privateConstructorUsedError;
-  String get currentMonth => throw _privateConstructorUsedError;
+  DateTime get currentMonth => throw _privateConstructorUsedError;
+  int get timeStamp => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   int get categoryId => throw _privateConstructorUsedError;
 
@@ -41,7 +42,8 @@ abstract class $TransactionModelCopyWith<$Res> {
   $Res call(
       {int expenseId,
       int amount,
-      String currentMonth,
+      DateTime currentMonth,
+      int timeStamp,
       String description,
       int categoryId});
 }
@@ -62,6 +64,7 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
     Object? expenseId = null,
     Object? amount = null,
     Object? currentMonth = null,
+    Object? timeStamp = null,
     Object? description = null,
     Object? categoryId = null,
   }) {
@@ -77,7 +80,11 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
       currentMonth: null == currentMonth
           ? _value.currentMonth
           : currentMonth // ignore: cast_nullable_to_non_nullable
-              as String,
+              as DateTime,
+      timeStamp: null == timeStamp
+          ? _value.timeStamp
+          : timeStamp // ignore: cast_nullable_to_non_nullable
+              as int,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -101,7 +108,8 @@ abstract class _$$_TransactionModelCopyWith<$Res>
   $Res call(
       {int expenseId,
       int amount,
-      String currentMonth,
+      DateTime currentMonth,
+      int timeStamp,
       String description,
       int categoryId});
 }
@@ -120,6 +128,7 @@ class __$$_TransactionModelCopyWithImpl<$Res>
     Object? expenseId = null,
     Object? amount = null,
     Object? currentMonth = null,
+    Object? timeStamp = null,
     Object? description = null,
     Object? categoryId = null,
   }) {
@@ -135,7 +144,11 @@ class __$$_TransactionModelCopyWithImpl<$Res>
       currentMonth: null == currentMonth
           ? _value.currentMonth
           : currentMonth // ignore: cast_nullable_to_non_nullable
-              as String,
+              as DateTime,
+      timeStamp: null == timeStamp
+          ? _value.timeStamp
+          : timeStamp // ignore: cast_nullable_to_non_nullable
+              as int,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -155,6 +168,7 @@ class _$_TransactionModel implements _TransactionModel {
       {required this.expenseId,
       required this.amount,
       required this.currentMonth,
+      required this.timeStamp,
       required this.description,
       required this.categoryId});
 
@@ -166,7 +180,9 @@ class _$_TransactionModel implements _TransactionModel {
   @override
   final int amount;
   @override
-  final String currentMonth;
+  final DateTime currentMonth;
+  @override
+  final int timeStamp;
   @override
   final String description;
   @override
@@ -174,7 +190,7 @@ class _$_TransactionModel implements _TransactionModel {
 
   @override
   String toString() {
-    return 'TransactionModel(expenseId: $expenseId, amount: $amount, currentMonth: $currentMonth, description: $description, categoryId: $categoryId)';
+    return 'TransactionModel(expenseId: $expenseId, amount: $amount, currentMonth: $currentMonth, timeStamp: $timeStamp, description: $description, categoryId: $categoryId)';
   }
 
   @override
@@ -187,6 +203,8 @@ class _$_TransactionModel implements _TransactionModel {
             (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.currentMonth, currentMonth) ||
                 other.currentMonth == currentMonth) &&
+            (identical(other.timeStamp, timeStamp) ||
+                other.timeStamp == timeStamp) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.categoryId, categoryId) ||
@@ -195,8 +213,8 @@ class _$_TransactionModel implements _TransactionModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, expenseId, amount, currentMonth, description, categoryId);
+  int get hashCode => Object.hash(runtimeType, expenseId, amount, currentMonth,
+      timeStamp, description, categoryId);
 
   @JsonKey(ignore: true)
   @override
@@ -216,7 +234,8 @@ abstract class _TransactionModel implements TransactionModel {
   const factory _TransactionModel(
       {required final int expenseId,
       required final int amount,
-      required final String currentMonth,
+      required final DateTime currentMonth,
+      required final int timeStamp,
       required final String description,
       required final int categoryId}) = _$_TransactionModel;
 
@@ -228,7 +247,9 @@ abstract class _TransactionModel implements TransactionModel {
   @override
   int get amount;
   @override
-  String get currentMonth;
+  DateTime get currentMonth;
+  @override
+  int get timeStamp;
   @override
   String get description;
   @override

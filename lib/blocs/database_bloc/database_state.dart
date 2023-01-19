@@ -8,8 +8,10 @@ class DatabaseState extends Equatable {
   final TransactionsCategoriesModel? createdCategory;
   final IconModel? selectedIcon;
   final BalanceModel balance;
+  final Map<String, List<TransactionModel>> mapTransactions;
 
   const DatabaseState({
+    this.mapTransactions = const {},
     this.incomeCategories = const [],
     this.expensesCategories = const [],
     this.transaction = const [],
@@ -25,6 +27,7 @@ class DatabaseState extends Equatable {
   });
 
   DatabaseState copyWith({
+    Map<String, List<TransactionModel>>? mapTransactions,
     List<TransactionsCategoriesModel>? expensesCategories,
     List<TransactionsCategoriesModel>? incomeCategories,
     List<TransactionModel>? transaction,
@@ -34,6 +37,7 @@ class DatabaseState extends Equatable {
     BalanceModel? balance,
   }) {
     return DatabaseState(
+      mapTransactions: mapTransactions ?? this.mapTransactions,
       expensesCategories: expensesCategories ?? this.expensesCategories,
       incomeCategories: incomeCategories ?? this.incomeCategories,
       transaction: transaction ?? this.transaction,
