@@ -38,6 +38,6 @@ String dateFormatHelper(String dayTransaction) {
 
 String dayExpensesHelper(List<TransactionModel> models) {
   final result = models.fold(0, (previousValue, element) => previousValue + element.amount);
-  return '-$result';
+  return '$result';
 }
 

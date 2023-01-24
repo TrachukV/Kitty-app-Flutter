@@ -7,7 +7,7 @@ class DatabaseInitialEvent extends DatabaseEvent {}
 class CreateCategoryEvent extends DatabaseEvent {
   CreateCategoryEvent({
     required this.categoryName,
-});
+  });
 
   final String categoryName;
 }
@@ -20,6 +20,28 @@ class GetIconEvent extends DatabaseEvent {
   GetIconEvent({required this.selectedIcon});
 
   final IconModel selectedIcon;
+}
+class SelectMonthEvent extends DatabaseEvent {
+  SelectMonthEvent({
+    required this.month,
+  });
+
+  final int month;
+}
+
+class IncDecMonthEvent extends DatabaseEvent {
+  IncDecMonthEvent({
+    required this.command,
+  });
+
+  final String command;
+
+}
+
+class GetMonthTransactions extends DatabaseEvent {
+  GetMonthTransactions({required this.transactionsModels});
+
+  final List<TransactionModel> transactionsModels;
 }
 
 class GetCreatedTransaction extends DatabaseEvent {

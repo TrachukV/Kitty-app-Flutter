@@ -29,6 +29,7 @@ class AppIcons {
   static SvgPicture blackBalance = SvgPicture.asset('$_path/black_balance.svg');
   static SvgPicture blackIncome = SvgPicture.asset('$_path/black_income.svg');
   static SvgPicture blackExpenses = SvgPicture.asset('$_path/black_expenses.svg');
+  static SvgPicture blackMore = SvgPicture.asset('$_path/black_more.svg');
   //[END] Black Icons
 
   //[Start] Colored Icons

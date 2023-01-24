@@ -9,8 +9,10 @@ class DatabaseState extends Equatable {
   final IconModel? selectedIcon;
   final BalanceModel balance;
   final Map<String, List<TransactionModel>> mapTransactions;
+  final int activeMonth;
 
   const DatabaseState({
+    this.activeMonth = 0,
     this.mapTransactions = const {},
     this.incomeCategories = const [],
     this.expensesCategories = const [],
@@ -22,11 +24,11 @@ class DatabaseState extends Equatable {
       income: 0,
       expenses: 0,
       actualBalance: 0,
-      currentMonth: 'bez date',
     ),
   });
 
   DatabaseState copyWith({
+    int? activeMonth,
     Map<String, List<TransactionModel>>? mapTransactions,
     List<TransactionsCategoriesModel>? expensesCategories,
     List<TransactionsCategoriesModel>? incomeCategories,
@@ -37,6 +39,8 @@ class DatabaseState extends Equatable {
     BalanceModel? balance,
   }) {
     return DatabaseState(
+      balance: balance ?? this.balance,
+      activeMonth: activeMonth ?? this.activeMonth,
       mapTransactions: mapTransactions ?? this.mapTransactions,
       expensesCategories: expensesCategories ?? this.expensesCategories,
       incomeCategories: incomeCategories ?? this.incomeCategories,
@@ -49,11 +53,14 @@ class DatabaseState extends Equatable {
 
   @override
   List<Object?> get props => [
+        activeMonth,
         expensesCategories,
         incomeCategories,
         icons,
         selectedIcon,
         transaction,
         createdCategory,
+        mapTransactions,
+        balance,
       ];
 }

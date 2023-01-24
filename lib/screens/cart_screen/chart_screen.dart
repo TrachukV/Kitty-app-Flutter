@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
+import 'package:kitty_app/resources/app_icons.dart';
+import 'package:kitty_app/resources/app_text_styles.dart';
+import 'package:kitty_app/screens/widgets/calendar_widget.dart';
 
 class ChartScreen extends StatelessWidget {
   const ChartScreen({Key? key}) : super(key: key);
@@ -8,19 +10,36 @@ class ChartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime time = DateTime.now();
+    final height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leadingWidth: 100,
+        title: Text(
+          'Statistics',
+          style: AppTextStyles.blackBold,
+          textAlign: TextAlign.right,
+          textDirection: TextDirection.rtl,
+        ),
+        actions: [
+          GestureDetector(
+            child: AppIcons.blackSearch,
+          ),
+          const SizedBox(width: 20),
+          GestureDetector(child: AppIcons.blackMore),
+          const SizedBox(width: 17),
+        ],
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: height * 0.01,
+          ),
+           CalendarWidget(decrement: () {  }, increment: () {  }, selectMonth: () {  },)
+        ]
 
-
-    var dt = DateTime.fromMillisecondsSinceEpoch(time.millisecondsSinceEpoch);
-
-// 12 Hour format:
-    var d12 = DateFormat('MM/dd/yyyy, hh:mm a').format(dt); // 12/31/2000, 10:00 PM
-
-// 24 Hour format:
-    var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
-    print(time.millisecondsSinceEpoch);
-    print(d12);
-    print(d24);
-return Container();
+      ),
+    );
   }
 }

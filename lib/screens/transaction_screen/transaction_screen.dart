@@ -219,13 +219,20 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       ValueListenableBuilder(
                         valueListenable: _amountController,
                         builder: (BuildContext context, TextEditingValue value, Widget? child) {
-                          print(_amount);
-                          print(_description);
                           return BlueButton(
                             selectedType: selectedType,
-                            check: state.createdCategory != null && selectedType != 'type' && _amount != '',
-                            amount: _amount,
-                            description: _description,
+                            check:  state.createdCategory != null && selectedType != 'type' && value.text.isNotEmpty,
+                            callback: () {
+                              context.read<DatabaseBloc>().add(
+                                GetCreatedTransaction(
+                                    amount: selectedType == 'Expenses' ? '-${value.text}' : value.text,
+                                    description: _description),
+                              );
+                              context.read<DatabaseBloc>().add(DatabaseInitialEvent());
+                              context
+                                  .read<NavigationBloc>()
+                                  .add(NavigateTabEvent(tabIndex: 0, route: HomeScreen.routeName));
+                            },
                           );
                         },
                       ),
@@ -383,15 +390,13 @@ class BlueButton extends StatelessWidget {
   const BlueButton({
     Key? key,
     required this.selectedType,
-    required this.check,
-    required this.amount,
-    required this.description,
+     this.check = false,
+    required this.callback,
   }) : super(key: key);
 
   final String selectedType;
-  final bool check;
-  final String amount;
-  final String description;
+ final  bool check;
+  final VoidCallback callback;
 
   @override
   Widget build(BuildContext context) {
@@ -400,12 +405,7 @@ class BlueButton extends StatelessWidget {
     return ElevatedButton(
       style: AppTextStyles.buttonStyle,
       onPressed: check
-          ? () {
-              context.read<DatabaseBloc>().add(
-                    GetCreatedTransaction(amount: amount, description: description),
-                  );
-              context.read<NavigationBloc>().add(NavigateTabEvent(tabIndex: 0, route: HomeScreen.routeName));
-            }
+          ? callback
           : null,
       child: SizedBox(
         height: height / 14,

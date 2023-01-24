@@ -11,7 +11,6 @@ _$_BalanceModel _$$_BalanceModelFromJson(Map<String, dynamic> json) =>
       income: json['income'] as int,
       expenses: json['expenses'] as int,
       actualBalance: json['actualBalance'] as int,
-      currentMonth: json['currentMonth'] as String,
     );
 
 Map<String, dynamic> _$$_BalanceModelToJson(_$_BalanceModel instance) =>
@@ -19,5 +18,4 @@ Map<String, dynamic> _$$_BalanceModelToJson(_$_BalanceModel instance) =>
       'income': instance.income,
       'expenses': instance.expenses,
       'actualBalance': instance.actualBalance,
-      'currentMonth': instance.currentMonth,
     };

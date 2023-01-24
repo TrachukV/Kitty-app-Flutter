@@ -10,7 +10,6 @@ class BalanceModel with _$BalanceModel {
     required int income,
     required int expenses,
     required int actualBalance,
-    required String currentMonth,
 }) = _BalanceModel;
 
 

@@ -14,6 +14,7 @@ class TransactionHistoryWidget extends StatelessWidget {
     return BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, state) {
         final transactionsMap = state.mapTransactions.entries;
+        final allCategories = [...state.expensesCategories, ...state.incomeCategories];
         return Flexible(
           child: ListView.separated(
             padding: const EdgeInsets.all(15),
@@ -27,6 +28,7 @@ class TransactionHistoryWidget extends StatelessWidget {
               context,
               index,
             ) {
+
               final dayTransactionsData = transactionsMap.elementAt(index).value;
               return Container(
                 decoration: BoxDecoration(
@@ -52,7 +54,7 @@ class TransactionHistoryWidget extends StatelessWidget {
                       ),
                     ),
                     ...List.generate(dayTransactionsData.length, (index) {
-                      final transactions = state.expensesCategories.firstWhere(
+                      final transactions = allCategories.firstWhere(
                         (element) => element.categoryId == dayTransactionsData[index].categoryId,
                       );
                       return ListTile(
@@ -62,9 +64,9 @@ class TransactionHistoryWidget extends StatelessWidget {
                           style: AppTextStyles.blackRegular,
                         ),
                         subtitle: Text(dayTransactionsData[index].description, style: AppTextStyles.greyCategory),
-                        trailing: Text('-${(dayTransactionsData[index].amount)}'
+                        trailing: Text(dayTransactionsData[index].amount
                           .toString(),
-                          style: AppTextStyles.redRegular,
+                          style: dayTransactionsData[index].amount  < 0 ? AppTextStyles.redRegular : AppTextStyles.greenRegular,
                         ),
                       );
                     })

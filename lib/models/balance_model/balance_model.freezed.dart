@@ -23,7 +23,6 @@ mixin _$BalanceModel {
   int get income => throw _privateConstructorUsedError;
   int get expenses => throw _privateConstructorUsedError;
   int get actualBalance => throw _privateConstructorUsedError;
-  String get currentMonth => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +36,7 @@ abstract class $BalanceModelCopyWith<$Res> {
           BalanceModel value, $Res Function(BalanceModel) then) =
       _$BalanceModelCopyWithImpl<$Res, BalanceModel>;
   @useResult
-  $Res call({int income, int expenses, int actualBalance, String currentMonth});
+  $Res call({int income, int expenses, int actualBalance});
 }
 
 /// @nodoc
@@ -56,7 +55,6 @@ class _$BalanceModelCopyWithImpl<$Res, $Val extends BalanceModel>
     Object? income = null,
     Object? expenses = null,
     Object? actualBalance = null,
-    Object? currentMonth = null,
   }) {
     return _then(_value.copyWith(
       income: null == income
@@ -71,10 +69,6 @@ class _$BalanceModelCopyWithImpl<$Res, $Val extends BalanceModel>
           ? _value.actualBalance
           : actualBalance // ignore: cast_nullable_to_non_nullable
               as int,
-      currentMonth: null == currentMonth
-          ? _value.currentMonth
-          : currentMonth // ignore: cast_nullable_to_non_nullable
-              as String,
     ) as $Val);
   }
 }
@@ -87,7 +81,7 @@ abstract class _$$_BalanceModelCopyWith<$Res>
       __$$_BalanceModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int income, int expenses, int actualBalance, String currentMonth});
+  $Res call({int income, int expenses, int actualBalance});
 }
 
 /// @nodoc
@@ -104,7 +98,6 @@ class __$$_BalanceModelCopyWithImpl<$Res>
     Object? income = null,
     Object? expenses = null,
     Object? actualBalance = null,
-    Object? currentMonth = null,
   }) {
     return _then(_$_BalanceModel(
       income: null == income
@@ -119,10 +112,6 @@ class __$$_BalanceModelCopyWithImpl<$Res>
           ? _value.actualBalance
           : actualBalance // ignore: cast_nullable_to_non_nullable
               as int,
-      currentMonth: null == currentMonth
-          ? _value.currentMonth
-          : currentMonth // ignore: cast_nullable_to_non_nullable
-              as String,
     ));
   }
 }
@@ -133,8 +122,7 @@ class _$_BalanceModel implements _BalanceModel {
   const _$_BalanceModel(
       {required this.income,
       required this.expenses,
-      required this.actualBalance,
-      required this.currentMonth});
+      required this.actualBalance});
 
   factory _$_BalanceModel.fromJson(Map<String, dynamic> json) =>
       _$$_BalanceModelFromJson(json);
@@ -145,12 +133,10 @@ class _$_BalanceModel implements _BalanceModel {
   final int expenses;
   @override
   final int actualBalance;
-  @override
-  final String currentMonth;
 
   @override
   String toString() {
-    return 'BalanceModel(income: $income, expenses: $expenses, actualBalance: $actualBalance, currentMonth: $currentMonth)';
+    return 'BalanceModel(income: $income, expenses: $expenses, actualBalance: $actualBalance)';
   }
 
   @override
@@ -162,15 +148,12 @@ class _$_BalanceModel implements _BalanceModel {
             (identical(other.expenses, expenses) ||
                 other.expenses == expenses) &&
             (identical(other.actualBalance, actualBalance) ||
-                other.actualBalance == actualBalance) &&
-            (identical(other.currentMonth, currentMonth) ||
-                other.currentMonth == currentMonth));
+                other.actualBalance == actualBalance));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, income, expenses, actualBalance, currentMonth);
+  int get hashCode => Object.hash(runtimeType, income, expenses, actualBalance);
 
   @JsonKey(ignore: true)
   @override
@@ -190,8 +173,7 @@ abstract class _BalanceModel implements BalanceModel {
   const factory _BalanceModel(
       {required final int income,
       required final int expenses,
-      required final int actualBalance,
-      required final String currentMonth}) = _$_BalanceModel;
+      required final int actualBalance}) = _$_BalanceModel;
 
   factory _BalanceModel.fromJson(Map<String, dynamic> json) =
       _$_BalanceModel.fromJson;
@@ -202,8 +184,6 @@ abstract class _BalanceModel implements BalanceModel {
   int get expenses;
   @override
   int get actualBalance;
-  @override
-  String get currentMonth;
   @override
   @JsonKey(ignore: true)
   _$$_BalanceModelCopyWith<_$_BalanceModel> get copyWith =>

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kitty_app/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/database/local_database.dart';
@@ -14,7 +15,6 @@ import 'package:kitty_app/screens/settings_screen/settings_screen.dart';
 import 'package:kitty_app/screens/transaction_screen/transaction_screen.dart';
 import 'package:kitty_app/screens/widgets/bottom_bar_widget.dart';
 
-
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
 
@@ -29,7 +29,6 @@ class MainScreen extends StatelessWidget {
     TransactionScreen.routeName,
     CreateCategoryScreen.routeName,
   ];
-
 
   Future<bool> _maybePop() async {
     return await _navigatorKey.currentState!.maybePop();
@@ -48,12 +47,12 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => DatabaseBloc(DBProvider())
-            ..add(
-              DatabaseInitialEvent(),
-            ),
-        ),
+        // BlocProvider(
+        //   create: (context) => DatabaseBloc(DBProvider())
+        //     ..add(
+        //       DatabaseInitialEvent(),
+        //     ),
+        // ),
         BlocProvider(
           create: (context) => NavigationBloc(),
         ),
