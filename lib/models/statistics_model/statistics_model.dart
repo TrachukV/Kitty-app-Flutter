@@ -13,7 +13,7 @@ class StatisticsModel with _$StatisticsModel {
     required String title,
     required int counterTransactions,
     required int totalAmount,
-    required int timeStamp,
+    required double percentage,
     required IconModel icon,
   }) = _StatisticsModel;
 

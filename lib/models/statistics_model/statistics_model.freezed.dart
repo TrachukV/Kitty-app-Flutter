@@ -23,7 +23,7 @@ mixin _$StatisticsModel {
   String get title => throw _privateConstructorUsedError;
   int get counterTransactions => throw _privateConstructorUsedError;
   int get totalAmount => throw _privateConstructorUsedError;
-  int get timeStamp => throw _privateConstructorUsedError;
+  double get percentage => throw _privateConstructorUsedError;
   IconModel get icon => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,7 +42,7 @@ abstract class $StatisticsModelCopyWith<$Res> {
       {String title,
       int counterTransactions,
       int totalAmount,
-      int timeStamp,
+      double percentage,
       IconModel icon});
 
   $IconModelCopyWith<$Res> get icon;
@@ -64,7 +64,7 @@ class _$StatisticsModelCopyWithImpl<$Res, $Val extends StatisticsModel>
     Object? title = null,
     Object? counterTransactions = null,
     Object? totalAmount = null,
-    Object? timeStamp = null,
+    Object? percentage = null,
     Object? icon = null,
   }) {
     return _then(_value.copyWith(
@@ -80,10 +80,10 @@ class _$StatisticsModelCopyWithImpl<$Res, $Val extends StatisticsModel>
           ? _value.totalAmount
           : totalAmount // ignore: cast_nullable_to_non_nullable
               as int,
-      timeStamp: null == timeStamp
-          ? _value.timeStamp
-          : timeStamp // ignore: cast_nullable_to_non_nullable
-              as int,
+      percentage: null == percentage
+          ? _value.percentage
+          : percentage // ignore: cast_nullable_to_non_nullable
+              as double,
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
@@ -112,7 +112,7 @@ abstract class _$$_StatisticsModelCopyWith<$Res>
       {String title,
       int counterTransactions,
       int totalAmount,
-      int timeStamp,
+      double percentage,
       IconModel icon});
 
   @override
@@ -133,7 +133,7 @@ class __$$_StatisticsModelCopyWithImpl<$Res>
     Object? title = null,
     Object? counterTransactions = null,
     Object? totalAmount = null,
-    Object? timeStamp = null,
+    Object? percentage = null,
     Object? icon = null,
   }) {
     return _then(_$_StatisticsModel(
@@ -149,10 +149,10 @@ class __$$_StatisticsModelCopyWithImpl<$Res>
           ? _value.totalAmount
           : totalAmount // ignore: cast_nullable_to_non_nullable
               as int,
-      timeStamp: null == timeStamp
-          ? _value.timeStamp
-          : timeStamp // ignore: cast_nullable_to_non_nullable
-              as int,
+      percentage: null == percentage
+          ? _value.percentage
+          : percentage // ignore: cast_nullable_to_non_nullable
+              as double,
       icon: null == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
@@ -169,7 +169,7 @@ class _$_StatisticsModel implements _StatisticsModel {
       {required this.title,
       required this.counterTransactions,
       required this.totalAmount,
-      required this.timeStamp,
+      required this.percentage,
       required this.icon});
 
   factory _$_StatisticsModel.fromJson(Map<String, dynamic> json) =>
@@ -182,13 +182,13 @@ class _$_StatisticsModel implements _StatisticsModel {
   @override
   final int totalAmount;
   @override
-  final int timeStamp;
+  final double percentage;
   @override
   final IconModel icon;
 
   @override
   String toString() {
-    return 'StatisticsModel(title: $title, counterTransactions: $counterTransactions, totalAmount: $totalAmount, timeStamp: $timeStamp, icon: $icon)';
+    return 'StatisticsModel(title: $title, counterTransactions: $counterTransactions, totalAmount: $totalAmount, percentage: $percentage, icon: $icon)';
   }
 
   @override
@@ -201,15 +201,15 @@ class _$_StatisticsModel implements _StatisticsModel {
                 other.counterTransactions == counterTransactions) &&
             (identical(other.totalAmount, totalAmount) ||
                 other.totalAmount == totalAmount) &&
-            (identical(other.timeStamp, timeStamp) ||
-                other.timeStamp == timeStamp) &&
+            (identical(other.percentage, percentage) ||
+                other.percentage == percentage) &&
             (identical(other.icon, icon) || other.icon == icon));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, title, counterTransactions, totalAmount, timeStamp, icon);
+      runtimeType, title, counterTransactions, totalAmount, percentage, icon);
 
   @JsonKey(ignore: true)
   @override
@@ -230,7 +230,7 @@ abstract class _StatisticsModel implements StatisticsModel {
       {required final String title,
       required final int counterTransactions,
       required final int totalAmount,
-      required final int timeStamp,
+      required final double percentage,
       required final IconModel icon}) = _$_StatisticsModel;
 
   factory _StatisticsModel.fromJson(Map<String, dynamic> json) =
@@ -243,7 +243,7 @@ abstract class _StatisticsModel implements StatisticsModel {
   @override
   int get totalAmount;
   @override
-  int get timeStamp;
+  double get percentage;
   @override
   IconModel get icon;
   @override

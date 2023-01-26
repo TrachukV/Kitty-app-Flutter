@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitty_app/repository/database_repository.dart';
 import 'package:kitty_app/routes/app_routes.dart';
 
 import 'blocs/database_bloc/database_bloc.dart';
@@ -9,18 +10,22 @@ import 'database/local_database.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => DatabaseBloc(DBProvider())
-            ..add(
-              DatabaseInitialEvent(),
-            ),
+    RepositoryProvider(
+      create: (context) => DatabaseRepo(DBProvider()),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+            DatabaseBloc(RepositoryProvider.of<DatabaseRepo>(context))
+              ..add(
+                DatabaseInitialEvent(),
+              ),
+          ),
+        ],
+        child: const MaterialApp(
+          onGenerateRoute: AppRouter.generateRoute,
+          debugShowCheckedModeBanner: false,
         ),
-      ],
-      child: const MaterialApp(
-        onGenerateRoute: AppRouter.generateRoute,
-        debugShowCheckedModeBanner: false,
       ),
     ),
   );

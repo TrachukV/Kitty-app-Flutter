@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kitty_app/blocs/calendar_bloc/calendar_bloc.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
-import 'package:kitty_app/database/local_database.dart';
+
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/widgets/calendar_widget.dart';
-import 'package:kitty_app/screens/home_screen/widgets/month_item.dart';
+
 import 'package:kitty_app/screens/home_screen/widgets/transactionsHistoryWidget.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   static const routeName = 'home_screen';
 
@@ -20,9 +19,14 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+
+
 class _HomeScreenState extends State<HomeScreen> {
+
+
   @override
   Widget build(BuildContext context) {
+
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return BlocBuilder<DatabaseBloc, DatabaseState>(
@@ -71,17 +75,15 @@ class _HomeScreenState extends State<HomeScreen> {
               CalendarWidget(
                 decrement: () {
                   context.read<DatabaseBloc>().add(
-                        IncDecMonthEvent(command: 'decrement'),
+                        IncDecMonthEvent(command: 'decrement', screen: 'home' ),
                       );
                 },
                 increment: () {
                   context.read<DatabaseBloc>().add(
-                    IncDecMonthEvent(command: 'increment'),
+                    IncDecMonthEvent(command: 'increment', screen: 'home' ),
                   );
                 },
-                selectMonth: () {
-
-                },
+                screen: 'home',
               ),
               SizedBox(
                 height: height * 0.025,

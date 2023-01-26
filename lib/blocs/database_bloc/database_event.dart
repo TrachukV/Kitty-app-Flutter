@@ -2,6 +2,8 @@ part of 'database_bloc.dart';
 
 abstract class DatabaseEvent {}
 
+class Sran extends DatabaseEvent {}
+
 class DatabaseInitialEvent extends DatabaseEvent {}
 
 class CreateCategoryEvent extends DatabaseEvent {
@@ -24,16 +26,18 @@ class GetIconEvent extends DatabaseEvent {
 class SelectMonthEvent extends DatabaseEvent {
   SelectMonthEvent({
     required this.month,
+    required this.screen,
   });
-
+  final String screen;
   final int month;
 }
 
 class IncDecMonthEvent extends DatabaseEvent {
-  IncDecMonthEvent({
+  IncDecMonthEvent( {
+    required this.screen,
     required this.command,
   });
-
+  final String screen;
   final String command;
 
 }

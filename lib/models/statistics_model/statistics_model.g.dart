@@ -11,7 +11,7 @@ _$_StatisticsModel _$$_StatisticsModelFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       counterTransactions: json['counterTransactions'] as int,
       totalAmount: json['totalAmount'] as int,
-      timeStamp: json['timeStamp'] as int,
+      percentage: (json['percentage'] as num).toDouble(),
       icon: IconModel.fromJson(json['icon'] as Map<String, dynamic>),
     );
 
@@ -20,6 +20,6 @@ Map<String, dynamic> _$$_StatisticsModelToJson(_$_StatisticsModel instance) =>
       'title': instance.title,
       'counterTransactions': instance.counterTransactions,
       'totalAmount': instance.totalAmount,
-      'timeStamp': instance.timeStamp,
+      'percentage': instance.percentage,
       'icon': instance.icon.toJson(),
     };

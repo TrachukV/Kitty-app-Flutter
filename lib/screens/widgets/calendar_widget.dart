@@ -15,11 +15,12 @@ class CalendarWidget extends StatelessWidget {
     Key? key,
     required this.decrement,
     required this.increment,
-    required this.selectMonth,
+     required this.screen,
   }) : super(key: key);
   final VoidCallback decrement;
   final VoidCallback increment;
-  final VoidCallback selectMonth;
+
+  final String screen;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class CalendarWidget extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            state.activeMonth == 0
+            state.activeMonth == 1
                 ? Icon(
                     Icons.arrow_back_ios,
                     color: AppColors.grey,
@@ -68,7 +69,9 @@ class CalendarWidget extends StatelessWidget {
                   children: [
                     AppIcons.blackCalendar,
                     Text(
-                      '${monthsList[state.activeMonth]}, 2023',
+                      state.activeMonth == 0 ?
+                      '${monthsList.first}, ${DateTime.now().year}' :
+                      '${monthsList[state.activeMonth - 1]}, ${DateTime.now().year}',
                       style: AppTextStyles.blackMedium,
                     ),
                   ],
@@ -125,11 +128,11 @@ class CalendarWidget extends StatelessWidget {
                                           onTap: () {
                                             context.read<DatabaseBloc>().add(
                                                   SelectMonthEvent(
-                                                    month: index,
+                                                    month: index + 1, screen: screen,
                                                   ),
                                                 );
                                           },
-                                          isActive: state.activeMonth == index,
+                                          isActive: state.activeMonth == index + 1,
                                         );
                                       }),
                                     ),
@@ -149,7 +152,7 @@ class CalendarWidget extends StatelessWidget {
                 );
               },
             ),
-            state.activeMonth == 11
+            state.activeMonth == 12
                 ? Icon(
                     Icons.arrow_forward_ios,
                     color: AppColors.grey,
