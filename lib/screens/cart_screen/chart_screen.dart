@@ -9,6 +9,8 @@ import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/widgets/calendar_widget.dart';
 
+import '../../utils/pdf_generator/pdf_generenor.dart';
+
 class ChartScreen extends StatelessWidget {
   const ChartScreen({Key? key}) : super(key: key);
   static const routeName = 'chart_screen';
@@ -27,7 +29,9 @@ class ChartScreen extends StatelessWidget {
               color: Colors.white,
             ),
             label: const Text('Download report'),
-            onPressed: () async {},
+            onPressed: () async {
+              await createOpenPdf(state);
+            },
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           appBar: AppBar(
