@@ -59,7 +59,7 @@ class EditCategoryScreen extends StatelessWidget {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(
-              'Add new category',
+              'Edit category',
               style: AppTextStyles.blackRegular,
             ),
             backgroundColor: AppColors.grey,
