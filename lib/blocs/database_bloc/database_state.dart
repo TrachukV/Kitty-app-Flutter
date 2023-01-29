@@ -6,6 +6,7 @@ class DatabaseState extends Equatable {
   final List<TransactionModel> transaction;
   final List<IconModel> icons;
   final TransactionsCategoriesModel? createdCategory;
+  final TransactionsCategoriesModel? editCategory;
   final IconModel? selectedIcon;
   final BalanceModel balance;
   final Map<String, List<TransactionModel>> mapTransactions;
@@ -17,6 +18,7 @@ class DatabaseState extends Equatable {
   final List<String> searchHistory;
 
   const DatabaseState({
+    this.editCategory,
     this.searchHistory = const [],
     this.searchedValue = '',
     this.selectedCategories = const [],
@@ -38,6 +40,7 @@ class DatabaseState extends Equatable {
   });
 
   DatabaseState copyWith({
+    TransactionsCategoriesModel? createdCategory,
     List<String>? searchHistory,
     String? searchedValue,
     List<int>? selectedCategories,
@@ -50,10 +53,11 @@ class DatabaseState extends Equatable {
     List<TransactionModel>? transaction,
     List<IconModel>? icons,
     IconModel? selectedIcon,
-    TransactionsCategoriesModel? createdCategory,
+    TransactionsCategoriesModel? editCategory,
     BalanceModel? balance,
   }) {
     return DatabaseState(
+      editCategory: editCategory ?? this.editCategory,
       searchHistory: searchHistory ?? this.searchHistory,
       searchedValue: searchedValue ?? this.searchedValue,
       selectedCategories: selectedCategories ?? this.selectedCategories,
@@ -73,6 +77,7 @@ class DatabaseState extends Equatable {
 
   @override
   List<Object?> get props => [
+    editCategory,
         searchHistory,
         searchedValue,
         selectedCategories,

@@ -15,6 +15,7 @@ _$_TransactionsCategoriesModel _$$_TransactionsCategoriesModelFromJson(
       amount: json['amount'] as int? ?? 0,
       icon: IconModel.fromJson(json['icon'] as Map<String, dynamic>),
       type: json['type'] as String,
+      orderNum: json['orderNum'] as int,
     );
 
 Map<String, dynamic> _$$_TransactionsCategoriesModelToJson(
@@ -26,4 +27,5 @@ Map<String, dynamic> _$$_TransactionsCategoriesModelToJson(
       'amount': instance.amount,
       'icon': instance.icon.toJson(),
       'type': instance.type,
+      'orderNum': instance.orderNum,
     };

@@ -15,6 +15,7 @@ class TransactionsCategoriesModel with _$TransactionsCategoriesModel {
     @Default(0) int amount,
     required IconModel icon,
     required String type,
+    required int orderNum,
   }) = _TransactionsCategoriesModel;
 
   factory TransactionsCategoriesModel.fromJson(Map<String, dynamic> json) => _$TransactionsCategoriesModelFromJson(json);

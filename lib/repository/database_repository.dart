@@ -27,12 +27,13 @@ class DatabaseRepo {
     final icon = database.iconTable;
     return db.transaction((txn) async {
       return txn.rawQuery('''
-      SELECT  $category.categoryId, $category.title, 
+      SELECT $category.categoryId, $category.title, $category.orderNum, 
       $category.totalAmount,$category.entries, $category.type, $icon.iconId, 
       $icon.pathToIcon,$icon.color
       FROM $category
       INNER JOIN $icon
       ON $category.iconId = $icon.iconId
+      ORDER BY orderNum
       ''').then((data) {
         final converted = List<Map<String, dynamic>>.from(data);
         return converted.map((e) {
@@ -42,11 +43,13 @@ class DatabaseRepo {
             type: e['type'],
             totalAmount: double.parse(e['totalAmount']),
             amount: 0,
+            orderNum: e['orderNum'],
             icon: IconModel(
               iconId: e['iconId'],
               color: e['color'],
               pathToIcon: e['pathToIcon'],
             ),
+
           );
         }).toList();
       });
@@ -221,10 +224,12 @@ class DatabaseRepo {
         final converted = List<Map<String, dynamic>>.from(data);
         return converted.map((e) {
           return TransactionsCategoriesModel(
-              categoryId: e['categoryId'],
-              title: e['title'],
-              type: e['type'],
-              icon: IconModel(iconId: e['iconId'], pathToIcon: e['pathToIcon'], color: e['color']));
+            orderNum: e['orderNum'],
+            categoryId: e['categoryId'],
+            title: e['title'],
+            type: e['type'],
+            icon: IconModel(iconId: e['iconId'], pathToIcon: e['pathToIcon'], color: e['color']),
+          );
         }).toList();
       });
     });
@@ -282,6 +287,34 @@ class DatabaseRepo {
         final converted = List<Map<String, dynamic>>.from(data);
         return converted.map((e) => e['value'] as String).toList();
       });
+    });
+  }
+
+  Future<void> dragCategories(int oldId, int newId) async {
+    final db = await database.database;
+    await db.transaction((txn) async {
+      await txn.rawQuery('''
+      UPDATE ${database.categoryTable} SET orderNum = 
+      (CASE WHEN orderNum = $oldId THEN $newId ELSE $oldId END) 
+      WHERE orderNum IN ($oldId, $newId) 
+      ''');
+    });
+  }
+
+  Future<void> editCategory(
+      {required int categoryId,
+        required int iconId,
+        required String title}) async {
+    final db = await database.database;
+    await db.transaction((txn) async {
+      txn.update(
+          database.categoryTable,
+          {
+            'title': title,
+            'iconId': iconId,
+          },
+          where: 'categoryId = ?',
+          whereArgs: [categoryId]);
     });
   }
 }

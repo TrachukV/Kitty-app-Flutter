@@ -3,11 +3,14 @@ part of 'database_bloc.dart';
 abstract class DatabaseEvent {}
 
 class CategoriesForSearchEvent extends DatabaseEvent {}
+
 class CategorySearchSelectEvent extends DatabaseEvent {
-  CategorySearchSelectEvent( {required this.categoryId, required this.searchedValue});
+  CategorySearchSelectEvent({required this.categoryId, required this.searchedValue});
+
   final int categoryId;
   final String searchedValue;
 }
+
 class TransactionSearchEvent extends DatabaseEvent {
   TransactionSearchEvent({
     required this.searchedValue,
@@ -35,23 +38,25 @@ class GetIconEvent extends DatabaseEvent {
 
   final IconModel selectedIcon;
 }
+
 class SelectMonthEvent extends DatabaseEvent {
   SelectMonthEvent({
     required this.month,
     required this.screen,
   });
+
   final String screen;
   final int month;
 }
 
 class IncDecMonthEvent extends DatabaseEvent {
-  IncDecMonthEvent( {
+  IncDecMonthEvent({
     required this.screen,
     required this.command,
   });
+
   final String screen;
   final String command;
-
 }
 
 class GetMonthTransactions extends DatabaseEvent {
@@ -92,4 +97,30 @@ class ClearDatabaseEvent extends DatabaseEvent {}
 
 class StatisticInitialEvent extends DatabaseEvent {}
 
+class GetEditCategoryEvent extends DatabaseEvent {
+  GetEditCategoryEvent({required this.editCategory});
+
+  final TransactionsCategoriesModel editCategory;
+}
+
+class EditCategoryEvent extends DatabaseEvent {
+  EditCategoryEvent({
+    required this.editTitle,
+    required this.editIcon,
+  });
+
+  final String editTitle;
+  final IconModel editIcon;
+}
+
 class HomeScreenInitialEvent extends DatabaseEvent {}
+
+class DragCategoriesEvent extends DatabaseEvent {
+  DragCategoriesEvent({
+    required this.oldIndex,
+    required this.newIndex,
+  });
+
+  final int oldIndex;
+  final int newIndex;
+}

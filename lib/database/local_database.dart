@@ -38,8 +38,13 @@ class DBProvider {
       totalAmount TEXT,
       entries INTEGER,
       iconId INTEGER NOT NULL,
+      orderNum INTEGER,
       FOREIGN KEY (iconId) REFERENCES $iconTable (iconId)
-      )
+      );
+      CREATE TRIGGER auto_increment_trigger AFTER INSERT ON $categoryTable
+      WHEN new.orderNum IS NULL BEGIN UPDATE $categoryTable SET orderNum = 
+      (SELECT IF NULL(MAX(orderNum), 0) + 1 FROM $categoryTable) WHERE categoryId = 
+      new.categoryId; END;
           ''');
       await txn.execute('''
       CREATE TABLE $transactionTable (
@@ -82,6 +87,7 @@ class DBProvider {
           'totalAmount': (0.0).toString(),
           'entries': 0,
           'iconId': i,
+          'orderNum': i+1,
         });
       }
       for (int i = 6; i < DatabaseData.expenseCategories.length + 6; i++,) {
@@ -91,6 +97,7 @@ class DBProvider {
           'totalAmount': 0.0.toString(),
           'entries': 0,
           'iconId': i,
+          'orderNum': i+1,
         });
       }
     });

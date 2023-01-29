@@ -9,12 +9,15 @@ import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/routes/app_routes.dart';
 import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
+import 'package:kitty_app/screens/edit_category_screen/edit_category_screen.dart';
 import 'package:kitty_app/screens/home_screen/home_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitty_app/screens/search_screen/search_screen.dart';
 import 'package:kitty_app/screens/settings_screen/settings_screen.dart';
 import 'package:kitty_app/screens/transaction_screen/transaction_screen.dart';
 import 'package:kitty_app/screens/widgets/bottom_bar_widget.dart';
+
+import 'manage_screen/manage_screen.dart';
 
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
@@ -30,6 +33,8 @@ class MainScreen extends StatelessWidget {
     TransactionScreen.routeName,
     CreateCategoryScreen.routeName,
     SearchScreen.routeName,
+    ManageScreen.routeName,
+    EditCategoryScreen.routeName,
   ];
 
   Future<bool> _maybePop() async {

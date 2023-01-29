@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
+import 'package:kitty_app/screens/edit_category_screen/edit_category_screen.dart';
 import 'package:kitty_app/screens/home_screen/home_screen.dart';
 import 'package:kitty_app/screens/main_screen.dart';
+import 'package:kitty_app/screens/manage_screen/manage_screen.dart';
 import 'package:kitty_app/screens/search_screen/search_screen.dart';
 import 'package:kitty_app/screens/settings_screen/settings_screen.dart';
 import 'package:kitty_app/screens/splash_screen/splash_screen.dart';
@@ -42,6 +44,14 @@ class AppRouter {
       case SearchScreen.routeName:
         builder = (_) => const SearchScreen();
         break;
+      case ManageScreen.routeName:
+        builder = (_) => const ManageScreen();
+        break;
+      case EditCategoryScreen.routeName:
+        builder = (_) => const EditCategoryScreen();
+        break;
+
+
 
       // [END] Main pages
 

@@ -27,6 +27,7 @@ mixin _$TransactionsCategoriesModel {
   int get amount => throw _privateConstructorUsedError;
   IconModel get icon => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
+  int get orderNum => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,7 +49,8 @@ abstract class $TransactionsCategoriesModelCopyWith<$Res> {
       double totalAmount,
       int amount,
       IconModel icon,
-      String type});
+      String type,
+      int orderNum});
 
   $IconModelCopyWith<$Res> get icon;
 }
@@ -73,6 +75,7 @@ class _$TransactionsCategoriesModelCopyWithImpl<$Res,
     Object? amount = null,
     Object? icon = null,
     Object? type = null,
+    Object? orderNum = null,
   }) {
     return _then(_value.copyWith(
       categoryId: null == categoryId
@@ -99,6 +102,10 @@ class _$TransactionsCategoriesModelCopyWithImpl<$Res,
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      orderNum: null == orderNum
+          ? _value.orderNum
+          : orderNum // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -126,7 +133,8 @@ abstract class _$$_TransactionsCategoriesModelCopyWith<$Res>
       double totalAmount,
       int amount,
       IconModel icon,
-      String type});
+      String type,
+      int orderNum});
 
   @override
   $IconModelCopyWith<$Res> get icon;
@@ -151,6 +159,7 @@ class __$$_TransactionsCategoriesModelCopyWithImpl<$Res>
     Object? amount = null,
     Object? icon = null,
     Object? type = null,
+    Object? orderNum = null,
   }) {
     return _then(_$_TransactionsCategoriesModel(
       categoryId: null == categoryId
@@ -177,6 +186,10 @@ class __$$_TransactionsCategoriesModelCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      orderNum: null == orderNum
+          ? _value.orderNum
+          : orderNum // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -191,7 +204,8 @@ class _$_TransactionsCategoriesModel implements _TransactionsCategoriesModel {
       this.totalAmount = 0.0,
       this.amount = 0,
       required this.icon,
-      required this.type});
+      required this.type,
+      required this.orderNum});
 
   factory _$_TransactionsCategoriesModel.fromJson(Map<String, dynamic> json) =>
       _$$_TransactionsCategoriesModelFromJson(json);
@@ -210,10 +224,12 @@ class _$_TransactionsCategoriesModel implements _TransactionsCategoriesModel {
   final IconModel icon;
   @override
   final String type;
+  @override
+  final int orderNum;
 
   @override
   String toString() {
-    return 'TransactionsCategoriesModel(categoryId: $categoryId, title: $title, totalAmount: $totalAmount, amount: $amount, icon: $icon, type: $type)';
+    return 'TransactionsCategoriesModel(categoryId: $categoryId, title: $title, totalAmount: $totalAmount, amount: $amount, icon: $icon, type: $type, orderNum: $orderNum)';
   }
 
   @override
@@ -228,13 +244,15 @@ class _$_TransactionsCategoriesModel implements _TransactionsCategoriesModel {
                 other.totalAmount == totalAmount) &&
             (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.icon, icon) || other.icon == icon) &&
-            (identical(other.type, type) || other.type == type));
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.orderNum, orderNum) ||
+                other.orderNum == orderNum));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, categoryId, title, totalAmount, amount, icon, type);
+  int get hashCode => Object.hash(runtimeType, categoryId, title, totalAmount,
+      amount, icon, type, orderNum);
 
   @JsonKey(ignore: true)
   @override
@@ -259,7 +277,8 @@ abstract class _TransactionsCategoriesModel
       final double totalAmount,
       final int amount,
       required final IconModel icon,
-      required final String type}) = _$_TransactionsCategoriesModel;
+      required final String type,
+      required final int orderNum}) = _$_TransactionsCategoriesModel;
 
   factory _TransactionsCategoriesModel.fromJson(Map<String, dynamic> json) =
       _$_TransactionsCategoriesModel.fromJson;
@@ -276,6 +295,8 @@ abstract class _TransactionsCategoriesModel
   IconModel get icon;
   @override
   String get type;
+  @override
+  int get orderNum;
   @override
   @JsonKey(ignore: true)
   _$$_TransactionsCategoriesModelCopyWith<_$_TransactionsCategoriesModel>

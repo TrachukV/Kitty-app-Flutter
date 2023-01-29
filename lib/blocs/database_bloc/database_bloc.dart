@@ -18,7 +18,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   DatabaseBloc(this.dbRepo) : super(const DatabaseState()) {
     on<DatabaseInitialEvent>((event, emit) async {
       await _initial(emit);
-      if(state.mapTransactions.isNotEmpty) {
+      if (state.mapTransactions.isNotEmpty) {
         add(StatisticInitialEvent());
       }
       add(CategoriesForSearchEvent());
@@ -32,10 +32,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         searchedValue: '',
       ));
     });
-    on<StatisticInitialEvent>((event, emit) async  {
+    on<StatisticInitialEvent>((event, emit) async {
       final statistics = await dbRepo.getStatistics(DateTime.now().month);
-      emit(state.copyWith(statisticsModels:  statistics));
-
+      emit(state.copyWith(statisticsModels: statistics));
     });
     on<SelectMonthEvent>((event, emit) async {
       await _calendarSwitch(command: event.screen, emit: emit, month: event.month);
@@ -87,12 +86,26 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       );
     });
     on<TransactionSearchEvent>((event, emit) async {
-
-       await _getSearchedTransactions(categoriesIds: [], emit: emit, searchedValue: event.searchedValue);
+      await _getSearchedTransactions(categoriesIds: [], emit: emit, searchedValue: event.searchedValue);
 
       emit(state.copyWith(
         searchedValue: event.searchedValue,
       ));
+    });
+    on<DragCategoriesEvent>((event, emit) async {
+      await _dragCategories(event.oldIndex, event.newIndex);
+    });
+    on<GetEditCategoryEvent>((event, emit) {
+      print(event.editCategory.icon.pathToIcon);
+      emit(state.copyWith(editCategory: event.editCategory));
+    });
+    on<EditCategoryEvent>((event, emit) async {
+      await dbRepo.editCategory(
+        categoryId: state.editCategory!.categoryId,
+        iconId: event.editIcon.iconId,
+        title: event.editTitle,
+      );
+      await _initial(emit);
     });
   }
 
@@ -228,7 +241,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     final categoriesForSearch = await dbRepo.getUsedCategories();
     final historySearch = await dbRepo.getRecentSearchValues();
 
-    emit(state.copyWith(categoriesForSearch: categoriesForSearch, searchHistory: historySearch,));
+    emit(state.copyWith(
+      categoriesForSearch: categoriesForSearch,
+      searchHistory: historySearch,
+    ));
     print(state.searchHistory.length);
   }
 
@@ -246,11 +262,20 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     required Emitter emit,
     required String searchedValue,
   }) async {
-    print('ss ${searchedValue}');
     final transactions = await dbRepo.getSearchedTransaction(categoriesIds, searchedValue);
     emit(state.copyWith(
       mapTransactions: groupByTimeStampHelper(transactions),
     ));
-    print(state.mapTransactions.length);
+  }
+
+  Future<void> _dragCategories(int oldIndex, int newIndex) async {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final firstElement = state.expensesCategories[oldIndex].orderNum,
+        secondElement = state.expensesCategories[newIndex].orderNum;
+    final item = state.expensesCategories.removeAt(oldIndex);
+    state.expensesCategories.insert(newIndex, item);
+    await dbRepo.dragCategories(firstElement, secondElement);
   }
 }
