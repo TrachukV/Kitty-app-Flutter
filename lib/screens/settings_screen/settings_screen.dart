@@ -18,8 +18,58 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, state) {
-        return ChartWidget(
-          statistics: state.statisticsModels,
+        return SafeArea(
+          child: Scaffold(
+            body: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  color: AppColors.grey,
+                  child: Column(
+                    children: [
+                       Text(
+                        'Settings',
+                        style: AppTextStyles.blackRegular,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Wrap(
+                        children: [
+                           CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Text('M', style: AppTextStyles.blackRegular),
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:  [
+                              Text(
+                                'Muhammed Mahmudov',
+                                style: AppTextStyles.blackTitle,
+                              ),
+                              Text(
+                                'muhmed@shahid.iran',
+                                style: AppTextStyles.blackTitle,
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  child: GestureDetector(
+                    onTap: (){},
+                    child: Text('Manage categories'),
+                  ),
+                )
+              ],
+            ),
+          ),
         );
       },
     );

@@ -11,6 +11,7 @@ import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
 import 'package:kitty_app/screens/home_screen/home_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kitty_app/screens/search_screen/search_screen.dart';
 import 'package:kitty_app/screens/settings_screen/settings_screen.dart';
 import 'package:kitty_app/screens/transaction_screen/transaction_screen.dart';
 import 'package:kitty_app/screens/widgets/bottom_bar_widget.dart';
@@ -28,6 +29,7 @@ class MainScreen extends StatelessWidget {
     SettingsScreen.routeName,
     TransactionScreen.routeName,
     CreateCategoryScreen.routeName,
+    SearchScreen.routeName,
   ];
 
   Future<bool> _maybePop() async {
@@ -64,6 +66,7 @@ class MainScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
+
           return WillPopScope(
             onWillPop: () async {
               final bool maybePop = await _maybePop();

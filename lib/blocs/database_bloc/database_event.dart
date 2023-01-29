@@ -2,7 +2,19 @@ part of 'database_bloc.dart';
 
 abstract class DatabaseEvent {}
 
-class Sran extends DatabaseEvent {}
+class CategoriesForSearchEvent extends DatabaseEvent {}
+class CategorySearchSelectEvent extends DatabaseEvent {
+  CategorySearchSelectEvent( {required this.categoryId, required this.searchedValue});
+  final int categoryId;
+  final String searchedValue;
+}
+class TransactionSearchEvent extends DatabaseEvent {
+  TransactionSearchEvent({
+    required this.searchedValue,
+  });
+
+  final String searchedValue;
+}
 
 class DatabaseInitialEvent extends DatabaseEvent {}
 
@@ -58,10 +70,10 @@ class GetCreatedTransaction extends DatabaseEvent {
   final String description;
 }
 
-class GetDescriptionCategoryEvent extends DatabaseEvent {
-  GetDescriptionCategoryEvent({required this.description});
+class SaveHistoryElementEvent extends DatabaseEvent {
+  SaveHistoryElementEvent({required this.searchController});
 
-  final String description;
+  final String searchController;
 }
 
 class GetCategoryEvent extends DatabaseEvent {
@@ -78,4 +90,6 @@ class GetNewCategoryEvent extends DatabaseEvent {
 
 class ClearDatabaseEvent extends DatabaseEvent {}
 
-class ClearEvent extends DatabaseEvent {}
+class StatisticInitialEvent extends DatabaseEvent {}
+
+class HomeScreenInitialEvent extends DatabaseEvent {}

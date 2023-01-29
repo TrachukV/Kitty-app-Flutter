@@ -21,6 +21,7 @@ class ChartScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, state) {
+
         return Scaffold(
           floatingActionButton: FloatingActionButton.extended(
             backgroundColor: AppColors.blue,

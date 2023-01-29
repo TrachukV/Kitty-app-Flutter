@@ -25,6 +25,7 @@ class DBProvider {
   final String iconTable = 'iconTable';
   final String categoryTable = 'categoriesTable';
   final String transactionTable = 'transactionTable';
+  final String searches = 'searchValues';
 
 
   Future<void> _createDb(Database db, int version) async {
@@ -58,6 +59,12 @@ class DBProvider {
       pathToIcon TEXT,
       color TEXT
       )
+      ''');
+
+      await txn.execute('''
+      CREATE TABLE $searches (
+      value TEXT,
+      timeStamp INTEGER)
       ''');
 
       final List<Map<String, String>> allIcons = DatabaseData.allIcons.values.toList();

@@ -4,6 +4,7 @@ import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
 import 'package:kitty_app/screens/home_screen/home_screen.dart';
 import 'package:kitty_app/screens/main_screen.dart';
+import 'package:kitty_app/screens/search_screen/search_screen.dart';
 import 'package:kitty_app/screens/settings_screen/settings_screen.dart';
 import 'package:kitty_app/screens/splash_screen/splash_screen.dart';
 import 'package:kitty_app/screens/transaction_screen/transaction_screen.dart';
@@ -37,6 +38,9 @@ class AppRouter {
         break;
       case CreateCategoryScreen.routeName:
         builder = (_) => const CreateCategoryScreen();
+        break;
+      case SearchScreen.routeName:
+        builder = (_) => const SearchScreen();
         break;
 
       // [END] Main pages

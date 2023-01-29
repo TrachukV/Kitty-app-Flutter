@@ -163,7 +163,6 @@ class DatabaseRepo {
     final transactionTable = database.transactionTable;
     final db = await database.database;
     return await db.transaction((txn) async {
-
       final int monthlySum = await txn.rawQuery('''
       SELECT SUM(amount) AS sum FROM $transactionTable 
       WHERE amount < 0
@@ -191,9 +190,97 @@ class DatabaseRepo {
             title: e['title'],
             counterTransactions: e['totalCount'],
             percentage: e['sumOfEntries'] / monthlySum * 100,
-            icon: IconModel(iconId: e['iconId'], color: e['color'], pathToIcon: e['pathToIcon']),
+            icon: IconModel(
+              iconId: e['iconId'],
+              color: e['color'],
+              pathToIcon: e['pathToIcon'],
+            ),
           );
         }).toList();
+      });
+    });
+  }
+
+  Future<List<TransactionsCategoriesModel>> getUsedCategories() async {
+    final db = await database.database;
+    final icons = database.iconTable;
+    final categoryTable = database.categoryTable;
+    final transactionTable = database.transactionTable;
+    return await db.transaction((txn) async {
+      return await txn.rawQuery('''
+         SELECT  COUNT(*) totalCount, $transactionTable.categoryId, 
+         $categoryTable.title, $categoryTable.type, $icons.iconId, 
+         $icons.pathToIcon, $icons.color
+         FROM $transactionTable 
+         INNER JOIN $categoryTable 
+         ON $categoryTable.categoryId = $transactionTable.categoryId 
+         JOIN iconTable 
+         ON $categoryTable.iconId = $icons.iconId 
+         GROUP BY categoriesTable.categoryId, categoriesTable.title
+          ''').then((data) {
+        final converted = List<Map<String, dynamic>>.from(data);
+        return converted.map((e) {
+          return TransactionsCategoriesModel(
+              categoryId: e['categoryId'],
+              title: e['title'],
+              type: e['type'],
+              icon: IconModel(iconId: e['iconId'], pathToIcon: e['pathToIcon'], color: e['color']));
+        }).toList();
+      });
+    });
+  }
+
+  Future<List<TransactionModel>> getSearchedTransaction(List<int> categoriesIds, String searchValue) async {
+    final db = await database.database;
+    final categories = ' AND categoryId IN (${('?' * (categoriesIds.length)).split('').join(', ')})';
+    return await db.transaction((txn) async {
+      return await txn
+          .query(database.transactionTable,
+              where: 'description LIKE ?${categoriesIds.isNotEmpty ? categories : ''}',
+              whereArgs: ['$searchValue%', ...categoriesIds],
+              orderBy: 'expenseId DESC')
+          .then((data) {
+        final converted = List<Map<String, dynamic>>.from(data);
+        return converted.map((e) {
+          return TransactionModel(
+            expenseId: e['expenseId'],
+            description: e['description'],
+            amount: e['amount'],
+            timeStamp: e['timeStamp'],
+            categoryId: e['categoryId'],
+            currentMonth: DateFormat('dd-MMM-yyyy').parse(
+              e['currentMonth'],
+            ),
+          );
+        }).toList();
+      });
+    });
+  }
+
+  Future<void> saveSearchValue(String value) async {
+    final db = await database.database;
+    return await db.transaction((txn) async {
+      final int count = await txn.rawQuery('SELECT COUNT(timeStamp) AS count FROM ${database.searches}').then((data) {
+        final converted = List<Map<String, dynamic>>.from(data);
+        return converted.first['count'] ?? 0;
+      });
+      if (count >= 5) {
+        await txn.rawQuery('DELETE FROM ${database.searches} WHERE '
+            'timeStamp = (SELECT MIN(timeStamp) FROM ${database.searches})');
+      }
+      await txn.insert(database.searches, {'value': value, 'timeStamp': DateTime.now().millisecondsSinceEpoch});
+    });
+  }
+
+  Future<List<String>> getRecentSearchValues() async {
+    final db = await database.database;
+    return await db.transaction((txn) async {
+      return await txn
+          .rawQuery('SELECT * FROM ${database.searches} '
+              'ORDER BY timeStamp DESC')
+          .then((data) {
+        final converted = List<Map<String, dynamic>>.from(data);
+        return converted.map((e) => e['value'] as String).toList();
       });
     });
   }

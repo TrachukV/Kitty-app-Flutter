@@ -11,4 +11,6 @@ class AppColors{
   static Color grey = const Color(0xffe0e0e0);
   static Color silver = const Color(0xff616161);
   static Color sonicSilver = const Color(0xff757575);
+  static Color lifgtBlue = const Color(0xffdbeefc);
+
 }

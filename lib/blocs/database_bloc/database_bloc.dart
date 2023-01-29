@@ -18,6 +18,24 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   DatabaseBloc(this.dbRepo) : super(const DatabaseState()) {
     on<DatabaseInitialEvent>((event, emit) async {
       await _initial(emit);
+      if(state.mapTransactions.isNotEmpty) {
+        add(StatisticInitialEvent());
+      }
+      add(CategoriesForSearchEvent());
+    });
+    on<HomeScreenInitialEvent>((event, emit) async {
+      final transactions = await dbRepo.getAllTransaction();
+      emit(state.copyWith(
+        transaction: transactions,
+        mapTransactions: groupByTimeStampHelper(transactions),
+        selectedCategories: [],
+        searchedValue: '',
+      ));
+    });
+    on<StatisticInitialEvent>((event, emit) async  {
+      final statistics = await dbRepo.getStatistics(DateTime.now().month);
+      emit(state.copyWith(statisticsModels:  statistics));
+
     });
     on<SelectMonthEvent>((event, emit) async {
       await _calendarSwitch(command: event.screen, emit: emit, month: event.month);
@@ -54,10 +72,32 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     on<GetMonthTransactions>((event, emit) {
       emit(state.copyWith(mapTransactions: groupByTimeStampHelper(event.transactionsModels)));
     });
-    on<Sran>((event, emit) async {});
+    on<CategoriesForSearchEvent>((event, emit) async {
+      await _getSearchCategories(emit);
+    });
+    on<SaveHistoryElementEvent>((event, emit) async {
+      await dbRepo.saveSearchValue(event.searchController);
+    });
+    on<CategorySearchSelectEvent>((event, emit) async {
+      _selectedCategory(event.categoryId, emit);
+      await _getSearchedTransactions(
+        categoriesIds: state.selectedCategories,
+        emit: emit,
+        searchedValue: state.searchedValue,
+      );
+    });
+    on<TransactionSearchEvent>((event, emit) async {
+
+       await _getSearchedTransactions(categoriesIds: [], emit: emit, searchedValue: event.searchedValue);
+
+      emit(state.copyWith(
+        searchedValue: event.searchedValue,
+      ));
+    });
   }
 
   DatabaseRepo dbRepo;
+  final List<int> selectedCategories = [];
 
   Future<void> _initial(Emitter emit) async {
     final transactions = await dbRepo.getAllTransaction();
@@ -71,7 +111,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           )
           .millisecondsSinceEpoch,
     );
-    final statistics = await dbRepo.getStatistics(DateTime.now().month);
+    // final statistics = await dbRepo.getStatistics(DateTime.now().month);
 
     emit(state.copyWith(
       icons: icons,
@@ -81,7 +121,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       transaction: transactions,
       mapTransactions: groupByTimeStampHelper(transactions),
       activeMonth: DateTime.now().month,
-      statisticsModels: statistics,
+      // statisticsModels: statistics,
     ));
   }
 
@@ -103,7 +143,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       case 'statistics':
         await _getStatistics(month, emit);
         emit(state.copyWith(activeMonth: month));
-
     }
   }
 
@@ -179,11 +218,39 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       ));
     } catch (e) {
       log('Empty month');
-        emit(state.copyWith(
-          statisticsModels: [],
-        ));
-
-
+      emit(state.copyWith(
+        statisticsModels: [],
+      ));
     }
+  }
+
+  Future<void> _getSearchCategories(Emitter emit) async {
+    final categoriesForSearch = await dbRepo.getUsedCategories();
+    final historySearch = await dbRepo.getRecentSearchValues();
+
+    emit(state.copyWith(categoriesForSearch: categoriesForSearch, searchHistory: historySearch,));
+    print(state.searchHistory.length);
+  }
+
+  void _selectedCategory(int categoryId, Emitter emit) {
+    if (selectedCategories.contains(categoryId)) {
+      selectedCategories.remove(categoryId);
+    } else {
+      selectedCategories.add(categoryId);
+    }
+    emit(state.copyWith(selectedCategories: selectedCategories));
+  }
+
+  Future<void> _getSearchedTransactions({
+    required List<int> categoriesIds,
+    required Emitter emit,
+    required String searchedValue,
+  }) async {
+    print('ss ${searchedValue}');
+    final transactions = await dbRepo.getSearchedTransaction(categoriesIds, searchedValue);
+    emit(state.copyWith(
+      mapTransactions: groupByTimeStampHelper(transactions),
+    ));
+    print(state.mapTransactions.length);
   }
 }
