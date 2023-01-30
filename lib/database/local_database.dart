@@ -73,7 +73,7 @@ class DBProvider {
       ''');
 
       final List<Map<String, String>> allIcons = DatabaseData.allIcons.values.toList();
-      for (int i = 0; i < allIcons.length; i++) {
+      for (int i = 0; i < allIcons.length+1; i++) {
         await txn.insert(iconTable, {
           'iconId': i,
           'pathToIcon': allIcons[i]['icon'],

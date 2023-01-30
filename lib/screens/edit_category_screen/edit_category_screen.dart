@@ -15,7 +15,6 @@ class EditCategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController _categoryController = TextEditingController();
     PersistentBottomSheetController? _bottomSheetController;
-    bool isActive = false;
 
     void _closeBottomSheet() {
       if (_bottomSheetController != null) {

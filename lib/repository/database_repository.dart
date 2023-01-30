@@ -49,7 +49,6 @@ class DatabaseRepo {
               color: e['color'],
               pathToIcon: e['pathToIcon'],
             ),
-
           );
         }).toList();
       });
@@ -212,7 +211,7 @@ class DatabaseRepo {
     return await db.transaction((txn) async {
       return await txn.rawQuery('''
          SELECT  COUNT(*) totalCount, $transactionTable.categoryId, 
-         $categoryTable.title, $categoryTable.type, $icons.iconId, 
+         $categoryTable.title, $categoryTable.type, $icons.iconId, $categoryTable.orderNum,
          $icons.pathToIcon, $icons.color
          FROM $transactionTable 
          INNER JOIN $categoryTable 
@@ -228,7 +227,11 @@ class DatabaseRepo {
             categoryId: e['categoryId'],
             title: e['title'],
             type: e['type'],
-            icon: IconModel(iconId: e['iconId'], pathToIcon: e['pathToIcon'], color: e['color']),
+            icon: IconModel(
+              iconId: e['iconId'],
+              pathToIcon: e['pathToIcon'],
+              color: e['color'],
+            ),
           );
         }).toList();
       });
@@ -269,7 +272,7 @@ class DatabaseRepo {
         final converted = List<Map<String, dynamic>>.from(data);
         return converted.first['count'] ?? 0;
       });
-      if (count >= 5) {
+      if (count >= 3) {
         await txn.rawQuery('DELETE FROM ${database.searches} WHERE '
             'timeStamp = (SELECT MIN(timeStamp) FROM ${database.searches})');
       }
@@ -301,10 +304,7 @@ class DatabaseRepo {
     });
   }
 
-  Future<void> editCategory(
-      {required int categoryId,
-        required int iconId,
-        required String title}) async {
+  Future<void> editCategory({required int categoryId, required int iconId, required String title}) async {
     final db = await database.database;
     await db.transaction((txn) async {
       txn.update(
