@@ -1,78 +1,167 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/resources/app_colors.dart';
-import 'package:kitty_app/resources/app_icons.dart';
+
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
 import 'package:kitty_app/screens/manage_screen/manage_screen.dart';
+import 'package:kitty_app/screens/settings_screen/widgets/setting_item.dart';
 
-import '../../repository/database_repository.dart';
-
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   static const routeName = 'settings_screen';
 
   @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, state) {
+        bool isSwitched = false;
+        final height = MediaQuery.of(context).size.height;
         return SafeArea(
           child: Scaffold(
             body: Column(
               children: [
                 Container(
+                  height: height / 6,
                   width: double.infinity,
                   color: AppColors.grey,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 5, left: 16, right: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Settings',
+                          style: AppTextStyles.blackBold,
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: AppColors.white,
+                              child: Text('M', style: AppTextStyles.blackMedium),
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Muhammed Mahmudov',
+                                  style: AppTextStyles.blackMedium,
+                                ),
+                                Text(
+                                  'muhmed@gov.ua',
+                                  style: AppTextStyles.blackTitle,
+                                )
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                       Text(
-                        'Settings',
-                        style: AppTextStyles.blackRegular,
+                      SettingItem(
+                        onTap: () {
+                          context.read<NavigationBloc>().add(
+                                NavigateTabEvent(
+                                  tabIndex: 6,
+                                  route: ManageScreen.routeName,
+                                ),
+                              );
+                        },
+                        rightWidget: Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColors.grey,
+                          size: 24,
+                        ),
+                        title: 'Manage categories',
+                        iconData: Icons.category_outlined,
                       ),
-                      const SizedBox(
-                        height: 16,
+                      SettingItem(
+                        onTap: () {
+                          print('sdsdsd');
+                          context.read<NavigationBloc>().add(
+                                NavigateTabEvent(
+                                  tabIndex: 1,
+                                  route: ChartScreen.routeName,
+                                ),
+                              );
+                        },
+                        rightWidget: Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColors.grey,
+                          size: 24,
+                        ),
+                        title: 'Export to PDF',
+                        iconData: Icons.picture_as_pdf_outlined,
                       ),
-                      Wrap(
-                        children: [
-                           CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Text('M', style: AppTextStyles.blackRegular),
-                          ),
-                          const SizedBox(
-                            width: 12,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:  [
-                              Text(
-                                'Muhammed Mahmudov',
-                                style: AppTextStyles.blackTitle,
-                              ),
-                              Text(
-                                'muhmed@shahid.iran',
-                                style: AppTextStyles.blackTitle,
-                              )
-                            ],
-                          )
-                        ],
+                      SettingItem(
+                        onTap: () {},
+                        rightWidget: Row(
+                          children: [
+                            Text(
+                              'eng',
+                              style: AppTextStyles.greyCategory,
+                            ),
+                            Switch(
+                              splashRadius: 0,
+                              activeColor: AppColors.white,
+                              activeTrackColor: AppColors.grey,
+                              inactiveTrackColor: AppColors.grey,
+                              value: isSwitched,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  isSwitched = value;
+                                  print(isSwitched);
+                                });
+                              },
+                            ),
+                            Text(
+                              'ukr',
+                              style: AppTextStyles.greyCategory,
+                            )
+                          ],
+                        ),
+                        title: 'Choose language',
+                        iconData: Icons.translate_outlined,
+                      ),
+                      SettingItem(
+                        onTap: () {},
+                        rightWidget: Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColors.grey,
+                          size: 24,
+                        ),
+                        title: 'Frequently asked questions',
+                        iconData: Icons.help_center_outlined,
+                      ),
+                      SettingItem(
+                        onTap: () {},
+                        rightWidget: const SizedBox.shrink(),
+                        title: 'Logout',
+                        iconData: Icons.logout_outlined,
                       )
                     ],
                   ),
                 ),
-                Container(
-                  child: GestureDetector(
-                    onTap: (){
-                      context
-                          .read<NavigationBloc>()
-                          .add(NavigateTabEvent(tabIndex: 6, route: ManageScreen.routeName));
-                    },
-                    child: Text('Manage categories'),
-                  ),
-                )
               ],
             ),
           ),

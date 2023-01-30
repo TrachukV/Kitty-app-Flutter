@@ -40,11 +40,7 @@ class DBProvider {
       iconId INTEGER NOT NULL,
       orderNum INTEGER,
       FOREIGN KEY (iconId) REFERENCES $iconTable (iconId)
-      );
-      CREATE TRIGGER auto_increment_trigger AFTER INSERT ON $categoryTable
-      WHEN new.orderNum IS NULL BEGIN UPDATE $categoryTable SET orderNum = 
-      (SELECT IF NULL(MAX(orderNum), 0) + 1 FROM $categoryTable) WHERE categoryId = 
-      new.categoryId; END;
+      )
           ''');
       await txn.execute('''
       CREATE TABLE $transactionTable (
@@ -72,8 +68,15 @@ class DBProvider {
       timeStamp INTEGER)
       ''');
 
+      await txn.execute('''
+       CREATE TRIGGER auto_increment_trigger AFTER INSERT ON $categoryTable
+      WHEN new.orderNum IS NULL BEGIN UPDATE $categoryTable SET orderNum = 
+      (SELECT IFNULL(MAX(orderNum), 0) + 1 FROM $categoryTable) WHERE categoryId = 
+      new.categoryId; END;
+      ''');
+
       final List<Map<String, String>> allIcons = DatabaseData.allIcons.values.toList();
-      for (int i = 0; i < allIcons.length+1; i++) {
+      for (int i = 0; i < allIcons.length; i++) {
         await txn.insert(iconTable, {
           'iconId': i,
           'pathToIcon': allIcons[i]['icon'],

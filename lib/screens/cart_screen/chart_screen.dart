@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
+import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/models/statistics_model/statistics_model.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
+import 'package:kitty_app/screens/search_screen/search_screen.dart';
 import 'package:kitty_app/screens/widgets/calendar_widget.dart';
 
 import '../../utils/pdf_generator/pdf_generenor.dart';
@@ -47,6 +49,11 @@ class ChartScreen extends StatelessWidget {
             ),
             actions: [
               GestureDetector(
+                onTap: (){
+                  context
+                      .read<NavigationBloc>()
+                      .add(NavigateTabEvent(tabIndex: 5, route: SearchScreen.routeName));
+                },
                 child: AppIcons.blackSearch,
               ),
               const SizedBox(width: 20),
