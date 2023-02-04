@@ -1,13 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
+import 'package:kitty_app/blocs/user_bloc/user_bloc.dart';
 
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/search_screen/search_screen.dart';
+import 'package:kitty_app/screens/widgets/avatar_widget.dart';
 import 'package:kitty_app/screens/widgets/calendar_widget.dart';
 
 import 'package:kitty_app/screens/home_screen/widgets/transactionsHistoryWidget.dart';
@@ -22,18 +26,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 
-
 class _HomeScreenState extends State<HomeScreen> {
 
 
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery
+        .of(context)
+        .size
+        .height;
 
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
     return BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, state) {
-        if(state.icons.isEmpty){
+        if (state.icons.isEmpty) {
           CircularProgressIndicator(
             color: AppColors.blue,
           );
@@ -56,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             actions: [
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   context
                       .read<NavigationBloc>()
                       .add(NavigateTabEvent(tabIndex: 5, route: SearchScreen.routeName));
@@ -64,18 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: AppIcons.blackSearch,
               ),
               const SizedBox(width: 20),
-              GestureDetector(
-                child: Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(color: AppColors.grey, shape: BoxShape.circle),
-                  child: Center(
-                      child: Text(
-                    'M',
-                    style: AppTextStyles.blackMedium,
-                  )),
-                ),
-              ),
+              AvatarWidget(color: AppColors.grey,),
               const SizedBox(width: 17),
             ],
           ),
@@ -87,12 +81,12 @@ class _HomeScreenState extends State<HomeScreen> {
               CalendarWidget(
                 decrement: () {
                   context.read<DatabaseBloc>().add(
-                        IncDecMonthEvent(command: 'decrement', screen: 'home' ),
-                      );
+                    IncDecMonthEvent(command: 'decrement', screen: 'home'),
+                  );
                 },
                 increment: () {
                   context.read<DatabaseBloc>().add(
-                    IncDecMonthEvent(command: 'increment', screen: 'home' ),
+                    IncDecMonthEvent(command: 'increment', screen: 'home'),
                   );
                 },
                 screen: 'home',

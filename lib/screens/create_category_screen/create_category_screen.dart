@@ -71,7 +71,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                   height: height / 20,
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     if (state.selectedIcon == null)
@@ -109,7 +109,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                     else
                       SvgPicture.asset(
                         state.selectedIcon!.pathToIcon,
-                        width: 45,
+                        width: 55,
                       ),
                     SizedBox(
                       height: height / 12,

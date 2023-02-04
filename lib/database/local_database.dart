@@ -1,6 +1,6 @@
 
 
-import 'package:kitty_app/database/database_data.dart';
+import 'package:kitty_app/utils/constants/database_data.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

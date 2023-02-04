@@ -11,6 +11,8 @@ class UserModel with _$UserModel {
     required String eMail,
     required String pathToAvatar,
     required int id,
+    required bool biometrics,
+    required String pinCode,
 }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

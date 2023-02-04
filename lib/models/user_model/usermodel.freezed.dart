@@ -24,6 +24,8 @@ mixin _$UserModel {
   String get eMail => throw _privateConstructorUsedError;
   String get pathToAvatar => throw _privateConstructorUsedError;
   int get id => throw _privateConstructorUsedError;
+  bool get biometrics => throw _privateConstructorUsedError;
+  String get pinCode => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +38,13 @@ abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
-  $Res call({String userName, String eMail, String pathToAvatar, int id});
+  $Res call(
+      {String userName,
+      String eMail,
+      String pathToAvatar,
+      int id,
+      bool biometrics,
+      String pinCode});
 }
 
 /// @nodoc
@@ -56,6 +64,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? eMail = null,
     Object? pathToAvatar = null,
     Object? id = null,
+    Object? biometrics = null,
+    Object? pinCode = null,
   }) {
     return _then(_value.copyWith(
       userName: null == userName
@@ -74,6 +84,14 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      biometrics: null == biometrics
+          ? _value.biometrics
+          : biometrics // ignore: cast_nullable_to_non_nullable
+              as bool,
+      pinCode: null == pinCode
+          ? _value.pinCode
+          : pinCode // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -85,7 +103,13 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       __$$_UserModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String userName, String eMail, String pathToAvatar, int id});
+  $Res call(
+      {String userName,
+      String eMail,
+      String pathToAvatar,
+      int id,
+      bool biometrics,
+      String pinCode});
 }
 
 /// @nodoc
@@ -103,6 +127,8 @@ class __$$_UserModelCopyWithImpl<$Res>
     Object? eMail = null,
     Object? pathToAvatar = null,
     Object? id = null,
+    Object? biometrics = null,
+    Object? pinCode = null,
   }) {
     return _then(_$_UserModel(
       userName: null == userName
@@ -121,6 +147,14 @@ class __$$_UserModelCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      biometrics: null == biometrics
+          ? _value.biometrics
+          : biometrics // ignore: cast_nullable_to_non_nullable
+              as bool,
+      pinCode: null == pinCode
+          ? _value.pinCode
+          : pinCode // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -132,7 +166,9 @@ class _$_UserModel implements _UserModel {
       {required this.userName,
       required this.eMail,
       required this.pathToAvatar,
-      required this.id});
+      required this.id,
+      required this.biometrics,
+      required this.pinCode});
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserModelFromJson(json);
@@ -145,10 +181,14 @@ class _$_UserModel implements _UserModel {
   final String pathToAvatar;
   @override
   final int id;
+  @override
+  final bool biometrics;
+  @override
+  final String pinCode;
 
   @override
   String toString() {
-    return 'UserModel(userName: $userName, eMail: $eMail, pathToAvatar: $pathToAvatar, id: $id)';
+    return 'UserModel(userName: $userName, eMail: $eMail, pathToAvatar: $pathToAvatar, id: $id, biometrics: $biometrics, pinCode: $pinCode)';
   }
 
   @override
@@ -161,13 +201,16 @@ class _$_UserModel implements _UserModel {
             (identical(other.eMail, eMail) || other.eMail == eMail) &&
             (identical(other.pathToAvatar, pathToAvatar) ||
                 other.pathToAvatar == pathToAvatar) &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.biometrics, biometrics) ||
+                other.biometrics == biometrics) &&
+            (identical(other.pinCode, pinCode) || other.pinCode == pinCode));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, userName, eMail, pathToAvatar, id);
+  int get hashCode => Object.hash(
+      runtimeType, userName, eMail, pathToAvatar, id, biometrics, pinCode);
 
   @JsonKey(ignore: true)
   @override
@@ -188,7 +231,9 @@ abstract class _UserModel implements UserModel {
       {required final String userName,
       required final String eMail,
       required final String pathToAvatar,
-      required final int id}) = _$_UserModel;
+      required final int id,
+      required final bool biometrics,
+      required final String pinCode}) = _$_UserModel;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$_UserModel.fromJson;
@@ -201,6 +246,10 @@ abstract class _UserModel implements UserModel {
   String get pathToAvatar;
   @override
   int get id;
+  @override
+  bool get biometrics;
+  @override
+  String get pinCode;
   @override
   @JsonKey(ignore: true)
   _$$_UserModelCopyWith<_$_UserModel> get copyWith =>

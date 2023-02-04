@@ -10,6 +10,7 @@ class AppIcons {
     '$_path/logo.svg',
   );
   //[START] Black Icons
+
   static SvgPicture blackDrag = SvgPicture.asset('$_path/black_drag.svg');
   static SvgPicture blackChartNotPressed = SvgPicture.asset('$_path/black_chart_not_pressed.svg');
   static SvgPicture blackChartPressed = SvgPicture.asset('$_path/black_chart_pressed.svg');
@@ -74,4 +75,6 @@ class AppIcons {
   static const String sport = '$_path/colored_sport.svg';
   static const String transportation = '$_path/colored_transportation.svg';
 //[END] Categories Icons
+
+  static String kittiLogo = '$_path/logo.svg';
 }
