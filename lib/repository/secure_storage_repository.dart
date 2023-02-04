@@ -14,7 +14,9 @@ class SecureStorageRepository {
     await SecuredStorageService.saveUser(userModel: user);
     return id;
   }
-
+  Future<void> removeUsers()async{
+    await SecuredStorageService.deleteUsers;
+  }
 
 Future<String?> getId()  async {
     final id = await SecuredStorageService.readUser();

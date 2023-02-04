@@ -26,6 +26,13 @@ class GetAvatarEvent extends UserEvent {
   final String path;
 }
 
+class DeleteUsers extends UserEvent {
+
+
+
+}
+
+
 class GetInfoUserEvent extends UserEvent {
   const GetInfoUserEvent( {required this.firstName, required this.lastName, required this.email, required this.pathToAvatar,});
 final String pathToAvatar;

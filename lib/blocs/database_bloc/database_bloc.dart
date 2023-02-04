@@ -9,6 +9,8 @@ import 'package:kitty_app/models/icon_model/icon_model.dart';
 import 'package:kitty_app/models/statistics_model/statistics_model.dart';
 import 'package:kitty_app/repository/database_repository.dart';
 import 'package:kitty_app/utils/helpers/helpers.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 part 'database_event.dart';
 
@@ -31,6 +33,12 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         selectedCategories: [],
         searchedValue: '',
       ));
+    });
+    on<DeleteDataBaseEvent>((event, emit) async {
+      final dbDirectory = await getDatabasesPath();
+      const dbName = 'kitty_app.db';
+      final path = join(dbDirectory, dbName);
+      databaseFactory.deleteDatabase(path);
     });
     on<StatisticInitialEvent>((event, emit) async {
       final statistics = await dbRepo.getStatistics(DateTime.now().month);

@@ -92,6 +92,9 @@ class GetNewCategoryEvent extends DatabaseEvent {
 
   final String newCategory;
 }
+class DeleteDataBaseEvent extends DatabaseEvent {
+
+}
 
 class ClearDatabaseEvent extends DatabaseEvent {}
 

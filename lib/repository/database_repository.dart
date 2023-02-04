@@ -11,6 +11,8 @@ class DatabaseRepo {
 
   final DBProvider database;
 
+
+
   Future<List<IconModel>> getAllIcons() async {
     final db = await database.database;
     return db.transaction((txn) async {

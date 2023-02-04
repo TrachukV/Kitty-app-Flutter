@@ -19,7 +19,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         emit(state.copyWith(userModel: userModel));
       }
     });
-
+    on<DeleteUsers>((event, emit) async {
+      final delete  = await SecuredStorageService.deleteUsers();
+    });
     on<GetInfoUserEvent>((event, emit) async {
       final validator = validateEmail(event.email);
       if (validator != null) {

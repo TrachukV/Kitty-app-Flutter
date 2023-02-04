@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/blocs/user_bloc/user_bloc.dart';
 import 'package:kitty_app/resources/app_colors.dart';
+import 'package:kitty_app/resources/app_icons.dart';
 
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
@@ -57,7 +60,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
                                 children: [
-                                  AvatarWidget( color: AppColors.white,),
+                                  AvatarWidget(
+                                    color: AppColors.white,
+                                  ),
                                   const SizedBox(
                                     width: 12,
                                   ),
@@ -162,8 +167,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         SettingItem(
                           onTap: () {
-                            Navigator.of(context, rootNavigator: true)
-                                .pushNamedAndRemoveUntil(LockScreen.routeName, (route) => false);
+                            _callAlertDialog(context: context, height: height);
                           },
                           rightWidget: const SizedBox.shrink(),
                           title: 'Logout',
@@ -179,5 +183,99 @@ class _SettingsScreenState extends State<SettingsScreen> {
         );
       },
     );
+  }
+
+  Future<void> _callAlertDialog({required BuildContext context, required double height}) {
+    return _alertDialog(
+      context: context,
+      height: height,
+      title: 'Do you want to delete your account or close the Kitty app?',
+      tapYes: () {
+        Navigator.of(context).pop();
+        _alertDialog(
+          context: context,
+          height: height,
+          title: 'Are you sure you want to delete this account?',
+          tapYes: () {
+            context.read<UserBloc>().add(DeleteUsers());
+            context.read<DatabaseBloc>().add(DeleteDataBaseEvent());
+          },
+          tapNo: () {
+            Navigator.of(context).pop();
+          },
+          titleButtonYes: 'Yes',
+          titleButtonNo: 'No',
+        );
+      },
+      tapNo: () {
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      },
+      titleButtonYes: 'Delete acc',
+      titleButtonNo: 'Close app',
+    );
+  }
+
+  Future<void> _alertDialog({
+    required BuildContext context,
+    required double height,
+    required String title,
+    required VoidCallback tapYes,
+    required VoidCallback tapNo,
+    required String titleButtonYes,
+    required String titleButtonNo,
+  }) async {
+    return showDialog(
+        useRootNavigator: false,
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            content: SizedBox(
+              height: height / 5,
+              child: Column(
+                children: [
+                  SvgPicture.asset(
+                    AppIcons.kittiLogo,
+                    height: 50,
+                  ),
+                  Text(
+                    textAlign: TextAlign.center,
+                    title,
+                    style: AppTextStyles.greyRegular,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(AppColors.sonicSilver),
+                        ),
+                        onPressed: tapYes,
+                        child: Text(
+                          titleButtonYes,
+                          style: AppTextStyles.whiteRegular,
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(AppColors.sonicSilver),
+                        ),
+                        onPressed: tapNo,
+                        child: Text(
+                          titleButtonNo,
+                          style: AppTextStyles.whiteRegular,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
