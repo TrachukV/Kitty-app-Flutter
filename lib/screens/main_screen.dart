@@ -12,6 +12,7 @@ import 'package:kitty_app/routes/app_routes.dart';
 import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
 import 'package:kitty_app/screens/edit_category_screen/edit_category_screen.dart';
+import 'package:kitty_app/screens/faq_screen/faq_screen.dart';
 import 'package:kitty_app/screens/home_screen/home_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitty_app/screens/search_screen/search_screen.dart';
@@ -37,6 +38,7 @@ class MainScreen extends StatelessWidget {
     SearchScreen.routeName,
     ManageScreen.routeName,
     EditCategoryScreen.routeName,
+    FAQScreen.routeName,
   ];
 
   Future<bool> _maybePop() async {
