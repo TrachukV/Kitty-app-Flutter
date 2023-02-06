@@ -14,6 +14,7 @@ import 'package:kitty_app/resources/app_icons.dart';
 
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
+import 'package:kitty_app/screens/faq_screen/faq_screen.dart';
 
 import 'package:kitty_app/screens/manage_screen/manage_screen.dart';
 import 'package:kitty_app/screens/settings_screen/widgets/setting_item.dart';
@@ -21,7 +22,7 @@ import 'package:kitty_app/screens/widgets/avatar_widget.dart';
 import 'package:kitty_app/services/secure_storage.dart';
 
 class SettingsScreen extends StatefulWidget {
-  SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({Key? key}) : super(key: key);
 
   static const routeName = 'settings_screen';
 
@@ -46,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   BlocBuilder<UserBloc, UserState>(
                     builder: (context, state) {
                       return Container(
-                        height: height / 6,
+                        height: 100,
                         width: double.infinity,
                         color: AppColors.grey,
                         child: Padding(
@@ -77,6 +78,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         state.userModel.userName,
                                         style: AppTextStyles.blackMedium,
                                       ),
+                                      SizedBox(height: 10,),
                                       Text(
                                         state.userModel.eMail,
                                         style: AppTextStyles.blackTitle,
@@ -170,7 +172,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           iconData: Icons.translate_outlined,
                         ),
                         SettingItem(
-                          onTap: () {},
+                          onTap: () {
+                            context
+                                .read<NavigationBloc>()
+                                .add(NavigateTabEvent(tabIndex: 8, route: FAQScreen.routeName));
+                          },
                           rightWidget: Icon(
                             Icons.arrow_forward_ios,
                             color: AppColors.grey,

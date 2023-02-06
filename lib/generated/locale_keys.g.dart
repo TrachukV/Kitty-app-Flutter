@@ -59,6 +59,25 @@ abstract class  LocaleKeys {
   static const q_sure_delete_acc = 'q_sure_delete_acc';
   static const delete_acc = 'delete_acc';
   static const close_app = 'close_app';
+  static const sign_in = 'sign_in';
   static const q_use_bio = 'q_use_bio';
+  static const added_category = 'added_category';
+  static const faq_data_questions_how_add_trans = 'faq_data.questions.how_add_trans';
+  static const faq_data_questions_how_add_cat = 'faq_data.questions.how_add_cat';
+  static const faq_data_questions_how_edit_trans = 'faq_data.questions.how_edit_trans';
+  static const faq_data_questions_how_del_trans = 'faq_data.questions.how_del_trans';
+  static const faq_data_questions_how_stats_work = 'faq_data.questions.how_stats_work';
+  static const faq_data_questions_how_balance_work = 'faq_data.questions.how_balance_work';
+  static const faq_data_questions_how_change_date = 'faq_data.questions.how_change_date';
+  static const faq_data_questions = 'faq_data.questions';
+  static const faq_data_answers_how_add_trans = 'faq_data.answers.how_add_trans';
+  static const faq_data_answers_how_add_cat = 'faq_data.answers.how_add_cat';
+  static const faq_data_answers_how_edit_trans = 'faq_data.answers.how_edit_trans';
+  static const faq_data_answers_how_del_trans = 'faq_data.answers.how_del_trans';
+  static const faq_data_answers_how_stats_work = 'faq_data.answers.how_stats_work';
+  static const faq_data_answers_how_balance_work = 'faq_data.answers.how_balance_work';
+  static const faq_data_answers_how_change_date = 'faq_data.answers.how_change_date';
+  static const faq_data_answers = 'faq_data.answers';
+  static const faq_data = 'faq_data';
 
 }

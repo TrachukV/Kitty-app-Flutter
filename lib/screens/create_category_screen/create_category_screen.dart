@@ -41,12 +41,11 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(
-              LocaleKeys.add_smth.tr(),
+              LocaleKeys.add_category.tr(),
               style: AppTextStyles.blackRegular,
             ),
             backgroundColor: AppColors.grey,
             elevation: 0,
-            leadingWidth: 100,
             leading: Padding(
               padding: const EdgeInsets.all(10.0),
               child: GestureDetector(
@@ -146,6 +145,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
               return ElevatedButton(
                 style: AppTextStyles.buttonStyle,
                 onPressed:  state.selectedIcon != null && value.text.isNotEmpty ? () {
+                  showSnackBar(context);
                 context.read<DatabaseBloc>().add(CreateCategoryEvent(categoryName: value.text));
                 context.read<NavigationBloc>().add(NavigateTabEvent(tabIndex: 0, route: HomeScreen.routeName));
               } : null,
@@ -159,6 +159,29 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
         );
       },
     );
+  }
+  void showSnackBar(BuildContext context) {
+    final snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            LocaleKeys.add_category.tr(),
+            style: AppTextStyles.whiteRegular,
+          ),
+          GestureDetector(
+            onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+            child: Icon(
+              Icons.close,
+              color: AppColors.grey,
+            ),
+          )
+        ],
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: AppColors.black,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
 
@@ -226,4 +249,5 @@ class IconSelections extends StatelessWidget {
       },
     );
   }
+
 }

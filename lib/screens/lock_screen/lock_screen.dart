@@ -288,7 +288,7 @@ class _LockScreenState extends State<LockScreen> {
                                 height: 100,
                               ),
                               Text(
-                                'Press to sign in',
+                                LocaleKeys.sign_in.tr(),
                                 style: AppTextStyles.greyBold,
                               ),
                             ],

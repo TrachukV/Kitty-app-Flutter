@@ -95,30 +95,26 @@ class _TransactionScreenState extends State<TransactionScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          title: Text(
+            LocaleKeys.add_smth.tr(),
+            style: AppTextStyles.blackRegular,
+          ),
           backgroundColor: AppColors.grey,
           elevation: 0,
-          leadingWidth: 104,
-          leading: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: GestureDetector(
-                  child: AppIcons.blackBack,
-                  onTap: () {
-                    _closeBottomSheet();
-                    context.read<NavigationBloc>().add(
-                          NavigationPopEvent(),
-                        );
-                  },
-                ),
+          leading: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: GestureDetector(
+              child: Icon(
+                Icons.arrow_back,
+                color: AppColors.black,
               ),
-              Text(
-                LocaleKeys.add_new.tr() + LocaleKeys.transaction.tr(),
-                style: AppTextStyles.blackRegular,
-              ),
-            ],
+              onTap: () {
+                _closeBottomSheet();
+                context.read<NavigationBloc>().add(
+                      NavigationPopEvent(),
+                    );
+              },
+            ),
           ),
         ),
         body: SingleChildScrollView(
