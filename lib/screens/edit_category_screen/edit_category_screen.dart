@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
+import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
@@ -47,9 +49,9 @@ class EditCategoryScreen extends StatelessWidget {
                     : null,
                 child: SizedBox(
                   width: width * 0.9,
-                  child: const Center(
+                  child:  Center(
                     heightFactor: 1,
-                    child: Text('Add new category'),
+                    child: Text(LocaleKeys.edit_category.tr()),
                   ),
                 ),
               );
@@ -58,7 +60,7 @@ class EditCategoryScreen extends StatelessWidget {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(
-              'Edit category',
+              LocaleKeys.edit_category.tr(),
               style: AppTextStyles.blackRegular,
             ),
             backgroundColor: AppColors.grey,
@@ -130,7 +132,7 @@ class EditCategoryScreen extends StatelessWidget {
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4),
                               borderSide: BorderSide(color: AppColors.blue, width: 1)),
-                          labelText: 'Category name',
+                          labelText: LocaleKeys.category_name.tr(),
                         ),
                       ),
                     ),

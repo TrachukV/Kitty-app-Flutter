@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
+
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
-import 'package:kitty_app/database/local_database.dart';
+
+import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
@@ -92,7 +94,7 @@ class MainScreen extends StatelessWidget {
                               ),
                             );
                       },
-                      label: Text('Add new', style: AppTextStyles.whiteRegular),
+                      label: Text(LocaleKeys.add_new.tr(), style: AppTextStyles.whiteRegular),
                       icon: AppIcons.whiteAddPlus,
                       backgroundColor: AppColors.blue,
                     )

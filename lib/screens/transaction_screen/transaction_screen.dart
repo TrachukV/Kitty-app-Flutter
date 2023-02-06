@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
+import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
@@ -25,7 +27,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   PersistentBottomSheetController? _bottomSheetController;
   final FocusNode focusNode = FocusNode();
-  String selectedType = 'type';
+  String selectedType = LocaleKeys.transaction.tr();
 
   void _closeBottomSheet() {
     if (_bottomSheetController != null) {
@@ -53,7 +55,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
         // isScrollControlled: true,
         enableDrag: false,
         builder: (_) {
-          if (selectedType == 'Expenses') {
+          if (selectedType == LocaleKeys.expenses.tr()) {
             return CategorySelections(
               categories: state.expensesCategories,
               addCategoryButton: OutlinedButton(
@@ -63,11 +65,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         );
                   },
                   child: Text(
-                    'Add new category',
+                    LocaleKeys.add_category.tr(),
                     style: AppTextStyles.blueRegular,
                   )),
             );
-          } else if (selectedType == 'Income') {
+          } else if (selectedType == LocaleKeys.income.tr()) {
             return CategorySelections(
               categories: state.incomeCategories,
             );
@@ -76,7 +78,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
         });
   }
 
-  List<String> typeTransaction = ['Expenses', 'Income'];
+  List<String> typeTransaction = [
+    LocaleKeys.expenses.tr(),
+    LocaleKeys.income.tr(),
+  ];
   String? value;
 
   @override
@@ -110,7 +115,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 ),
               ),
               Text(
-                'Add new',
+                LocaleKeys.add_new.tr() + LocaleKeys.transaction.tr(),
                 style: AppTextStyles.blackRegular,
               ),
             ],
@@ -138,8 +143,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                               borderRadius: BorderRadius.circular(4),
                               borderSide: BorderSide(color: AppColors.blue, width: 1)),
                         ),
-                        hint: const Text(
-                          'Select category',
+                        hint:  Text(
+                          LocaleKeys.select.tr(),
                         ),
                         borderRadius: BorderRadius.circular(8),
                         elevation: 1,
@@ -158,7 +163,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       const SizedBox(height: 20),
                       TextField(
                         decoration: InputDecoration(
-                          labelText: 'Category name',
+                          labelText: LocaleKeys.category_name.tr(),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: BorderSide(color: AppColors.grey, width: 1),
@@ -179,7 +184,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                           _amount = amount;
                         },
                         decoration: InputDecoration(
-                          labelText: 'Amount',
+                          labelText: LocaleKeys.enter_amount.tr(),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: BorderSide(color: AppColors.grey, width: 1),
@@ -200,7 +205,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                           _description = description;
                         },
                         decoration: InputDecoration(
-                          labelText: 'Description',
+                          labelText: LocaleKeys.description.tr(),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: BorderSide(color: AppColors.grey, width: 1),
@@ -221,13 +226,13 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         builder: (BuildContext context, TextEditingValue value, Widget? child) {
                           return BlueButton(
                             selectedType: selectedType,
-                            check:  state.createdCategory != null && selectedType != 'type' && value.text.isNotEmpty,
+                            check: state.createdCategory != null && selectedType != 'type' && value.text.isNotEmpty,
                             callback: () {
                               context.read<DatabaseBloc>().add(
-                                GetCreatedTransaction(
-                                    amount: selectedType == 'Expenses' ? '-${value.text}' : value.text,
-                                    description: _description),
-                              );
+                                    GetCreatedTransaction(
+                                        amount: selectedType == 'Expenses' ? '-${value.text}' : value.text,
+                                        description: _description),
+                                  );
                               context.read<DatabaseBloc>().add(DatabaseInitialEvent());
                               context
                                   .read<NavigationBloc>()
@@ -318,7 +323,7 @@ class CategorySelections extends StatelessWidget {
               AppIcons.blackDrag,
               const SizedBox(height: 10),
               Text(
-                'CHOOSE CATEGORY',
+                LocaleKeys.choose_icon.tr(),
                 style: AppTextStyles.blackTitle,
               ),
               const SizedBox(height: 10),
@@ -390,12 +395,12 @@ class BlueButton extends StatelessWidget {
   const BlueButton({
     Key? key,
     required this.selectedType,
-     this.check = false,
+    this.check = false,
     required this.callback,
   }) : super(key: key);
 
   final String selectedType;
- final  bool check;
+  final bool check;
   final VoidCallback callback;
 
   @override
@@ -404,14 +409,12 @@ class BlueButton extends StatelessWidget {
     final height = MediaQuery.of(context).size.width;
     return ElevatedButton(
       style: AppTextStyles.buttonStyle,
-      onPressed: check
-          ? callback
-          : null,
+      onPressed: check ? callback : null,
       child: SizedBox(
         height: height / 14,
         width: width / 1.1,
         child: Center(
-          child: Text('Add new $selectedType'),
+          child: Text('${LocaleKeys.add_new.tr()} $selectedType'),
         ),
       ),
     );

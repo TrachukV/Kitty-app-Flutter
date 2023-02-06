@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
+import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/models/icon_model/icon_model.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
@@ -39,12 +41,12 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(
-              'Add new category',
+              LocaleKeys.add_smth.tr(),
               style: AppTextStyles.blackRegular,
             ),
             backgroundColor: AppColors.grey,
             elevation: 0,
-            leadingWidth: 50,
+            leadingWidth: 100,
             leading: Padding(
               padding: const EdgeInsets.all(10.0),
               child: GestureDetector(
@@ -126,7 +128,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4),
                               borderSide: BorderSide(color: AppColors.blue, width: 1)),
-                          labelText: 'Category name',
+                          labelText: LocaleKeys.category_name.tr(),
                         ),
                       ),
                     ),
@@ -149,7 +151,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
               } : null,
                 child: SizedBox(
                   width: width * 0.9,
-                  child: const Center(heightFactor: 1, child: Text('Add new category')),
+                  child:  Center(heightFactor: 1, child: Text(LocaleKeys.add_category.tr())),
                 ),
               );
             },
@@ -191,7 +193,7 @@ class IconSelections extends StatelessWidget {
               AppIcons.blackDrag,
               const SizedBox(height: 10),
               Text(
-                'CHOOSE CATEGORY ICON',
+                LocaleKeys.choose_category.tr(),
                 style: AppTextStyles.blackTitle,
               ),
               const SizedBox(height: 10),

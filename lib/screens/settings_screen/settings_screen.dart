@@ -1,5 +1,6 @@
-import 'dart:io';
 
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,18 +8,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/blocs/user_bloc/user_bloc.dart';
+import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
-import 'package:kitty_app/screens/lock_screen/lock_screen.dart';
+
 import 'package:kitty_app/screens/manage_screen/manage_screen.dart';
 import 'package:kitty_app/screens/settings_screen/widgets/setting_item.dart';
 import 'package:kitty_app/screens/widgets/avatar_widget.dart';
+import 'package:kitty_app/services/secure_storage.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  SettingsScreen({Key? key}) : super(key: key);
 
   static const routeName = 'settings_screen';
 
@@ -29,9 +32,10 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    print('test ${SecuredStorageService.changeLanguage}');
+
     return BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, state) {
-        bool isSwitched = false;
         final height = MediaQuery.of(context).size.height;
         return Container(
           color: AppColors.grey,
@@ -105,7 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: AppColors.grey,
                             size: 24,
                           ),
-                          title: 'Manage categories',
+                          title: LocaleKeys.manage_cat.tr(),
                           iconData: Icons.category_outlined,
                         ),
                         SettingItem(
@@ -122,37 +126,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: AppColors.grey,
                             size: 24,
                           ),
-                          title: 'Export to PDF',
+                          title: LocaleKeys.export.tr(),
                           iconData: Icons.picture_as_pdf_outlined,
                         ),
                         SettingItem(
                           onTap: () {},
                           rightWidget: Row(
                             children: [
-                              Text(
-                                'eng',
-                                style: AppTextStyles.greyCategory,
-                              ),
-                              Switch(
-                                splashRadius: 0,
-                                activeColor: AppColors.white,
-                                activeTrackColor: AppColors.grey,
-                                inactiveTrackColor: AppColors.grey,
-                                value: isSwitched,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    isSwitched = value;
-                                    print(isSwitched);
-                                  });
+                              GestureDetector(
+                                onTap: (){
+                                  context.setLocale(Locale('en'));
                                 },
+                                child: Container(
+                                  height: height / 30,
+                                  width: height / 30,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(width: 1, color: AppColors.grey),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Center(child: Text('🇬🇧')),
+                                ),
                               ),
-                              Text(
-                                'ukr',
-                                style: AppTextStyles.greyCategory,
-                              )
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              GestureDetector(
+                                onTap: (){
+                                 context.setLocale(Locale('uk'));
+                                },
+                                child: Container(
+                                  height: height / 30,
+                                  width: height / 30,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(width: 1, color: AppColors.grey),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Center(child: Text('🇺🇦')),
+                                ),
+                              ),
                             ],
                           ),
-                          title: 'Choose language',
+                          title: LocaleKeys.language.tr(),
                           iconData: Icons.translate_outlined,
                         ),
                         SettingItem(
@@ -162,7 +176,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: AppColors.grey,
                             size: 24,
                           ),
-                          title: 'Frequently asked questions',
+                          title: LocaleKeys.faq.tr(),
                           iconData: Icons.help_center_outlined,
                         ),
                         SettingItem(
@@ -170,7 +184,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             _callAlertDialog(context: context, height: height);
                           },
                           rightWidget: const SizedBox.shrink(),
-                          title: 'Logout',
+                          title: LocaleKeys.logout.tr(),
                           iconData: Icons.logout_outlined,
                         )
                       ],
@@ -189,13 +203,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return _alertDialog(
       context: context,
       height: height,
-      title: 'Do you want to delete your account or close the Kitty app?',
+      title: LocaleKeys.q_delete_acc.tr(),
       tapYes: () {
         Navigator.of(context).pop();
         _alertDialog(
           context: context,
           height: height,
-          title: 'Are you sure you want to delete this account?',
+          title: LocaleKeys.q_sure_delete_acc.tr(),
           tapYes: () {
             context.read<UserBloc>().add(DeleteUsers());
             context.read<DatabaseBloc>().add(DeleteDataBaseEvent());
@@ -203,15 +217,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
           tapNo: () {
             Navigator.of(context).pop();
           },
-          titleButtonYes: 'Yes',
-          titleButtonNo: 'No',
+          titleButtonYes: LocaleKeys.yes.tr(),
+          titleButtonNo: LocaleKeys.no.tr(),
         );
       },
       tapNo: () {
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');
       },
-      titleButtonYes: 'Delete acc',
-      titleButtonNo: 'Close app',
+      titleButtonYes: LocaleKeys.delete_acc.tr(),
+      titleButtonNo: LocaleKeys.close_app.tr(),
     );
   }
 
@@ -225,8 +239,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required String titleButtonNo,
   }) async {
     return showDialog(
-        useRootNavigator: false,
-        barrierDismissible: false,
+
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -234,6 +247,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               borderRadius: BorderRadius.circular(10),
             ),
             content: SizedBox(
+              width: double.infinity,
               height: height / 5,
               child: Column(
                 children: [
@@ -256,6 +270,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         onPressed: tapYes,
                         child: Text(
+                          overflow: TextOverflow.ellipsis,
                           titleButtonYes,
                           style: AppTextStyles.whiteRegular,
                         ),
@@ -266,6 +281,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         onPressed: tapNo,
                         child: Text(
+                          overflow: TextOverflow.ellipsis,
                           titleButtonNo,
                           style: AppTextStyles.whiteRegular,
                         ),

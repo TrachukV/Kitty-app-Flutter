@@ -1,5 +1,7 @@
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:intl/intl.dart';
+import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/models/expenses_model/transaction_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,9 +32,9 @@ String dateFormatHelper(String dayTransaction) {
   DateTime yesterday = today.subtract(const Duration(days: 1));
   final yesterdayFormat = parseDateNow.format(yesterday);
   if (dayTransaction == todayFormat) {
-    return 'TODAY';
+    return LocaleKeys.today.tr();
   } else if (dayTransaction == yesterdayFormat) {
-    return 'YESTERDAY';
+    return LocaleKeys.yesterday.tr();
   }
 
   return actualFormatterDate;

@@ -1,11 +1,13 @@
-import 'dart:io';
 
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
-import 'package:kitty_app/blocs/user_bloc/user_bloc.dart';
+
+import 'package:kitty_app/generated/locale_keys.g.dart';
 
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
@@ -112,19 +114,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       BalanceWidget(
                         icon: AppIcons.blackExpenses,
                         finance: '${state.balance.expenses}',
-                        nameCategory: 'Expenses',
+                        nameCategory: LocaleKeys.expenses.tr(),
                         style: AppTextStyles.redRegular,
                       ),
                       BalanceWidget(
                         icon: AppIcons.blackBalance,
                         finance: '${state.balance.actualBalance}',
-                        nameCategory: 'Balance',
+                        nameCategory: LocaleKeys.balance.tr(),
                         style: AppTextStyles.greenRegular,
                       ),
                       BalanceWidget(
                         icon: AppIcons.blackIncome,
                         finance: '${state.balance.income}',
-                        nameCategory: 'Income',
+                        nameCategory: LocaleKeys.income.tr(),
                         style: AppTextStyles.blackRegular,
                       ),
                     ],

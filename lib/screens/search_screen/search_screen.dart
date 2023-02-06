@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
+import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/home_screen/widgets/transactionsHistoryWidget.dart';
@@ -73,7 +75,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           Icons.arrow_back,
                           color: AppColors.black,
                         )),
-                    hintText: 'Search for notes, categories or labels',
+                    hintText: LocaleKeys.search.tr(),
                     hintStyle: AppTextStyles.greyRegular),
               ),
               SizedBox(

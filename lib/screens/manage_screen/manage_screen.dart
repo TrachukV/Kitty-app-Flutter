@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
+import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
@@ -19,7 +21,7 @@ class ManageScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Manage categories',
+          LocaleKeys.category_name.tr(),
           style: AppTextStyles.blackRegular,
         ),
         backgroundColor: AppColors.grey,
@@ -46,7 +48,7 @@ class ManageScreen extends StatelessWidget {
           context.read<NavigationBloc>().add(NavigateTabEvent(tabIndex: 4, route: CreateCategoryScreen.routeName));
         },
         label: Text(
-          'Add new category',
+          LocaleKeys.add_category.tr(),
           style: AppTextStyles.whiteRegular,
         ),
         backgroundColor: AppColors.blue,
@@ -80,7 +82,7 @@ class ManageScreen extends StatelessWidget {
                               );
                         },
                         child: Text(
-                          'Edit',
+                          LocaleKeys.edit.tr(),
                           style: AppTextStyles.blueRegular,
                         ),
                       ),

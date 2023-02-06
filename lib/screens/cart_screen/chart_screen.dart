@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
+import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/models/statistics_model/statistics_model.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 
@@ -31,7 +33,7 @@ class ChartScreen extends StatelessWidget {
               Icons.file_download_outlined,
               color: Colors.white,
             ),
-            label: const Text('Download report'),
+            label:  Text(LocaleKeys.report.tr()),
             onPressed: () async {
               await createOpenPdf(state);
             },
@@ -42,10 +44,9 @@ class ChartScreen extends StatelessWidget {
             elevation: 0,
             leadingWidth: 100,
             title: Text(
-              'Statistics',
+              LocaleKeys.stats.tr(),
               style: AppTextStyles.blackBold,
               textAlign: TextAlign.right,
-              textDirection: TextDirection.rtl,
             ),
             actions: [
               GestureDetector(
@@ -84,7 +85,7 @@ class ChartScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 15),
               child: Text(
-                'OVERVIEW',
+                LocaleKeys.overview.tr(),
                 style: AppTextStyles.blackTitle,
               ),
             ),
@@ -110,7 +111,7 @@ class ChartScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 15),
               child: Text(
-                'DETAILS',
+                LocaleKeys.details.tr(),
                 style: AppTextStyles.blackTitle,
               ),
             ),

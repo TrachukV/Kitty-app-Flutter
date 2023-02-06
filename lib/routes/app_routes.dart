@@ -58,7 +58,7 @@ class AppRouter {
 
       // [START] Settings pages
       case SettingsScreen.routeName:
-        builder = (_) => const SettingsScreen();
+        builder = (_) =>  SettingsScreen();
         break;
       // [ENDS] Settings pages
 

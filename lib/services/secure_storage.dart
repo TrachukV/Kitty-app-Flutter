@@ -66,4 +66,5 @@ static bool bio = false;
   static Future<void> saveLast(String id) async {
     await storage.write(key: 'lastUser', value: id);
   }
+  static bool changeLanguage = false;
 }

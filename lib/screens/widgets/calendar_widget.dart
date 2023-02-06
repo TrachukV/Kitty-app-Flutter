@@ -1,12 +1,15 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
-import 'package:kitty_app/database/local_database.dart';
+
+import 'package:kitty_app/generated/locale_keys.g.dart';
 
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
+
 
 import '../home_screen/widgets/month_item.dart';
 
@@ -24,19 +27,19 @@ class CalendarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> monthsList = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
+    final List<String> listOfMonths = [
+      LocaleKeys.months_jan.tr(),
+      LocaleKeys.months_feb.tr(),
+      LocaleKeys.months_mar.tr(),
+      LocaleKeys.months_apr.tr(),
+      LocaleKeys.months_may.tr(),
+      LocaleKeys.months_jun.tr(),
+      LocaleKeys.months_jul.tr(),
+      LocaleKeys.months_aug.tr(),
+      LocaleKeys.months_sep.tr(),
+      LocaleKeys.months_oct.tr(),
+      LocaleKeys.months_nov.tr(),
+      LocaleKeys.months_dec.tr(),
     ];
     final width = MediaQuery.of(context).size.width;
     return BlocBuilder<DatabaseBloc, DatabaseState>(
@@ -70,8 +73,8 @@ class CalendarWidget extends StatelessWidget {
                     AppIcons.blackCalendar,
                     Text(
                       state.activeMonth == 0 ?
-                      '${monthsList.first}, ${DateTime.now().year}' :
-                      '${monthsList[state.activeMonth - 1]}, ${DateTime.now().year}',
+                      '${listOfMonths.first}, ${DateTime.now().year}' :
+                      '${listOfMonths[state.activeMonth - 1]}, ${DateTime.now().year}',
                       style: AppTextStyles.blackMedium,
                     ),
                   ],
@@ -124,7 +127,7 @@ class CalendarWidget extends StatelessWidget {
                                       crossAxisCount: 3,
                                       children: List.generate(12, (index) {
                                         return MonthItem(
-                                          month: monthsList[index].substring(0, 3),
+                                          month: listOfMonths[index].substring(0, 3),
                                           onTap: () {
                                             context.read<DatabaseBloc>().add(
                                                   SelectMonthEvent(

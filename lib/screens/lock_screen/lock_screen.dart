@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:kitty_app/blocs/user_bloc/user_bloc.dart';
+import 'package:kitty_app/generated/locale_keys.g.dart';
 
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
@@ -189,7 +191,7 @@ class _LockScreenState extends State<LockScreen> {
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(4),
                                         borderSide: BorderSide(color: AppColors.blue, width: 1)),
-                                    labelText: 'First name',
+                                    labelText: LocaleKeys.first_name.tr(),
                                     labelStyle: AppTextStyles.greyRegular),
                               ),
                             ),
@@ -213,7 +215,7 @@ class _LockScreenState extends State<LockScreen> {
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(4),
                                         borderSide: BorderSide(color: AppColors.blue, width: 1)),
-                                    labelText: 'Last name',
+                                    labelText: LocaleKeys.last_name.tr(),
                                     labelStyle: AppTextStyles.greyRegular),
                               ),
                             ),
@@ -242,7 +244,7 @@ class _LockScreenState extends State<LockScreen> {
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(4),
                                     borderSide: BorderSide(color: AppColors.blue, width: 1)),
-                                labelText: 'Email',
+                                labelText: LocaleKeys.email.tr(),
                                 labelStyle: AppTextStyles.greyRegular),
                           ),
                         ),
@@ -338,14 +340,14 @@ class _LockScreenState extends State<LockScreen> {
               height: height / 5,
               child: Column(
                 children: [
-                  const Icon(
+                   const Icon(
                     Icons.fingerprint,
                     size: 50,
                     color: Colors.red,
                   ),
                   Text(
                     textAlign: TextAlign.center,
-                    'Would you like to use biometrics to authentication on future visits?',
+                    LocaleKeys.use_biometrics.tr(),
                     style: AppTextStyles.greyRegular,
                   ),
                   const SizedBox(height: 20),
@@ -366,7 +368,7 @@ class _LockScreenState extends State<LockScreen> {
                           }
                         },
                         child: Text(
-                          'Yes',
+                          LocaleKeys.yes.tr(),
                           style: AppTextStyles.whiteRegular,
                         ),
                       ),
@@ -379,7 +381,7 @@ class _LockScreenState extends State<LockScreen> {
                           Navigator.of(context).pop();
                         },
                         child: Text(
-                          'No',
+                          LocaleKeys.no.tr(),
                           style: AppTextStyles.whiteRegular,
                         ),
                       ),
@@ -504,11 +506,11 @@ class _LockScreenState extends State<LockScreen> {
           backgroundColor: AppColors.white.withOpacity(0.8),
         ),
       ),
-      title: const AppBarPinWidget(
-        title: 'Enter a new pin',
+      title:  AppBarPinWidget(
+        title: LocaleKeys.enter_new_pin.tr(),
       ),
-      confirmTitle: const AppBarPinWidget(
-        title: 'Re-enter your pin',
+      confirmTitle:  AppBarPinWidget(
+        title: LocaleKeys.re_enter_pin.tr(),
       ),
       context: context,
       onConfirmed: (value) async {

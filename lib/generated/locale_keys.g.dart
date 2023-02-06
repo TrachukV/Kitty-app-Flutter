@@ -1,0 +1,64 @@
+// DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
+
+abstract class  LocaleKeys {
+  static const enter_new_pin = 'enter_new_pin';
+  static const re_enter_pin = 're_enter_pin';
+  static const use_biometrics = 'use_biometrics';
+  static const yes = 'yes';
+  static const no = 'no';
+  static const first_name = 'first_name';
+  static const last_name = 'last_name';
+  static const email = 'email';
+  static const registration = 'registration';
+  static const expenses = 'expenses';
+  static const income = 'income';
+  static const category_name = 'category_name';
+  static const enter_amount = 'enter_amount';
+  static const description = 'description';
+  static const edit_category = 'edit_category';
+  static const transaction = 'transaction';
+  static const edit = 'edit';
+  static const pick_month = 'pick_month';
+  static const balance = 'balance';
+  static const add_category = 'add_category';
+  static const add_new = 'add_new';
+  static const search = 'search';
+  static const report = 'report';
+  static const today = 'today';
+  static const yesterday = 'yesterday';
+  static const stats = 'stats';
+  static const home = 'home';
+  static const settings = 'settings';
+  static const manage_cat = 'manage_cat';
+  static const export = 'export';
+  static const language = 'language';
+  static const faq = 'faq';
+  static const logout = 'logout';
+  static const overview = 'overview';
+  static const details = 'details';
+  static const select = 'select';
+  static const add_income = 'add_income';
+  static const add_expense = 'add_expense';
+  static const add_smth = 'add_smth';
+  static const months_jan = 'months.jan';
+  static const months_feb = 'months.feb';
+  static const months_mar = 'months.mar';
+  static const months_apr = 'months.apr';
+  static const months_may = 'months.may';
+  static const months_jun = 'months.jun';
+  static const months_jul = 'months.jul';
+  static const months_aug = 'months.aug';
+  static const months_sep = 'months.sep';
+  static const months_oct = 'months.oct';
+  static const months_nov = 'months.nov';
+  static const months_dec = 'months.dec';
+  static const months = 'months';
+  static const choose_category = 'choose_category';
+  static const choose_icon = 'choose_icon';
+  static const q_delete_acc = 'q_delete_acc';
+  static const q_sure_delete_acc = 'q_sure_delete_acc';
+  static const delete_acc = 'delete_acc';
+  static const close_app = 'close_app';
+  static const q_use_bio = 'q_use_bio';
+
+}

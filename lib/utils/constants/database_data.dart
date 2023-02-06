@@ -1,3 +1,4 @@
+
 import 'package:kitty_app/resources/app_icons.dart';
 
 class DatabaseData {
@@ -19,7 +20,6 @@ class DatabaseData {
     'Institute',
     'Savings',
     'Education',
-
   ];
   static const Map<String, Map<String, String>> incomeIcons = {
     'sport': {'color': 'E6EE9C', 'icon': AppIcons.sport},
@@ -59,12 +59,7 @@ class DatabaseData {
     'maintenance': {'color': 'B39DDB', 'icon': AppIcons.maintenance},
     'party': {'color': 'BBDEFB', 'icon': AppIcons.party},
     'self_development': {'color': 'CFD8DC', 'icon': AppIcons.selfDevelopment},
-
-
-
-
-
-
-
   };
+
+
 }

@@ -27,6 +27,7 @@ dependencies:
   equatable: ^2.0.5
   flutter_gen: ^5.1.0+1
   flutter_bloc: ^8.1.1
+  easy_localization: ^3.0.1
   sqflite: ^2.2.2
   path: ^1.8.2
   open_document: ^1.0.5
