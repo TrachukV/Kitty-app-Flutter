@@ -13,7 +13,7 @@ import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 
 import 'package:kitty_app/resources/app_text_styles.dart';
-import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
+import 'package:kitty_app/screens/chart_screen/chart_screen.dart';
 import 'package:kitty_app/screens/faq_screen/faq_screen.dart';
 
 import 'package:kitty_app/screens/manage_screen/manage_screen.dart';

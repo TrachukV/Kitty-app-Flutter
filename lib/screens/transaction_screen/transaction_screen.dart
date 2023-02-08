@@ -148,7 +148,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         icon: AppIcons.blackDropDown,
                         items: typeTransaction.map(buildMenuItem).toList(),
                         onChanged: (value) {
-                          if (state.createdCategory != null) {
+                          if (state.createdCategory != null || !state.createdCategory!.categoryId.isNegative ) {
                             context.read<DatabaseBloc>().add(ClearDatabaseEvent());
                           }
                           setState(() {
@@ -233,6 +233,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                               context
                                   .read<NavigationBloc>()
                                   .add(NavigateTabEvent(tabIndex: 0, route: HomeScreen.routeName));
+                              context.read<DatabaseBloc>().add(ClearDatabaseEvent());
                             },
                           );
                         },

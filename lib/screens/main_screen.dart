@@ -9,7 +9,7 @@ import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/routes/app_routes.dart';
-import 'package:kitty_app/screens/cart_screen/chart_screen.dart';
+import 'package:kitty_app/screens/chart_screen/chart_screen.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
 import 'package:kitty_app/screens/edit_category_screen/edit_category_screen.dart';
 import 'package:kitty_app/screens/faq_screen/faq_screen.dart';

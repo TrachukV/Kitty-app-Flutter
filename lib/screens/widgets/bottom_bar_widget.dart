@@ -45,6 +45,7 @@ class _BottomBarState extends State<BottomBar> {
             iconPressed: AppIcons.blackChartPressed,
             iconNotPressed: AppIcons.blackChartNotPressed,
             onPressed: () {
+              context.read<DatabaseBloc>().add(StatisticInitialEvent());
               widget.onSelect(1);
             },
             isActive: widget.currentTab == 1,

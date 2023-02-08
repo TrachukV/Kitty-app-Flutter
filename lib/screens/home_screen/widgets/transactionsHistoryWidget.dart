@@ -2,13 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
+import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/utils/helpers/helpers.dart';
 
-class TransactionHistoryWidget extends StatelessWidget {
+class TransactionHistoryWidget extends StatefulWidget {
   const TransactionHistoryWidget({Key? key}) : super(key: key);
 
+  @override
+  State<TransactionHistoryWidget> createState() => _TransactionHistoryWidgetState();
+}
+
+class _TransactionHistoryWidgetState extends State<TransactionHistoryWidget> {
+  Offset _tapPosition = Offset.zero;
+  void _getTapPosition(TapDownDetails details) {
+    setState(() {
+      _tapPosition = details.globalPosition;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DatabaseBloc, DatabaseState>(
@@ -57,16 +69,32 @@ class TransactionHistoryWidget extends StatelessWidget {
                       final transactions = allCategories.firstWhere(
                         (element) => element.categoryId == dayTransactionsData[index].categoryId,
                       );
-                      return ListTile(
-                        leading: SvgPicture.asset(transactions.icon.pathToIcon),
-                        title: Text(
-                          transactions.title,
-                          style: AppTextStyles.blackRegular,
-                        ),
-                        subtitle: Text(dayTransactionsData[index].description, style: AppTextStyles.greyCategory),
-                        trailing: Text(dayTransactionsData[index].amount
-                          .toString(),
-                          style: dayTransactionsData[index].amount  < 0 ? AppTextStyles.redRegular : AppTextStyles.greenRegular,
+                      return GestureDetector(
+                        onTapDown: (details) => _getTapPosition(details),
+                        onLongPress: (){
+                          if(dayTransactionsData[index].description.isNotEmpty){
+                            _showDeleteOption(
+                                context,
+                                dayTransactionsData[index].description,
+                                dayTransactionsData[index].expenseId);
+                          } else {
+                            _showDeleteOption(
+                                context,
+                                '${transactions.title} ${LocaleKeys.transaction}',
+                                dayTransactionsData[index].expenseId);
+                          }
+                        },
+                        child: ListTile(
+                          leading: SvgPicture.asset(transactions.icon.pathToIcon),
+                          title: Text(
+                            transactions.title,
+                            style: AppTextStyles.blackRegular,
+                          ),
+                          subtitle: Text(dayTransactionsData[index].description, style: AppTextStyles.greyCategory),
+                          trailing: Text(dayTransactionsData[index].amount
+                            .toString(),
+                            style: dayTransactionsData[index].amount  < 0 ? AppTextStyles.redRegular : AppTextStyles.greenRegular,
+                          ),
                         ),
                       );
                     })
@@ -78,5 +106,24 @@ class TransactionHistoryWidget extends StatelessWidget {
         );
       },
     );
+  }
+  void _showDeleteOption(BuildContext context, String title, int id) async {
+    final RenderObject? overlay =
+    Overlay.of(context)?.context.findRenderObject();
+    await showMenu(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      context: context,
+      position: RelativeRect.fromRect(
+          Rect.fromLTWH(_tapPosition.dx, _tapPosition.dy, 30, 30),
+          Rect.fromLTWH(0, 0, overlay!.paintBounds.size.width,
+              overlay.paintBounds.size.height)),
+      items: [PopupMenuItem(
+          value: 'delete',
+          child: Text('Delete $title', style: AppTextStyles.redRegular,))],
+    ).then((value) {
+      if (value != null) {
+        context.read<DatabaseBloc>().add(DeleteTransactionEvent(transactionId: id));
+      }
+    });
   }
 }

@@ -24,6 +24,7 @@ class EditCategoryScreen extends StatelessWidget {
       }
     }
 
+
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return BlocBuilder<DatabaseBloc, DatabaseState>(
@@ -87,6 +88,7 @@ class EditCategoryScreen extends StatelessWidget {
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Column(
               children: [
+
                 SizedBox(
                   height: height / 20,
                 ),
@@ -112,7 +114,7 @@ class EditCategoryScreen extends StatelessWidget {
                             });
                       },
                       child: SvgPicture.asset(
-                        state.selectedIcon == null
+                        state.selectedIcon!.pathToIcon.isEmpty
                             ? state.editCategory!.icon.pathToIcon
                             : state.selectedIcon!.pathToIcon,
                       ),

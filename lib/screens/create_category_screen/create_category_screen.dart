@@ -75,7 +75,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    if (state.selectedIcon == null)
+                    if (state.selectedIcon!.pathToIcon.isEmpty)
                       GestureDetector(
                         onTap: () {
                           _bottomSheetController = showBottomSheet(
@@ -178,6 +178,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
           )
         ],
       ),
+      margin:const EdgeInsets.only(bottom: 500),
       behavior: SnackBarBehavior.floating,
       backgroundColor: AppColors.black,
     );

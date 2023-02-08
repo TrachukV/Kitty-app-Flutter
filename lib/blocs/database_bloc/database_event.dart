@@ -96,6 +96,11 @@ class DeleteDataBaseEvent extends DatabaseEvent {
 
 }
 
+class DeleteTransactionEvent extends DatabaseEvent {
+  DeleteTransactionEvent({required this.transactionId});
+
+  final int transactionId;
+}
 class ClearDatabaseEvent extends DatabaseEvent {}
 
 class StatisticInitialEvent extends DatabaseEvent {}

@@ -40,6 +40,11 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       final path = join(dbDirectory, dbName);
       databaseFactory.deleteDatabase(path);
     });
+
+    on<DeleteTransactionEvent>((event, emit) async {
+      await dbRepo.deleteEntry(event.transactionId);
+      add(DatabaseInitialEvent());
+    });
     on<StatisticInitialEvent>((event, emit) async {
       final statistics = await dbRepo.getStatistics(DateTime.now().month);
       emit(state.copyWith(statisticsModels: statistics));
@@ -54,8 +59,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       emit(state.copyWith(createdCategory: event.transactionCategory));
     });
     on<ClearDatabaseEvent>((event, emit) {
-      emit(state.copyWith(createdCategory: null));
-      emit(state.copyWith(selectedIcon: null));
+      emit(state.copyWith(createdCategory: zeroCategory));
+      emit(state.copyWith(selectedIcon: zeroIcon));
     });
     on<GetIconEvent>((event, emit) {
       emit(state.copyWith(selectedIcon: event.selectedIcon));
@@ -116,7 +121,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       await _initial(emit);
     });
   }
-
+  static const IconModel zeroIcon =
+  IconModel(iconId: -1, color: '', pathToIcon: '');
+  static const TransactionsCategoriesModel zeroCategory = TransactionsCategoriesModel(
+      categoryId: -1, title: '', type: '', orderNum: -1, icon: zeroIcon);
   DatabaseRepo dbRepo;
   final List<int> selectedCategories = [];
 
@@ -132,7 +140,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           )
           .millisecondsSinceEpoch,
     );
-    // final statistics = await dbRepo.getStatistics(DateTime.now().month);
 
     emit(state.copyWith(
       icons: icons,

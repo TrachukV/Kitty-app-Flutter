@@ -30,8 +30,8 @@ class DatabaseState extends Equatable {
     this.expensesCategories = const [],
     this.transaction = const [],
     this.icons = const [],
-    this.createdCategory,
-    this.selectedIcon,
+    this.createdCategory = DatabaseBloc.zeroCategory,
+    this.selectedIcon = DatabaseBloc.zeroIcon,
     this.balance = const BalanceModel(
       income: 0,
       expenses: 0,

@@ -61,7 +61,7 @@ class _LockScreenState extends State<LockScreen> {
       builder: (context, state) {
         print(state.userModel);
         if (state.status == AuthStatus.initial) {
-          Future.delayed(Duration(seconds: 1), () async {
+          Future.delayed(const Duration(seconds: 1), () async {
 
             if (state.userModel.eMail.isEmpty) {
               _screenLockCreate(context, height);

@@ -319,4 +319,11 @@ class DatabaseRepo {
           whereArgs: [categoryId]);
     });
   }
+  Future<void> deleteEntry(int id) async {
+    final db = await database.database;
+    await db.transaction((txn) async {
+      await txn.delete(database.transactionTable,
+          where: 'expenseId = ?', whereArgs: [id]);
+    });
+  }
 }
