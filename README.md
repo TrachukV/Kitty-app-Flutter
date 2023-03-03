@@ -12,7 +12,7 @@ This application is designed to conveniently track your expenses and keep statis
 
 
 ## 💥 Features
-
+- Native splash screen.
 - The application provides the option to use Ukrainian and English languages.
 - Authorization is done locally using TouchID, FaceID, or PIN code.
 - All data is stored locally using the SQLite database.
