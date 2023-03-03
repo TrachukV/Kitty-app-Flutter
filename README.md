@@ -1,5 +1,5 @@
 
-# ![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)Kitty Expense Manager Flutter App 💳
+# ![Logo](https://github.com/TrachukV/kittyApp/blob/main/demo/Kitty-Logo.png)Kitty Expense Manager Flutter App 💳
 
 This application is designed to conveniently track your expenses and keep statistics on them. Kitty will never let you forget where your salary went 😉
 - Manage your money wisely 💰
@@ -8,7 +8,7 @@ This application is designed to conveniently track your expenses and keep statis
 
 
 
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+![Logo](https://github.com/TrachukV/kittyApp/blob/main/demo/cover.png)
 
 
 ## 💥 Features
@@ -25,13 +25,13 @@ This application is designed to conveniently track your expenses and keep statis
 
 ## 📽Demo
 
-| Sign Up                                  | Add entery                                  |
-|------------------------------------------|-----------------------------------------------|
-| <img src=".gif" width="300"> | <img src=".gif" width="300"> |
+| Sign Up                                  | Add entery                              |
+|------------------------------------------|-------------------------------------------|
+| <img src="https://github.com/TrachukV/kittyApp/blob/main/demo/auth.gif" width="300"> | <img src="https://github.com/TrachukV/kittyApp/blob/main/demo/new%20entery.gif" width="300"> |
 
-| Search                       | Settings                |
-|--------------------------------------------|--------------------------------------------|
-| <img src=".gif" width="300"> | <img src=".gif" width="300"> |
+| Search                   | Settings                |
+|----------------------------------------|----------------------------------------|
+| <img src="https://github.com/TrachukV/kittyApp/blob/main/demo/search.gif" width="300"> | <img src="https://github.com/TrachukV/kittyApp/blob/main/demo/settings.gif" width="300"> |
 
 
 
@@ -63,9 +63,9 @@ This application is designed to conveniently track your expenses and keep statis
 
 
 ## 📱 Platforms
-| Android                                | IOS                                |
-|------------------------------------------|-----------------------------------------------|
-| <img src=".png" width="300"> | <img src=".png" width="300"> |
+| Android                            | IOS                            |
+|--------------------------------------|-------------------------------------------|
+| <img src="https://github.com/TrachukV/kittyApp/blob/main/demo/android.png" width="300"> | <img src="https://github.com/TrachukV/kittyApp/blob/main/demo/ios.png" width="300"> |
 
 ## 📌 UI
 
