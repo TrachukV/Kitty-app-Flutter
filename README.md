@@ -63,9 +63,11 @@ This application is designed to conveniently track your expenses and keep statis
 
 
 ## 📱 Platforms
-| Android                            | IOS                            |
-|--------------------------------------|-------------------------------------------|
-| <img src="https://github.com/TrachukV/kittyApp/blob/main/demo/android.png" width="300"> | <img src="https://github.com/TrachukV/kittyApp/blob/main/demo/ios.png" width="300"> |
+- ✅ Android
+- ✅ IOS
+- ⚠️ WEB - Soon
+- ⚠️ MAC OS - Soon
+
 
 ## 📌 UI
 
