@@ -161,6 +161,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           DateTime.now().year,
           month + 1,
         ).subtract(const Duration(days: 1)).millisecondsSinceEpoch;
+
         final getRangeDate = await dbRepo.getRangeDateTransaction(firstDate: firstDate, lastDate: lastDate);
         emit(state.copyWith(
           activeMonth: month,
