@@ -29,6 +29,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           errorStatus: ErrorStatus.error,
           errorMessage: validator,
         ));
+        emit(state.copyWith(errorStatus: ErrorStatus.initial));
       } else {
         print(event.lastName);
         print(event.firstName);
