@@ -1,14 +1,13 @@
-
 import 'package:kitty_app/resources/app_icons.dart';
 
 class DatabaseData {
   static const List<String> incomeCategories = [
-    'Salary',
+    'Groceries',
+    'Cafe',
+    'Electronics',
     'Gifts',
-    'Wages',
-    'Interest',
-    'Savings',
-    'Allowance',
+    'Laundry',
+    'Liquor',
   ];
   static const List<String> expenseCategories = [
     'Health',
@@ -61,5 +60,5 @@ class DatabaseData {
     'self_development': {'color': 'CFD8DC', 'icon': AppIcons.selfDevelopment},
   };
 
-
+  static String categoryType = '';
 }

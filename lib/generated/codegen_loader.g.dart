@@ -114,6 +114,7 @@ static const Map<String,dynamic> en = {
   "edit_category": "Edit category",
   "transaction": "transaction",
   "edit": "Edit",
+  "pick_month": "PICK A MONTH",
   "category_name": "Category name",
   "description": "Description (optional)",
   "balance": "Balance",

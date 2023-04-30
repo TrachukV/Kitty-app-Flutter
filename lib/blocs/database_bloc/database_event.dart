@@ -24,8 +24,10 @@ class DatabaseInitialEvent extends DatabaseEvent {}
 class CreateCategoryEvent extends DatabaseEvent {
   CreateCategoryEvent({
     required this.categoryName,
-  });
+    required this.categoryType,
 
+  });
+final String categoryType;
   final String categoryName;
 }
 
@@ -132,3 +134,10 @@ class DragCategoriesEvent extends DatabaseEvent {
   final int oldIndex;
   final int newIndex;
 }
+
+class GetDateEventInc extends DatabaseEvent {
+  final DateTime dateTime;
+
+  GetDateEventInc(this.dateTime);
+}
+

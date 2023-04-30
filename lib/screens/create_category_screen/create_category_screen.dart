@@ -11,6 +11,7 @@ import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/create_category_screen/widgets/dotted_border.dart';
 import 'package:kitty_app/screens/home_screen/home_screen.dart';
+import 'package:kitty_app/utils/constants/database_data.dart';
 
 class CreateCategoryScreen extends StatefulWidget {
   const CreateCategoryScreen({Key? key}) : super(key: key);
@@ -146,7 +147,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                 style: AppTextStyles.buttonStyle,
                 onPressed:  state.selectedIcon != null && value.text.isNotEmpty ? () {
                   showSnackBar(context);
-                context.read<DatabaseBloc>().add(CreateCategoryEvent(categoryName: value.text));
+                context.read<DatabaseBloc>().add(CreateCategoryEvent(categoryName: value.text, categoryType: DatabaseData.categoryType));
                 context.read<NavigationBloc>().add(NavigateTabEvent(tabIndex: 0, route: HomeScreen.routeName));
               } : null,
                 child: SizedBox(
@@ -161,6 +162,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
     );
   }
   void showSnackBar(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     final snackBar = SnackBar(
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,11 +180,14 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
           )
         ],
       ),
-      margin:const EdgeInsets.only(bottom: 500),
+      margin: EdgeInsets.only(bottom: height / 1.5),
       behavior: SnackBarBehavior.floating,
       backgroundColor: AppColors.black,
+      duration: Duration(seconds: 1),
     );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(
+      snackBar,
+    );
   }
 }
 

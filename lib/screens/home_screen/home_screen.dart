@@ -1,10 +1,9 @@
-
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
+import 'package:kitty_app/blocs/date_bloc/date_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 
 import 'package:kitty_app/generated/locale_keys.g.dart';
@@ -14,9 +13,11 @@ import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/search_screen/search_screen.dart';
 import 'package:kitty_app/screens/widgets/avatar_widget.dart';
-import 'package:kitty_app/screens/widgets/calendar_widget.dart';
+
 
 import 'package:kitty_app/screens/home_screen/widgets/transactionsHistoryWidget.dart';
+
+import '../widgets/calendar_widget_inc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -80,19 +81,23 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: height * 0.01,
               ),
-              CalendarWidget(
-                decrement: () {
-                  context.read<DatabaseBloc>().add(
-                    IncDecMonthEvent(command: 'decrement', screen: 'home'),
-                  );
-                },
-                increment: () {
-                  context.read<DatabaseBloc>().add(
-                    IncDecMonthEvent(command: 'increment', screen: 'home'),
-                  );
-                },
-                screen: 'home',
+              BlocProvider(
+                create: (context) => DateBloc(),
+                child: const CalendarWidgetInc(),
               ),
+              // CalendarWidget(
+              //   decrement: () {
+              //     context.read<DatabaseBloc>().add(
+              //       IncDecMonthEvent(command: 'decrement', screen: 'home'),
+              //     );
+              //   },
+              //   increment: () {
+              //     context.read<DatabaseBloc>().add(
+              //       IncDecMonthEvent(command: 'increment', screen: 'home'),
+              //     );
+              //   },
+              //   screen: 'home',
+              // ),
               SizedBox(
                 height: height * 0.025,
               ),

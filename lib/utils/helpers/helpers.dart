@@ -54,6 +54,7 @@ String dayExpensesHelper(List<TransactionModel> models) {
   return '$result';
 }
 
+
 bool validateEmailHelper(String email) {
   return RegExp(
       r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"

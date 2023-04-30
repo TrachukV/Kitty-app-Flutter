@@ -116,15 +116,15 @@ class DatabaseRepo {
       });
     });
   }
-
   Future<void> createCategory({
     required String categoryName,
     required int iconId,
+    required String categoryType,
   }) async {
     final db = await database.database;
     await db.transaction((txn) async {
       await txn.insert(database.categoryTable, {
-        'type': 'Expenses',
+        'type': categoryType,
         'title': categoryName,
         'totalAmount': 0.0.toString(),
         'entries': 0,

@@ -10,6 +10,7 @@ import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
 import 'package:kitty_app/screens/home_screen/home_screen.dart';
+import 'package:kitty_app/utils/constants/database_data.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({Key? key}) : super(key: key);
@@ -60,6 +61,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               categories: state.expensesCategories,
               addCategoryButton: OutlinedButton(
                   onPressed: () {
+                    DatabaseData.categoryType = 'Expenses';
                     context.read<NavigationBloc>().add(
                           NavigateTabEvent(tabIndex: 4, route: CreateCategoryScreen.routeName),
                         );
@@ -72,6 +74,17 @@ class _TransactionScreenState extends State<TransactionScreen> {
           } else if (selectedType == LocaleKeys.income.tr()) {
             return CategorySelections(
               categories: state.incomeCategories,
+              addCategoryButton: OutlinedButton(
+                  onPressed: () {
+                    DatabaseData.categoryType = 'Income';
+                    context.read<NavigationBloc>().add(
+                          NavigateTabEvent(tabIndex: 4, route: CreateCategoryScreen.routeName),
+                        );
+                  },
+                  child: Text(
+                    LocaleKeys.add_category.tr(),
+                    style: AppTextStyles.blueRegular,
+                  )),
             );
           }
           return const SizedBox.shrink();
@@ -139,7 +152,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                               borderRadius: BorderRadius.circular(4),
                               borderSide: BorderSide(color: AppColors.blue, width: 1)),
                         ),
-                        hint:  Text(
+                        hint: Text(
                           LocaleKeys.select.tr(),
                         ),
                         borderRadius: BorderRadius.circular(8),
@@ -148,7 +161,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         icon: AppIcons.blackDropDown,
                         items: typeTransaction.map(buildMenuItem).toList(),
                         onChanged: (value) {
-                          if (state.createdCategory != null || !state.createdCategory!.categoryId.isNegative ) {
+                          if (state.createdCategory != null || !state.createdCategory!.categoryId.isNegative) {
                             context.read<DatabaseBloc>().add(ClearDatabaseEvent());
                           }
                           setState(() {
@@ -222,7 +235,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         builder: (BuildContext context, TextEditingValue value, Widget? child) {
                           return BlueButton(
                             selectedType: selectedType,
-                            check: state.createdCategory != null && selectedType != 'type' && value.text.isNotEmpty,
+                            check: (state.createdCategory  != null && state.createdCategory!.title != '') && selectedType != 'type' && value.text.isNotEmpty,
                             callback: () {
                               context.read<DatabaseBloc>().add(
                                     GetCreatedTransaction(
@@ -291,12 +304,12 @@ class BlueButtonWidget extends StatelessWidget {
 //
 class CategorySelections extends StatelessWidget {
   final List categories;
-  final Widget? addCategoryButton;
+  final Widget addCategoryButton;
 
   const CategorySelections({
     Key? key,
     required this.categories,
-    this.addCategoryButton,
+    required this.addCategoryButton,
   }) : super(key: key);
 
   @override
@@ -349,7 +362,7 @@ class CategorySelections extends StatelessWidget {
                       );
                     }),
               ),
-              addCategoryButton ?? const SizedBox.shrink(),
+              addCategoryButton,
             ],
           ),
         );

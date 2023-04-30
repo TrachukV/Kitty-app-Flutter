@@ -24,7 +24,6 @@ class EditCategoryScreen extends StatelessWidget {
       }
     }
 
-
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return BlocBuilder<DatabaseBloc, DatabaseState>(
@@ -40,17 +39,18 @@ class EditCategoryScreen extends StatelessWidget {
                         context.read<DatabaseBloc>().add(
                               EditCategoryEvent(
                                 editTitle: _categoryController.text,
-                                editIcon: state.selectedIcon!,
+                                editIcon:
+                                    state.selectedIcon!.iconId == -1 ? state.editCategory!.icon : state.selectedIcon!,
                               ),
                             );
                         context.read<NavigationBloc>().add(
-                          NavigationPopEvent(),
-                        );
+                              NavigationPopEvent(),
+                            );
                       }
                     : null,
                 child: SizedBox(
                   width: width * 0.9,
-                  child:  Center(
+                  child: Center(
                     heightFactor: 1,
                     child: Text(LocaleKeys.edit_category.tr()),
                   ),
@@ -88,7 +88,6 @@ class EditCategoryScreen extends StatelessWidget {
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Column(
               children: [
-
                 SizedBox(
                   height: height / 20,
                 ),

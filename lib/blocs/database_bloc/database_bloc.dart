@@ -17,7 +17,7 @@ part 'database_event.dart';
 part 'database_state.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
-  DatabaseBloc(this.dbRepo) : super(const DatabaseState()) {
+  DatabaseBloc(this.dbRepo) : super( DatabaseState(DateTime.now(),),) {
     on<DatabaseInitialEvent>((event, emit) async {
       await _initial(emit);
       if (state.mapTransactions.isNotEmpty) {
@@ -66,7 +66,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       emit(state.copyWith(selectedIcon: event.selectedIcon));
     });
     on<CreateCategoryEvent>((event, emit) async {
-      await dbRepo.createCategory(categoryName: event.categoryName, iconId: state.selectedIcon!.iconId);
+      await dbRepo.createCategory(categoryName: event.categoryName, iconId: state.selectedIcon!.iconId, categoryType: event.categoryType);
       add(DatabaseInitialEvent());
     });
     on<GetCreatedTransaction>((event, emit) async {
@@ -109,7 +109,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       await _dragCategories(event.oldIndex, event.newIndex);
     });
     on<GetEditCategoryEvent>((event, emit) {
-      print(event.editCategory.icon.pathToIcon);
+
+
       emit(state.copyWith(editCategory: event.editCategory));
     });
     on<EditCategoryEvent>((event, emit) async {
@@ -118,13 +119,29 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
         iconId: event.editIcon.iconId,
         title: event.editTitle,
       );
+
       await _initial(emit);
     });
+
+    on<GetDateEventInc>((event, emit) async  {
+      final int firstDayOfMonth = DateTime.utc(event.dateTime.year, event.dateTime.month, 1).millisecondsSinceEpoch;
+      final int lastDayOfMonth = DateTime.utc(event.dateTime.year, event.dateTime.month + 1, 0).millisecondsSinceEpoch;
+      final List<TransactionModel> getRangeDate = await dbRepo.getRangeDateTransaction(firstDate: firstDayOfMonth, lastDate: lastDayOfMonth);
+      emit(state.copyWith(
+        selectedDate: event.dateTime,
+        mapTransactions: groupByTimeStampHelper(getRangeDate),
+        balance: await dbRepo.monthBalance(thisDate: firstDayOfMonth, lastDate: lastDayOfMonth)
+      ));
+
+
+
+    });
+
   }
-  static const IconModel zeroIcon =
-  IconModel(iconId: -1, color: '', pathToIcon: '');
-  static const TransactionsCategoriesModel zeroCategory = TransactionsCategoriesModel(
-      categoryId: -1, title: '', type: '', orderNum: -1, icon: zeroIcon);
+
+  static const IconModel zeroIcon = IconModel(iconId: -1, color: '', pathToIcon: '');
+  static const TransactionsCategoriesModel zeroCategory =
+      TransactionsCategoriesModel(categoryId: -1, title: '', type: '', orderNum: -1, icon: zeroIcon);
   DatabaseRepo dbRepo;
   final List<int> selectedCategories = [];
 
