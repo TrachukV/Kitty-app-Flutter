@@ -13,18 +13,13 @@ class AvatarWidget extends StatelessWidget {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
         return CircleAvatar(
+          radius: 18,
           backgroundColor: color,
+          backgroundImage: state.userModel.pathToAvatar.isEmpty? null : FileImage(File(state.userModel.pathToAvatar)),
           child: state.userModel.pathToAvatar.isEmpty
               ? Text(state.userModel.userName.substring(0, 1),
               style: AppTextStyles.blackMedium)
-              : ClipRRect(
-            borderRadius: BorderRadius.circular(50),
-            child: Image.file(
-              File(state.userModel.pathToAvatar),
-              fit: BoxFit.fill,
-              height: 40,
-            ),
-          ),
+              : null
         );
       },
     );

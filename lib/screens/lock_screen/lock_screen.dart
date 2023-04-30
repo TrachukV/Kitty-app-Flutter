@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,6 +19,7 @@ import 'package:kitty_app/services/secure_storage.dart';
 import 'package:kitty_app/utils/helpers/helpers.dart';
 
 import '../create_category_screen/widgets/dotted_border.dart';
+import 'helper.dart';
 
 class LockScreen extends StatefulWidget {
   const LockScreen({Key? key}) : super(key: key);
@@ -34,6 +36,8 @@ class _LockScreenState extends State<LockScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   String _email = '';
   String _firstName = '';
   String _lastName = '';
@@ -43,16 +47,11 @@ class _LockScreenState extends State<LockScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-
     return BlocConsumer<UserBloc, UserState>(
       listener: (context, state) async {
         if (state.errorStatus == ErrorStatus.error) {
-          _firstNameController.clear();
-          _lastNameController.clear();
           _emailController.clear();
           _email = '';
-          _firstName = '';
-          _lastName = '';
           showSnackBar(state);
         } else if (state.errorStatus == ErrorStatus.valid) {
           Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(MainScreen.routeName, (route) => false);
@@ -62,7 +61,6 @@ class _LockScreenState extends State<LockScreen> {
         print(state.userModel);
         if (state.status == AuthStatus.initial) {
           Future.delayed(const Duration(seconds: 1), () async {
-
             if (state.userModel.eMail.isEmpty) {
               _screenLockCreate(context, height);
             } else {
@@ -72,7 +70,7 @@ class _LockScreenState extends State<LockScreen> {
                   Navigator.of(context, rootNavigator: true)
                       .pushNamedAndRemoveUntil(MainScreen.routeName, (route) => false);
                 } else {
-                  final ifAuth = await LocalAuth.authenticate();
+                  print('fake');
                 }
               } else {
                 _screenLockAuth(state);
@@ -82,6 +80,8 @@ class _LockScreenState extends State<LockScreen> {
         }
 
         return Scaffold(
+          resizeToAvoidBottomInset: false,
+          floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
           floatingActionButton: state.userModel.eMail.isEmpty
               ? ValueListenableBuilder(
                   valueListenable: _emailController,
@@ -92,7 +92,8 @@ class _LockScreenState extends State<LockScreen> {
                               _emailController.text.isNotEmpty &&
                               _lastNameController.text.isNotEmpty
                           ? () {
-                        BlocProvider.of<UserBloc>(context).add(GetBiometricsEvent(biometrics: SecuredStorageService.bio));
+                              BlocProvider.of<UserBloc>(context)
+                                  .add(GetBiometricsEvent(biometrics: SecuredStorageService.bio));
 
                               context.read<UserBloc>().add(
                                     GetInfoUserEvent(
@@ -102,7 +103,6 @@ class _LockScreenState extends State<LockScreen> {
                                       pathToAvatar: state.pathImage,
                                     ),
                                   );
-
                             }
                           : null,
                       child: SizedBox(
@@ -145,23 +145,26 @@ class _LockScreenState extends State<LockScreen> {
                             icon: ClipRRect(
                               borderRadius: BorderRadius.circular(50),
                               child: GestureDetector(
-                                  onTap: () async {
-                                   final image = await pickImageHelper();
-                                   if(mounted){
-                                     context.read<UserBloc>().add(GetAvatarEvent(image));
-                                   }
-
-                                  },
+                                onTap: () async {
+                                  final image = await pickImageHelper();
+                                  if (mounted) {
+                                    context.read<UserBloc>().add(GetAvatarEvent(image));
+                                  }
+                                },
+                                child: CircleAvatar(
+                                  radius: 40,
+                                  backgroundColor: state.pathImage.isEmpty ? Colors.transparent : Colors.white,
+                                  backgroundImage: state.pathImage.isEmpty
+                                      ? null
+                                      : FileImage(File(state.pathImage)),
                                   child: state.pathImage.isEmpty
                                       ? Icon(
-                                          Icons.question_mark,
-                                          color: AppColors.sonicSilver,
-                                        )
-                                      : Image.file(
-                                          File(state.pathImage),
-                                          fit: BoxFit.fill,
-                                          height: 80,
-                                        )),
+                                    Icons.question_mark,
+                                    color: AppColors.sonicSilver,
+                                  )
+                                      : null,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -182,6 +185,9 @@ class _LockScreenState extends State<LockScreen> {
                                 maxLength: 14,
                                 textInputAction: TextInputAction.next,
                                 style: AppTextStyles.blackRegular,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.deny(RegExp(r"\s")),
+                                ],
                                 decoration: InputDecoration(
                                     counterText: '',
                                     enabledBorder: OutlineInputBorder(
@@ -206,6 +212,9 @@ class _LockScreenState extends State<LockScreen> {
                                 maxLength: 14,
                                 textInputAction: TextInputAction.next,
                                 style: AppTextStyles.blackRegular,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.deny(RegExp(r"\s")),
+                                ],
                                 decoration: InputDecoration(
                                     counterText: '',
                                     enabledBorder: OutlineInputBorder(
@@ -231,7 +240,7 @@ class _LockScreenState extends State<LockScreen> {
                             onChanged: (value) {
                               _email = value;
                             },
-                            textInputAction: TextInputAction.next,
+                            textInputAction: TextInputAction.done,
                             maxLength: 30,
                             keyboardType: TextInputType.emailAddress,
                             style: AppTextStyles.blackRegular,
@@ -275,24 +284,20 @@ class _LockScreenState extends State<LockScreen> {
                         if (ifAuth) {
                           Navigator.of(context, rootNavigator: true)
                               .pushNamedAndRemoveUntil(MainScreen.routeName, (route) => false);
-                        } else {
-                          final ifAuth = await LocalAuth.authenticate();
                         }
                       },
                       child: Center(
-                        child: Container(
-                          child: Column(
-                            children: [
-                              SvgPicture.asset(
-                                AppIcons.kittiLogo,
-                                height: 100,
-                              ),
-                              Text(
-                                LocaleKeys.sign_in.tr(),
-                                style: AppTextStyles.greyBold,
-                              ),
-                            ],
-                          ),
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              AppIcons.kittiLogo,
+                              height: 100,
+                            ),
+                            Text(
+                              LocaleKeys.sign_in.tr(),
+                              style: AppTextStyles.greyBold,
+                            ),
+                          ],
                         ),
                       ),
                     )),
@@ -303,6 +308,11 @@ class _LockScreenState extends State<LockScreen> {
 
   void showSnackBar(UserState state) {
     final snackBar = SnackBar(
+      margin: EdgeInsets.only(
+        bottom: MediaQuery.of(context).size.height - 150,
+        right: 10,
+        left: 10,
+      ),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -319,8 +329,8 @@ class _LockScreenState extends State<LockScreen> {
           )
         ],
       ),
+      duration: const Duration(seconds: 4),
       behavior: SnackBarBehavior.floating,
-      dismissDirection: DismissDirection.up,
       backgroundColor: AppColors.black,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -340,7 +350,7 @@ class _LockScreenState extends State<LockScreen> {
               height: height / 5,
               child: Column(
                 children: [
-                   const Icon(
+                  const Icon(
                     Icons.fingerprint,
                     size: 50,
                     color: Colors.red,
@@ -396,7 +406,6 @@ class _LockScreenState extends State<LockScreen> {
 
   Future<void> _screenLockAuth(UserState state) {
     return screenLock(
-
       canCancel: false,
       onUnlocked: () {
         Navigator.of(context).pop();
@@ -506,10 +515,10 @@ class _LockScreenState extends State<LockScreen> {
           backgroundColor: AppColors.white.withOpacity(0.8),
         ),
       ),
-      title:  AppBarPinWidget(
+      title: AppBarPinWidget(
         title: LocaleKeys.enter_new_pin.tr(),
       ),
-      confirmTitle:  AppBarPinWidget(
+      confirmTitle: AppBarPinWidget(
         title: LocaleKeys.re_enter_pin.tr(),
       ),
       context: context,
@@ -517,10 +526,6 @@ class _LockScreenState extends State<LockScreen> {
         context.read<UserBloc>().add(GetPinEvent(pin: value));
         print(value);
         Navigator.of(context).pop();
-        // Future.delayed(
-        //   const Duration(milliseconds: 100),
-        //
-        // );
         if (await authenticateIsAvailable()) {
           _alertDialog(context, height, biometrics);
         }
@@ -533,40 +538,6 @@ class _LockScreenState extends State<LockScreen> {
         Icons.arrow_back,
         color: Colors.black,
       ),
-    );
-  }
-}
-
-Future<bool> authenticateIsAvailable() async {
-  final isAvailable = await LocalAuth.canAuthenticate();
-  final isDeviceSupported = await LocalAuth.supported();
-  return isAvailable && isDeviceSupported;
-}
-
-class AppBarPinWidget extends StatelessWidget {
-  const AppBarPinWidget({
-    Key? key,
-    required this.title,
-  }) : super(key: key);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SvgPicture.asset(
-          AppIcons.kittiLogo,
-          height: 120,
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Text(
-          title,
-          style: AppTextStyles.greyBold,
-        ),
-      ],
     );
   }
 }
