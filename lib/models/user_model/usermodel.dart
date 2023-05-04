@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'usermodel.freezed.dart';
@@ -13,8 +12,8 @@ class UserModel with _$UserModel {
     required int id,
     required bool biometrics,
     required String pinCode,
-}) = _UserModel;
+  }) = _UserModel;
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 }
-

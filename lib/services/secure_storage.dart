@@ -14,15 +14,17 @@ class SecuredStorageService {
 
   static Future<UserModel?> readAll() async {
     final rawData = await storage.readAll();
-    if(rawData.isEmpty) return null;
-    return UserModel(userName: rawData['userName']!,
+    if (rawData.isEmpty) return null;
+    return UserModel(
+        userName: rawData['userName']!,
         eMail: rawData['email']!,
         pathToAvatar: rawData['pathToAvatar']!,
         id: 0,
-        biometrics: rawData['bio']! == 'true'? true : false,
+        biometrics: rawData['bio']! == 'true' ? true : false,
         pinCode: rawData['pin']!);
   }
-static bool bio = false;
+
+  static bool bio = false;
 
   static Future<String?> readUser() async {
     return await storage.read(key: 'email');
@@ -66,5 +68,6 @@ static bool bio = false;
   static Future<void> saveLast(String id) async {
     await storage.write(key: 'lastUser', value: id);
   }
+
   static bool changeLanguage = false;
 }

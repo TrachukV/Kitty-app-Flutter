@@ -5,7 +5,8 @@ abstract class DatabaseEvent {}
 class CategoriesForSearchEvent extends DatabaseEvent {}
 
 class CategorySearchSelectEvent extends DatabaseEvent {
-  CategorySearchSelectEvent({required this.categoryId, required this.searchedValue});
+  CategorySearchSelectEvent(
+      {required this.categoryId, required this.searchedValue});
 
   final int categoryId;
   final String searchedValue;
@@ -21,13 +22,14 @@ class TransactionSearchEvent extends DatabaseEvent {
 
 class DatabaseInitialEvent extends DatabaseEvent {}
 
+class ClearSearchList extends DatabaseEvent {}
+
 class CreateCategoryEvent extends DatabaseEvent {
   CreateCategoryEvent({
     required this.categoryName,
     required this.categoryType,
-
   });
-final String categoryType;
+  final String categoryType;
   final String categoryName;
 }
 
@@ -94,15 +96,15 @@ class GetNewCategoryEvent extends DatabaseEvent {
 
   final String newCategory;
 }
-class DeleteDataBaseEvent extends DatabaseEvent {
 
-}
+class DeleteDataBaseEvent extends DatabaseEvent {}
 
 class DeleteTransactionEvent extends DatabaseEvent {
   DeleteTransactionEvent({required this.transactionId});
 
   final int transactionId;
 }
+
 class ClearDatabaseEvent extends DatabaseEvent {}
 
 class StatisticInitialEvent extends DatabaseEvent {}
@@ -140,4 +142,3 @@ class GetDateEventInc extends DatabaseEvent {
 
   GetDateEventInc(this.dateTime);
 }
-

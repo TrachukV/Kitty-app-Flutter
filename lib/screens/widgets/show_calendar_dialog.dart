@@ -9,10 +9,14 @@ import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/home_screen/widgets/month_item.dart';
 
-void dialogCalendar(BuildContext context, double width) {
+void dialogCalendar(
+  BuildContext context,
+  double width,
+) {
   showGeneralDialog(
     context: context,
-    pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+    pageBuilder: (BuildContext buildContext, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
       return BlocProvider.value(
         value: BlocProvider.of<DateBloc>(context),
         child: const DialogCalendar(),
@@ -49,7 +53,6 @@ class _DialogCalendarState extends State<DialogCalendar> {
     LocaleKeys.months_nov.tr(),
     LocaleKeys.months_dec.tr(),
   ];
-  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +72,10 @@ class _DialogCalendarState extends State<DialogCalendar> {
           color: AppColors.white,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
-            BoxShadow(color: AppColors.sonicSilver.withOpacity(0.2), offset: const Offset(0, 4), blurRadius: 7)
+            BoxShadow(
+                color: AppColors.sonicSilver.withOpacity(0.2),
+                offset: const Offset(0, 4),
+                blurRadius: 7)
           ],
         ),
         child: BlocConsumer<DateBloc, DateState>(
@@ -80,7 +86,9 @@ class _DialogCalendarState extends State<DialogCalendar> {
             // context.read<DatabaseBloc>().add(GetDateEventInc(state.dateTime));
           },
           builder: (context, state) {
-            final selectedDate = context.watch<DatabaseBloc>().state.selectedDate;
+            final selectedDate =
+                context.watch<DatabaseBloc>().state.selectedDateHome;
+
             return Material(
               color: AppColors.white,
               child: Column(
@@ -138,15 +146,10 @@ class _DialogCalendarState extends State<DialogCalendar> {
                                       ),
                                     ),
                                   );
-                              // final selectedDate = context.read<DateBloc>().state.dateTime;
-                              // context.read<DatabaseBloc>().add(
-                              //       SelectMonthEvent(
-                              //         month: index + 1,
-                              //         screen: 'home',
-                              //       ),
-                              //     );
                             },
-                            isActive: selectedDate.year == state.dateTime.year && selectedDate.month == index + 1);
+                            isActive:
+                                selectedDate.year == state.dateTime.year &&
+                                    selectedDate.month == index + 1);
                       }),
                     ),
                   ),

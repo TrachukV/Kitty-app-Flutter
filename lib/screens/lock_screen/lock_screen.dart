@@ -17,6 +17,8 @@ import 'package:kitty_app/screens/main_screen.dart';
 import 'package:kitty_app/services/auth_services.dart';
 import 'package:kitty_app/services/secure_storage.dart';
 import 'package:kitty_app/utils/helpers/helpers.dart';
+import 'package:smart_snackbars/enums/animate_from.dart';
+import 'package:smart_snackbars/smart_snackbars.dart';
 
 import '../create_category_screen/widgets/dotted_border.dart';
 import 'helper.dart';
@@ -52,9 +54,11 @@ class _LockScreenState extends State<LockScreen> {
         if (state.errorStatus == ErrorStatus.error) {
           _emailController.clear();
           _email = '';
-          showSnackBar(state);
+          // showSnackBar(state);
+          flashbar(context, state);
         } else if (state.errorStatus == ErrorStatus.valid) {
-          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(MainScreen.routeName, (route) => false);
+          Navigator.of(context, rootNavigator: true)
+              .pushNamedAndRemoveUntil(MainScreen.routeName, (route) => false);
         }
       },
       builder: (context, state) {
@@ -68,10 +72,9 @@ class _LockScreenState extends State<LockScreen> {
                 final ifAuth = await LocalAuth.authenticate();
                 if (ifAuth) {
                   Navigator.of(context, rootNavigator: true)
-                      .pushNamedAndRemoveUntil(MainScreen.routeName, (route) => false);
-                } else {
-                  print('fake');
-                }
+                      .pushNamedAndRemoveUntil(
+                          MainScreen.routeName, (route) => false);
+                } else {}
               } else {
                 _screenLockAuth(state);
               }
@@ -81,19 +84,22 @@ class _LockScreenState extends State<LockScreen> {
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.miniCenterFloat,
           floatingActionButton: state.userModel.eMail.isEmpty
               ? ValueListenableBuilder(
                   valueListenable: _emailController,
-                  builder: (BuildContext context, TextEditingValue value, Widget? child) {
+                  builder: (BuildContext context, TextEditingValue value,
+                      Widget? child) {
                     return ElevatedButton(
                       style: AppTextStyles.buttonStyle,
                       onPressed: _firstNameController.text.isNotEmpty &&
                               _emailController.text.isNotEmpty &&
                               _lastNameController.text.isNotEmpty
                           ? () {
-                              BlocProvider.of<UserBloc>(context)
-                                  .add(GetBiometricsEvent(biometrics: SecuredStorageService.bio));
+                              BlocProvider.of<UserBloc>(context).add(
+                                  GetBiometricsEvent(
+                                      biometrics: SecuredStorageService.bio));
 
                               context.read<UserBloc>().add(
                                     GetInfoUserEvent(
@@ -107,7 +113,8 @@ class _LockScreenState extends State<LockScreen> {
                           : null,
                       child: SizedBox(
                         width: width * 0.9,
-                        child: const Center(heightFactor: 1, child: Text('Registration')),
+                        child: const Center(
+                            heightFactor: 1, child: Text('Registration')),
                       ),
                     );
                   },
@@ -141,27 +148,33 @@ class _LockScreenState extends State<LockScreen> {
                           child: DottedBorderWidget(
                             width: 1,
                             size: 80,
-                            color: state.pathImage.isEmpty ? AppColors.silver : AppColors.blue,
+                            color: state.pathImage.isEmpty
+                                ? AppColors.silver
+                                : AppColors.blue,
                             icon: ClipRRect(
                               borderRadius: BorderRadius.circular(50),
                               child: GestureDetector(
                                 onTap: () async {
                                   final image = await pickImageHelper();
                                   if (mounted) {
-                                    context.read<UserBloc>().add(GetAvatarEvent(image));
+                                    context
+                                        .read<UserBloc>()
+                                        .add(GetAvatarEvent(image));
                                   }
                                 },
                                 child: CircleAvatar(
                                   radius: 40,
-                                  backgroundColor: state.pathImage.isEmpty ? Colors.transparent : Colors.white,
+                                  backgroundColor: state.pathImage.isEmpty
+                                      ? Colors.transparent
+                                      : Colors.white,
                                   backgroundImage: state.pathImage.isEmpty
                                       ? null
                                       : FileImage(File(state.pathImage)),
                                   child: state.pathImage.isEmpty
-                                      ? Icon(
-                                    Icons.question_mark,
-                                    color: AppColors.sonicSilver,
-                                  )
+                                      ? const Icon(
+                                          Icons.question_mark,
+                                          color: AppColors.sonicSilver,
+                                        )
                                       : null,
                                 ),
                               ),
@@ -186,17 +199,21 @@ class _LockScreenState extends State<LockScreen> {
                                 textInputAction: TextInputAction.next,
                                 style: AppTextStyles.blackRegular,
                                 inputFormatters: [
-                                  FilteringTextInputFormatter.deny(RegExp(r"\s")),
+                                  FilteringTextInputFormatter.deny(
+                                      RegExp(r"\s")),
                                 ],
                                 decoration: InputDecoration(
                                     counterText: '',
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
-                                      borderSide: BorderSide(color: AppColors.sonicSilver, width: 1),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.sonicSilver,
+                                          width: 1),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(4),
-                                        borderSide: BorderSide(color: AppColors.blue, width: 1)),
+                                        borderSide: const BorderSide(
+                                            color: AppColors.blue, width: 1)),
                                     labelText: LocaleKeys.first_name.tr(),
                                     labelStyle: AppTextStyles.greyRegular),
                               ),
@@ -213,17 +230,21 @@ class _LockScreenState extends State<LockScreen> {
                                 textInputAction: TextInputAction.next,
                                 style: AppTextStyles.blackRegular,
                                 inputFormatters: [
-                                  FilteringTextInputFormatter.deny(RegExp(r"\s")),
+                                  FilteringTextInputFormatter.deny(
+                                      RegExp(r"\s")),
                                 ],
                                 decoration: InputDecoration(
                                     counterText: '',
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
-                                      borderSide: BorderSide(color: AppColors.sonicSilver, width: 1),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.sonicSilver,
+                                          width: 1),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(4),
-                                        borderSide: BorderSide(color: AppColors.blue, width: 1)),
+                                        borderSide: const BorderSide(
+                                            color: AppColors.blue, width: 1)),
                                     labelText: LocaleKeys.last_name.tr(),
                                     labelStyle: AppTextStyles.greyRegular),
                               ),
@@ -248,11 +269,13 @@ class _LockScreenState extends State<LockScreen> {
                                 counterText: '',
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(4),
-                                  borderSide: BorderSide(color: AppColors.sonicSilver, width: 1),
+                                  borderSide: const BorderSide(
+                                      color: AppColors.sonicSilver, width: 1),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(4),
-                                    borderSide: BorderSide(color: AppColors.blue, width: 1)),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.blue, width: 1)),
                                 labelText: LocaleKeys.email.tr(),
                                 labelStyle: AppTextStyles.greyRegular),
                           ),
@@ -283,7 +306,8 @@ class _LockScreenState extends State<LockScreen> {
                         final ifAuth = await LocalAuth.authenticate();
                         if (ifAuth) {
                           Navigator.of(context, rootNavigator: true)
-                              .pushNamedAndRemoveUntil(MainScreen.routeName, (route) => false);
+                              .pushNamedAndRemoveUntil(
+                                  MainScreen.routeName, (route) => false);
                         }
                       },
                       child: Center(
@@ -306,6 +330,32 @@ class _LockScreenState extends State<LockScreen> {
     );
   }
 
+  flashbar(BuildContext context, UserState state) {
+
+    return SmartSnackBars.showTemplatedSnackbar(
+      context: context,
+      backgroundColor: AppColors.black,
+      animateFrom: AnimateFrom.fromTop,
+      leading: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            state.errorMessage,
+            style: AppTextStyles.redRegular,
+          ),
+        ],
+      ),
+      trailing: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {},
+        child: const Icon(
+          Icons.close,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
   void showSnackBar(UserState state) {
     final snackBar = SnackBar(
       margin: EdgeInsets.only(
@@ -322,21 +372,22 @@ class _LockScreenState extends State<LockScreen> {
           ),
           GestureDetector(
             onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-            child: Icon(
+            child: const Icon(
               Icons.close,
               color: AppColors.grey,
             ),
           )
         ],
       ),
-      duration: const Duration(seconds: 4),
+      duration: const Duration(milliseconds: 500),
       behavior: SnackBarBehavior.floating,
       backgroundColor: AppColors.black,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future<void> _alertDialog(BuildContext context, double height, bool biometrics) async {
+  Future<void> _alertDialog(
+      BuildContext context, double height, bool biometrics) async {
     return showDialog(
         useRootNavigator: false,
         barrierDismissible: false,
@@ -366,7 +417,8 @@ class _LockScreenState extends State<LockScreen> {
                     children: [
                       ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(AppColors.sonicSilver),
+                          backgroundColor:
+                              MaterialStateProperty.all(AppColors.sonicSilver),
                         ),
                         onPressed: () async {
                           final ifAuth = await LocalAuth.authenticate();
@@ -384,7 +436,8 @@ class _LockScreenState extends State<LockScreen> {
                       ),
                       ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(AppColors.sonicSilver),
+                          backgroundColor:
+                              MaterialStateProperty.all(AppColors.sonicSilver),
                         ),
                         onPressed: () {
                           SecuredStorageService.bio = false;
@@ -409,7 +462,8 @@ class _LockScreenState extends State<LockScreen> {
       canCancel: false,
       onUnlocked: () {
         Navigator.of(context).pop();
-        Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(MainScreen.routeName, (route) => false);
+        Navigator.of(context, rootNavigator: true)
+            .pushNamedAndRemoveUntil(MainScreen.routeName, (route) => false);
       },
       title: Column(
         children: [

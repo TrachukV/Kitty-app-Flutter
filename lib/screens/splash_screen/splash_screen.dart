@@ -7,7 +7,6 @@ import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_images.dart';
 import 'package:kitty_app/screens/lock_screen/lock_screen.dart';
 
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 

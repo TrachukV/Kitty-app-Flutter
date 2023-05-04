@@ -14,26 +14,25 @@ class SecureStorageRepository {
     await SecuredStorageService.saveUser(userModel: user);
     return id;
   }
-  Future<void> removeUsers()async{
+
+  Future<void> removeUsers() async {
     await SecuredStorageService.deleteUsers;
   }
 
-Future<String?> getId()  async {
+  Future<String?> getId() async {
     final id = await SecuredStorageService.readUser();
-    if(id == null) return '';
+    if (id == null) return '';
     return id;
-}
-Future<String?> getInfo() async {
-  final checkUser = getId();
-    if(checkUser != null ) {
-
-    }
-}
-
-  Future<UserModel?> getUser()async{
-    final user = await SecuredStorageService.readUser();
-    if(user == null) return null;
-    return UserModel.fromJson(jsonDecode(user));
   }
 
+  Future<String?> getInfo() async {
+    final checkUser = getId();
+    if (checkUser != null) {}
+  }
+
+  Future<UserModel?> getUser() async {
+    final user = await SecuredStorageService.readUser();
+    if (user == null) return null;
+    return UserModel.fromJson(jsonDecode(user));
+  }
 }

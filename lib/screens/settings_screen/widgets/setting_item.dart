@@ -40,7 +40,6 @@ class SettingItem extends StatelessWidget {
                   title,
                   style: AppTextStyles.blackMedium,
                 ),
-
               ],
             ),
             rightWidget,

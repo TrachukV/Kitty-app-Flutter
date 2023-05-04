@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -27,7 +26,8 @@ class DottedBorderPainter extends CustomPainter {
     for (var i = 0; i < 20; i++) {
       var init = (-pi / 10) * (i / 1);
 
-      canvas.drawArc(Rect.fromCircle(center: center, radius: radius), init, arcAngle, false, complete);
+      canvas.drawArc(Rect.fromCircle(center: center, radius: radius), init,
+          arcAngle, false, complete);
     }
   }
 
@@ -63,11 +63,11 @@ class DottedBorderWidget extends StatelessWidget {
           icon,
           CustomPaint(
             size: Size(size, size),
-            foregroundPainter: DottedBorderPainter(completeColor: color, width: width),
+            foregroundPainter:
+                DottedBorderPainter(completeColor: color, width: width),
           ),
         ],
       ),
     );
   }
 }
-

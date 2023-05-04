@@ -12,8 +12,8 @@ import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/search_screen/search_screen.dart';
+import 'package:kitty_app/screens/settings_screen/settings_screen.dart';
 import 'package:kitty_app/screens/widgets/avatar_widget.dart';
-
 
 import 'package:kitty_app/screens/home_screen/widgets/transactionsHistoryWidget.dart';
 
@@ -28,16 +28,10 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-
 class _HomeScreenState extends State<HomeScreen> {
-
-
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final double height = MediaQuery.of(context).size.height;
 
     return BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, state) {
@@ -65,14 +59,24 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               GestureDetector(
                 onTap: () {
-                  context
-                      .read<NavigationBloc>()
-                      .add(NavigateTabEvent(tabIndex: 5, route: SearchScreen.routeName));
+                  context.read<NavigationBloc>().add(NavigateTabEvent(
+                      tabIndex: 5, route: SearchScreen.routeName));
                 },
                 child: AppIcons.blackSearch,
               ),
               const SizedBox(width: 20),
-              AvatarWidget(color: AppColors.grey,),
+              GestureDetector(
+                onTap: () {
+                  context.read<NavigationBloc>().add(
+                    NavigateTabEvent(
+                        tabIndex: 2,
+                        route: SettingsScreen.routeName),
+                  );
+                },
+                child: const AvatarWidget(
+                  color: AppColors.grey,
+                ),
+              ),
               const SizedBox(width: 17),
             ],
           ),
@@ -85,19 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 create: (context) => DateBloc(),
                 child: const CalendarWidgetInc(),
               ),
-              // CalendarWidget(
-              //   decrement: () {
-              //     context.read<DatabaseBloc>().add(
-              //       IncDecMonthEvent(command: 'decrement', screen: 'home'),
-              //     );
-              //   },
-              //   increment: () {
-              //     context.read<DatabaseBloc>().add(
-              //       IncDecMonthEvent(command: 'increment', screen: 'home'),
-              //     );
-              //   },
-              //   screen: 'home',
-              // ),
               SizedBox(
                 height: height * 0.025,
               ),
@@ -126,7 +117,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: AppIcons.blackBalance,
                         finance: '${state.balance.actualBalance}',
                         nameCategory: LocaleKeys.balance.tr(),
-                        style: AppTextStyles.greenRegular,
+                        style: state.balance.actualBalance.toString().contains('-')
+                            ? AppTextStyles.redRegular
+                            : AppTextStyles.greenRegular,
+
                       ),
                       BalanceWidget(
                         icon: AppIcons.blackIncome,
@@ -138,7 +132,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const TransactionHistoryWidget(),
+              const TransactionHistoryWidget(
+                page: 'home',
+              ),
             ],
           ),
         );

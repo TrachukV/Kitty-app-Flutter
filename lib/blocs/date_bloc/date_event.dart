@@ -1,10 +1,7 @@
 part of 'date_bloc.dart';
 
 @immutable
-abstract class DateEvent {
-
-
-}
+abstract class DateEvent {}
 
 class DateMonthEvent extends DateEvent {}
 
@@ -17,9 +14,7 @@ class IncYearEvent extends DateEvent {}
 class DecYearEvent extends DateEvent {}
 
 class ChooseDate extends DateEvent {
-
   final DateTime selectedDate;
 
   ChooseDate(this.selectedDate);
-
 }

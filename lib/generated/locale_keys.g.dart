@@ -28,6 +28,7 @@ abstract class  LocaleKeys {
   static const yesterday = 'yesterday';
   static const stats = 'stats';
   static const home = 'home';
+  static const empty_search = 'empty_search';
   static const settings = 'settings';
   static const manage_cat = 'manage_cat';
   static const export = 'export';
@@ -37,9 +38,11 @@ abstract class  LocaleKeys {
   static const overview = 'overview';
   static const details = 'details';
   static const select = 'select';
+  static const delete = 'delete';
   static const add_income = 'add_income';
   static const add_expense = 'add_expense';
   static const add_smth = 'add_smth';
+  static const empty_list = 'empty_list';
   static const months_jan = 'months.jan';
   static const months_feb = 'months.feb';
   static const months_mar = 'months.mar';

@@ -1,17 +1,20 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/generated/locale_keys.g.dart';
+import 'package:kitty_app/main.dart';
 import 'package:kitty_app/models/icon_model/icon_model.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/create_category_screen/widgets/dotted_border.dart';
-import 'package:kitty_app/screens/home_screen/home_screen.dart';
+import 'package:kitty_app/screens/transaction_screen/transaction_screen.dart';
+import 'package:kitty_app/screens/widgets/icon_view.dart';
 import 'package:kitty_app/utils/constants/database_data.dart';
+import 'package:smart_snackbars/enums/animate_from.dart';
+import 'package:smart_snackbars/smart_snackbars.dart';
 
 class CreateCategoryScreen extends StatefulWidget {
   const CreateCategoryScreen({Key? key}) : super(key: key);
@@ -50,7 +53,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
             leading: Padding(
               padding: const EdgeInsets.all(10.0),
               child: GestureDetector(
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_back,
                   color: AppColors.black,
                 ),
@@ -101,7 +104,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                           width: 1,
                           size: 50,
                           color: isActive ? AppColors.blue : AppColors.silver,
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.add_circle,
                             size: 30,
                             color: AppColors.silver,
@@ -109,9 +112,9 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                         ),
                       )
                     else
-                      SvgPicture.asset(
-                        state.selectedIcon!.pathToIcon,
-                        width: 55,
+                      SizedBox(
+                        width: 50,
+                        child: IconView(icon: state.selectedIcon!.pathToIcon, color: state.selectedIcon!.color),
                       ),
                     SizedBox(
                       height: height / 12,
@@ -145,14 +148,19 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
             builder: (BuildContext context, TextEditingValue value, Widget? child) {
               return ElevatedButton(
                 style: AppTextStyles.buttonStyle,
-                onPressed:  state.selectedIcon != null && value.text.isNotEmpty ? () {
-                  showSnackBar(context);
-                context.read<DatabaseBloc>().add(CreateCategoryEvent(categoryName: value.text, categoryType: DatabaseData.categoryType));
-                context.read<NavigationBloc>().add(NavigateTabEvent(tabIndex: 0, route: HomeScreen.routeName));
-              } : null,
+                onPressed: state.selectedIcon != DatabaseBloc.zeroIcon && value.text.isNotEmpty
+                    ? () {
+                        flashbar(context);
+                        context.read<DatabaseBloc>().add(
+                            CreateCategoryEvent(categoryName: value.text, categoryType: DatabaseData.categoryType));
+                        context
+                            .read<NavigationBloc>()
+                            .add(NavigateTabEvent(tabIndex: 3, route: TransactionScreen.routeName));
+                      }
+                    : null,
                 child: SizedBox(
                   width: width * 0.9,
-                  child:  Center(heightFactor: 1, child: Text(LocaleKeys.add_category.tr())),
+                  child: Center(heightFactor: 1, child: Text(LocaleKeys.add_category.tr())),
                 ),
               );
             },
@@ -161,33 +169,70 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
       },
     );
   }
-  void showSnackBar(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final snackBar = SnackBar(
-      content: Row(
+
+  flashbar(BuildContext context) {
+    return SmartSnackBars.showTemplatedSnackbar(
+      context: context,
+      backgroundColor: AppColors.black,
+      animateFrom: AnimateFrom.fromTop,
+      leading: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            LocaleKeys.add_category.tr(),
-            style: AppTextStyles.whiteRegular,
+            LocaleKeys.added_category.tr(),
+            style: const TextStyle(color: Colors.white),
           ),
-          GestureDetector(
-            onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-            child: Icon(
-              Icons.close,
-              color: AppColors.grey,
-            ),
-          )
         ],
       ),
-      margin: EdgeInsets.only(bottom: height / 1.5),
+      trailing: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {},
+        child: const Icon(
+          Icons.close,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? buildShowSnackBar(
+    BuildContext context,
+  ) {
+    return KittyApp.rootScaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
       behavior: SnackBarBehavior.floating,
+      // margin: EdgeInsets.only(
+      //   left: 16,
+      //   right: 16,
+      //   bottom: MediaQuery.of(context).size.height - 100,
+      // ),
+      // padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       backgroundColor: AppColors.black,
-      duration: Duration(seconds: 1),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(
-      snackBar,
-    );
+      duration: const Duration(seconds: 3),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      content: Align(
+        alignment: Alignment.topCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              LocaleKeys.added_category.tr(),
+              style: const TextStyle(color: Colors.white),
+            ),
+            InkWell(
+              onTap: () {
+                KittyApp.rootScaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+              },
+              child: const Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+            )
+          ],
+        ),
+      ),
+    ));
   }
 }
 
@@ -245,7 +290,10 @@ class IconSelections extends StatelessWidget {
                                 GetIconEvent(selectedIcon: iconModels[index]),
                               );
                         },
-                        child: SvgPicture.asset(iconModels[index].pathToIcon),
+                        child: IconView(
+                          icon: iconModels[index].pathToIcon,
+                          color: iconModels[index].color,
+                        ),
                       );
                     }),
               ),
@@ -255,5 +303,4 @@ class IconSelections extends StatelessWidget {
       },
     );
   }
-
 }

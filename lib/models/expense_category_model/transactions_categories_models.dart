@@ -18,5 +18,6 @@ class TransactionsCategoriesModel with _$TransactionsCategoriesModel {
     required int orderNum,
   }) = _TransactionsCategoriesModel;
 
-  factory TransactionsCategoriesModel.fromJson(Map<String, dynamic> json) => _$TransactionsCategoriesModelFromJson(json);
+  factory TransactionsCategoriesModel.fromJson(Map<String, dynamic> json) =>
+      _$TransactionsCategoriesModelFromJson(json);
 }

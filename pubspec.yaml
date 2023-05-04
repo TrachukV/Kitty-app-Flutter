@@ -1,8 +1,7 @@
 name: kitty_app
 description: Expense Management android app
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
@@ -30,10 +29,12 @@ dependencies:
   easy_localization: ^3.0.1
   sqflite: ^2.2.2
   path: ^1.8.2
-  open_document: ^1.0.5
+  open_filex: ^4.3.2
   image_picker: ^0.8.6+1
   flutter_secure_storage: ^7.0.1
   local_auth: ^2.1.3
+  uuid: ^3.0.7
+  smart_snackbars: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,7 @@ flutter:
 
   assets:
     - assets/icons/
+    - assets/icons/categories/
     - assets/images/
   fonts:
     - family: Inter

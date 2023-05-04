@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'transaction_model.freezed.dart';
@@ -13,8 +12,8 @@ class TransactionModel with _$TransactionModel {
     required int timeStamp,
     required String description,
     required int categoryId,
-
   }) = _TransactionModel;
 
-  factory TransactionModel.fromJson(Map<String, dynamic> json) => _$TransactionModelFromJson(json);
+  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
+      _$TransactionModelFromJson(json);
 }

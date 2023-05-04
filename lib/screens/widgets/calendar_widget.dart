@@ -10,7 +10,6 @@ import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 
-
 import '../home_screen/widgets/month_item.dart';
 
 class CalendarWidget extends StatelessWidget {
@@ -18,7 +17,7 @@ class CalendarWidget extends StatelessWidget {
     Key? key,
     required this.decrement,
     required this.increment,
-     required this.screen,
+    required this.screen,
   }) : super(key: key);
   final VoidCallback decrement;
   final VoidCallback increment;
@@ -72,9 +71,9 @@ class CalendarWidget extends StatelessWidget {
                   children: [
                     AppIcons.blackCalendar,
                     Text(
-                      state.activeMonth == 0 ?
-                      '${listOfMonths.first}, ${DateTime.now().year}' :
-                      '${listOfMonths[state.activeMonth - 1]}, ${DateTime.now().year}',
+                      state.activeMonth == 0
+                          ? '${listOfMonths.first}, ${DateTime.now().year}'
+                          : '${listOfMonths[state.activeMonth - 1]}, ${DateTime.now().year}',
                       style: AppTextStyles.blackMedium,
                     ),
                   ],
@@ -83,8 +82,9 @@ class CalendarWidget extends StatelessWidget {
               onTap: () {
                 showGeneralDialog(
                   context: context,
-                  pageBuilder:
-                      (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+                  pageBuilder: (BuildContext buildContext,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
                     return Align(
                       alignment: Alignment.topCenter,
                       child: Container(
@@ -127,15 +127,18 @@ class CalendarWidget extends StatelessWidget {
                                       crossAxisCount: 3,
                                       children: List.generate(12, (index) {
                                         return MonthItem(
-                                          month: listOfMonths[index].substring(0, 3),
+                                          month: listOfMonths[index]
+                                              .substring(0, 3),
                                           onTap: () {
                                             context.read<DatabaseBloc>().add(
                                                   SelectMonthEvent(
-                                                    month: index + 1, screen: screen,
+                                                    month: index + 1,
+                                                    screen: screen,
                                                   ),
                                                 );
                                           },
-                                          isActive: state.activeMonth == index + 1,
+                                          isActive:
+                                              state.activeMonth == index + 1,
                                         );
                                       }),
                                     ),
@@ -150,7 +153,8 @@ class CalendarWidget extends StatelessWidget {
                   },
                   barrierColor: Colors.transparent,
                   barrierDismissible: true,
-                  barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                  barrierLabel: MaterialLocalizations.of(context)
+                      .modalBarrierDismissLabel,
                   transitionDuration: const Duration(milliseconds: 200),
                 );
               },

@@ -11,7 +11,8 @@ part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(const UserState()) {
-    final SecureStorageRepository secureStorageRepository = SecureStorageRepository();
+    final SecureStorageRepository secureStorageRepository =
+        SecureStorageRepository();
     on<UserInit>((event, emit) async {
       final userModel = await SecuredStorageService.readAll();
       print(userModel);
@@ -20,7 +21,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
     });
     on<DeleteUsers>((event, emit) async {
-      final delete  = await SecuredStorageService.deleteUsers();
+      await SecuredStorageService.deleteUsers();
+      const newUserState = UserState();
+      emit(newUserState);
     });
     on<GetInfoUserEvent>((event, emit) async {
       final validator = validateEmail(event.email);
@@ -40,7 +43,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             id: 0,
             biometrics: state.biometrics,
             pinCode: state.pin);
-        final String id = await secureStorageRepository.createUser(user: currentUser);
+        final String id =
+            await secureStorageRepository.createUser(user: currentUser);
         emit(state.copyWith(
           errorStatus: ErrorStatus.valid,
           userModel: currentUser,

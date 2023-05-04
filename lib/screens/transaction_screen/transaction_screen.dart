@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/generated/locale_keys.g.dart';
@@ -10,6 +10,7 @@ import 'package:kitty_app/resources/app_icons.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
 import 'package:kitty_app/screens/home_screen/home_screen.dart';
+import 'package:kitty_app/screens/widgets/icon_view.dart';
 import 'package:kitty_app/utils/constants/database_data.dart';
 
 class TransactionScreen extends StatefulWidget {
@@ -44,7 +45,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
     });
   }
 
-  PersistentBottomSheetController<dynamic> bottomSheet(BuildContext context, DatabaseState state) {
+  PersistentBottomSheetController<dynamic> bottomSheet(
+      BuildContext context, DatabaseState state) {
     final height = MediaQuery.of(context).size.height;
     return showBottomSheet(
         elevation: 2.0,
@@ -63,7 +65,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   onPressed: () {
                     DatabaseData.categoryType = 'Expenses';
                     context.read<NavigationBloc>().add(
-                          NavigateTabEvent(tabIndex: 4, route: CreateCategoryScreen.routeName),
+                          NavigateTabEvent(
+                              tabIndex: 4,
+                              route: CreateCategoryScreen.routeName),
                         );
                   },
                   child: Text(
@@ -78,7 +82,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   onPressed: () {
                     DatabaseData.categoryType = 'Income';
                     context.read<NavigationBloc>().add(
-                          NavigateTabEvent(tabIndex: 4, route: CreateCategoryScreen.routeName),
+                          NavigateTabEvent(
+                              tabIndex: 4,
+                              route: CreateCategoryScreen.routeName),
                         );
                   },
                   child: Text(
@@ -137,7 +143,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
             child: BlocBuilder<DatabaseBloc, DatabaseState>(
               builder: (context, state) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                   child: Column(
                     children: [
                       const SizedBox(height: 20),
@@ -146,11 +153,13 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.grey, width: 1),
+                            borderSide:
+                                BorderSide(color: AppColors.grey, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4),
-                              borderSide: BorderSide(color: AppColors.blue, width: 1)),
+                              borderSide:
+                                  BorderSide(color: AppColors.blue, width: 1)),
                         ),
                         hint: Text(
                           LocaleKeys.select.tr(),
@@ -161,8 +170,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         icon: AppIcons.blackDropDown,
                         items: typeTransaction.map(buildMenuItem).toList(),
                         onChanged: (value) {
-                          if (state.createdCategory != null || !state.createdCategory!.categoryId.isNegative) {
-                            context.read<DatabaseBloc>().add(ClearDatabaseEvent());
+                          if (state.createdCategory != null ||
+                              !state.createdCategory!.categoryId.isNegative) {
+                            context
+                                .read<DatabaseBloc>()
+                                .add(ClearDatabaseEvent());
                           }
                           setState(() {
                             selectedType = value!;
@@ -175,14 +187,17 @@ class _TransactionScreenState extends State<TransactionScreen> {
                           labelText: LocaleKeys.category_name.tr(),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.grey, width: 1),
+                            borderSide:
+                                BorderSide(color: AppColors.grey, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4),
-                              borderSide: BorderSide(color: AppColors.blue, width: 1)),
+                              borderSide:
+                                  BorderSide(color: AppColors.blue, width: 1)),
                         ),
                         readOnly: true,
-                        controller: _categoryController..text = (state.createdCategory?.title ?? ''),
+                        controller: _categoryController
+                          ..text = (state.createdCategory?.title ?? ''),
                         onTap: () {
                           _bottomSheetController = bottomSheet(context, state);
                         },
@@ -192,15 +207,23 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         onChanged: (amount) {
                           _amount = amount;
                         },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(
+                            RegExp(r'\D'),
+                          ),
+                          LengthLimitingTextInputFormatter(10),
+                        ],
                         decoration: InputDecoration(
                           labelText: LocaleKeys.enter_amount.tr(),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.grey, width: 1),
+                            borderSide:
+                                BorderSide(color: AppColors.grey, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4),
-                              borderSide: BorderSide(color: AppColors.blue, width: 1)),
+                              borderSide:
+                                  BorderSide(color: AppColors.blue, width: 1)),
                         ),
                         onTap: _closeBottomSheet,
                         textInputAction: TextInputAction.go,
@@ -213,15 +236,20 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         onChanged: (description) {
                           _description = description;
                         },
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(100),
+                        ],
                         decoration: InputDecoration(
                           labelText: LocaleKeys.description.tr(),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: AppColors.grey, width: 1),
+                            borderSide:
+                                const BorderSide(color: AppColors.grey, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4),
-                              borderSide: BorderSide(color: AppColors.blue, width: 1)),
+                              borderSide:
+                                  const BorderSide(color: AppColors.blue, width: 1)),
                         ),
                         onTap: _closeBottomSheet,
                         onEditingComplete: _editingComplete,
@@ -232,21 +260,34 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       ),
                       ValueListenableBuilder(
                         valueListenable: _amountController,
-                        builder: (BuildContext context, TextEditingValue value, Widget? child) {
+                        builder: (BuildContext context, TextEditingValue value,
+                            Widget? child) {
                           return BlueButton(
                             selectedType: selectedType,
-                            check: (state.createdCategory  != null && state.createdCategory!.title != '') && selectedType != 'type' && value.text.isNotEmpty,
+                            check: (state.createdCategory != null &&
+                                    state.createdCategory!.title != '') &&
+                                selectedType != 'type' &&
+                                value.text.isNotEmpty,
                             callback: () {
+                              print(selectedType);
                               context.read<DatabaseBloc>().add(
                                     GetCreatedTransaction(
-                                        amount: selectedType == 'Expenses' ? '-${value.text}' : value.text,
+                                        amount: (selectedType == 'Expenses' ||
+                                                selectedType == 'Витрати')
+                                            ? '-${value.text}'
+                                            : value.text,
                                         description: _description),
                                   );
-                              context.read<DatabaseBloc>().add(DatabaseInitialEvent());
                               context
-                                  .read<NavigationBloc>()
-                                  .add(NavigateTabEvent(tabIndex: 0, route: HomeScreen.routeName));
-                              context.read<DatabaseBloc>().add(ClearDatabaseEvent());
+                                  .read<DatabaseBloc>()
+                                  .add(DatabaseInitialEvent());
+                              context.read<NavigationBloc>().add(
+                                  NavigateTabEvent(
+                                      tabIndex: 0,
+                                      route: HomeScreen.routeName));
+                              context
+                                  .read<DatabaseBloc>()
+                                  .add(ClearDatabaseEvent());
                             },
                           );
                         },
@@ -290,7 +331,8 @@ class BlueButtonWidget extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 15),
         height: height / 14,
         width: width / 1.1,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: colorButton),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50), color: colorButton),
         child: Center(
             child: Text(
           text,
@@ -306,12 +348,12 @@ class CategorySelections extends StatelessWidget {
   final List categories;
   final Widget addCategoryButton;
 
-  const CategorySelections({
+  CategorySelections({
     Key? key,
     required this.categories,
     required this.addCategoryButton,
   }) : super(key: key);
-
+  final _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DatabaseBloc, DatabaseState>(
@@ -320,7 +362,8 @@ class CategorySelections extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(20)),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.grey.withOpacity(0.5),
@@ -333,34 +376,46 @@ class CategorySelections extends StatelessWidget {
               AppIcons.blackDrag,
               const SizedBox(height: 10),
               Text(
-                LocaleKeys.choose_icon.tr(),
+                LocaleKeys.choose_category.tr(),
                 style: AppTextStyles.blackTitle,
               ),
               const SizedBox(height: 10),
               Flexible(
-                child: GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 5,
-                      crossAxisSpacing: 5,
-                    ),
-                    itemCount: categories.length,
-                    padding: const EdgeInsets.all(10),
-                    itemBuilder: (context, index) {
-                      return ChoiceCategoryWidget(
-                        onTap: () {
-                          context.read<DatabaseBloc>().add(
-                                GetCategoryEvent(
-                                  transactionCategory: categories[index],
-                                ),
-                              );
-                          Navigator.pop(context);
-                        },
-                        icon: SvgPicture.asset(categories[index].icon.pathToIcon),
-                        nameCategory: categories[index].title,
-                      );
-                    }),
+                child: Scrollbar(
+                  thickness: 10,
+                  controller: _scrollController,
+                  thumbVisibility: true,
+                  trackVisibility: true,
+                  radius: const Radius.circular(50),
+                  child: GridView.builder(
+                      shrinkWrap: true,
+                      controller: _scrollController,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 5,
+                        crossAxisSpacing: 5,
+                      ),
+                      itemCount: categories.length,
+                      padding: const EdgeInsets.all(10),
+                      itemBuilder: (context, index) {
+                        return ChoiceCategoryWidget(
+                          onTap: () {
+                            context.read<DatabaseBloc>().add(
+                                  GetCategoryEvent(
+                                    transactionCategory: categories[index],
+                                  ),
+                                );
+                            Navigator.pop(context);
+                          },
+                          icon:
+                              IconView(icon: categories[index].icon.pathToIcon, color: categories[index].icon.color,),
+                          // SvgPicture.asset(
+                          //     categories[index].icon.pathToIcon),
+                          nameCategory: categories[index].title,
+                        );
+                      }),
+                ),
               ),
               addCategoryButton,
             ],
@@ -379,7 +434,7 @@ class ChoiceCategoryWidget extends StatelessWidget {
     required this.onTap,
   });
 
-  final SvgPicture icon;
+  final IconView icon;
   final String nameCategory;
   final VoidCallback onTap;
 

@@ -13,8 +13,6 @@ import 'package:kitty_app/screens/settings_screen/settings_screen.dart';
 import 'package:kitty_app/screens/splash_screen/splash_screen.dart';
 import 'package:kitty_app/screens/transaction_screen/transaction_screen.dart';
 
-
-
 class AppRouter {
   const AppRouter._();
 
@@ -32,7 +30,7 @@ class AppRouter {
         builder = (_) => MainScreen();
         break;
       case HomeScreen.routeName:
-        builder = (_) =>  const HomeScreen();
+        builder = (_) => const HomeScreen();
         break;
       case ChartScreen.routeName:
         builder = (_) => const ChartScreen();
@@ -56,13 +54,11 @@ class AppRouter {
         builder = (_) => const FAQScreen();
         break;
 
-
-
       // [END] Main pages
 
       // [START] Settings pages
       case SettingsScreen.routeName:
-        builder = (_) =>  SettingsScreen();
+        builder = (_) => SettingsScreen();
         break;
       // [ENDS] Settings pages
 

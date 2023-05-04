@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:kitty_app/resources/app_fonts.dart';
 
@@ -15,7 +13,6 @@ class AppTextStyles {
     fontWeight: AppFonts.bold,
     letterSpacing: 0,
   );
-
 
   static TextStyle greyBold = TextStyle(
     fontFamily: AppFonts.fontFamily,

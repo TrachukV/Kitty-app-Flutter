@@ -25,6 +25,7 @@
   "yesterday": "YESTERDAY",
   "stats": "Statistics",
   "home": "Home",
+  "empty_search": "Any transaction not found",
   "settings": "Settings",
   "manage_cat": "Manage categories",
   "export": "Export to PDF",
@@ -33,7 +34,8 @@
   "logout": "Logout",
   "overview": "OVERVIEW",
   "details": "DETAILS",
-  "select": "Select",
+  "select": "Select the type of transaction",
+  "delete": "Delete",
   "add_income": "Add new income",
   "add_expense": "Add new expense",
   "add_smth": "Add new transaction",
@@ -61,6 +63,7 @@
   "sign_in": "Press to sign in",
   "q_use_bio": "Бажаєте надалі використовувати відбиток пальця або FaceId для входу?",
   "added_category": "New category added successfully!",
+  "empty_list": "Here's nothing yet.\nPlease add a transaction.",
   "faq_data": {
     "questions": {
       "how_add_trans": "How to add transaction?",

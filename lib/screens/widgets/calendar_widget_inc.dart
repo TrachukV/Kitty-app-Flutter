@@ -9,7 +9,9 @@ import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/screens/widgets/show_calendar_dialog.dart';
 
 class CalendarWidgetInc extends StatefulWidget {
-  const CalendarWidgetInc({Key? key}) : super(key: key);
+  const CalendarWidgetInc({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<CalendarWidgetInc> createState() => _CalendarWidgetIncState();
@@ -34,16 +36,10 @@ class _CalendarWidgetIncState extends State<CalendarWidgetInc> {
 
   void _incDate() {
     context.read<DateBloc>().add(IncMonthEvent());
-    // final date = context.read<DateBloc>().state.dateTime;
-    // print(date);
-    // context.read<DatabaseBloc>().add(GetDateEventInc(date));
   }
 
   void _decDate() {
     context.read<DateBloc>().add(DecMonthEvent());
-    // final date = context.read<DateBloc>().state.dateTime;
-    // print(date);
-    // context.read<DatabaseBloc>().add(GetDateEventInc(date));
   }
 
   @override
@@ -53,21 +49,25 @@ class _CalendarWidgetIncState extends State<CalendarWidgetInc> {
     return BlocListener<DateBloc, DateState>(
       listener: (context, state) {
         final date = context.read<DateBloc>().state.dateTime;
-        print(date);
-        context.read<DatabaseBloc>().add(GetDateEventInc(date));
+        context.read<DatabaseBloc>().add(GetDateEventInc(
+              date,
+            ));
       },
       listenWhen: (oldValue, newValue) {
         return oldValue != newValue;
       },
       child: BlocBuilder<DatabaseBloc, DatabaseState>(
         builder: (context, state) {
-          final String dateString = '${listOfMonths[state.selectedDate.month - 1]}, ${state.selectedDate.year}';
+          final String dateString =
+              '${listOfMonths[state.selectedDateHome.month - 1]}, ${state.selectedDateHome.year}';
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(onPressed: _decDate, icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+                IconButton(
+                    onPressed: _decDate,
+                    icon: const Icon(Icons.arrow_back_ios_new_outlined)),
                 GestureDetector(
                   onTapDown: (TapDownDetails tapDownDetails) {
                     dialogCalendar(context, width);
@@ -77,7 +77,8 @@ class _CalendarWidgetIncState extends State<CalendarWidgetInc> {
                       color: AppColors.grey,
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     child: Row(
                       children: [
                         const Icon(

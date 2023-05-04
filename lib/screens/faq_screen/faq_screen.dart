@@ -54,7 +54,8 @@ class FAQScreen extends StatelessWidget {
                   itemBuilder: (context, i) {
                     return DecoratedBox(
                       decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.grey), borderRadius: BorderRadius.circular(8)),
+                          border: Border.all(color: AppColors.grey),
+                          borderRadius: BorderRadius.circular(8)),
                       child: ExpansionTile(
                         childrenPadding: const EdgeInsets.all(8),
                         title: Text(

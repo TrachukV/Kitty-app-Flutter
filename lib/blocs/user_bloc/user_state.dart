@@ -25,8 +25,13 @@ class UserState extends Equatable {
   const UserState(
       {this.biometrics = false,
       this.errorMessage = '',
-      this.userModel =
-          const UserModel(userName: '', eMail: '', pathToAvatar: '', id: 0, biometrics: false, pinCode: ''),
+      this.userModel = const UserModel(
+          userName: '',
+          eMail: '',
+          pathToAvatar: '',
+          id: 0,
+          biometrics: false,
+          pinCode: ''),
       this.userId = '',
       this.pathImage = '',
       this.pin = '',

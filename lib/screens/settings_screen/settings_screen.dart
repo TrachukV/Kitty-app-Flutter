@@ -1,5 +1,3 @@
-
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +16,7 @@ import 'package:kitty_app/screens/faq_screen/faq_screen.dart';
 
 import 'package:kitty_app/screens/manage_screen/manage_screen.dart';
 import 'package:kitty_app/screens/settings_screen/widgets/setting_item.dart';
+import 'package:kitty_app/screens/splash_screen/splash_screen.dart';
 import 'package:kitty_app/screens/widgets/avatar_widget.dart';
 import 'package:kitty_app/services/secure_storage.dart';
 
@@ -51,7 +50,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         width: double.infinity,
                         color: AppColors.grey,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 5, left: 16, right: 16),
+                          padding: const EdgeInsets.only(
+                              top: 5, left: 16, right: 16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -72,13 +72,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     width: 12,
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         state.userModel.userName,
                                         style: AppTextStyles.blackMedium,
                                       ),
-                                      SizedBox(height: 10,),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
                                       Text(
                                         state.userModel.eMail,
                                         style: AppTextStyles.blackTitle,
@@ -136,14 +139,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           rightWidget: Row(
                             children: [
                               GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   context.setLocale(Locale('en'));
                                 },
                                 child: Container(
                                   height: height / 30,
                                   width: height / 30,
                                   decoration: BoxDecoration(
-                                    border: Border.all(width: 1, color: AppColors.grey),
+                                    border: Border.all(
+                                        width: 1, color: AppColors.grey),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Center(child: Text('🇬🇧')),
@@ -153,14 +157,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 width: 10,
                               ),
                               GestureDetector(
-                                onTap: (){
-                                 context.setLocale(Locale('uk'));
+                                onTap: () {
+                                  context.setLocale(Locale('uk'));
                                 },
                                 child: Container(
                                   height: height / 30,
                                   width: height / 30,
                                   decoration: BoxDecoration(
-                                    border: Border.all(width: 1, color: AppColors.grey),
+                                    border: Border.all(
+                                        width: 1, color: AppColors.grey),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Center(child: Text('🇺🇦')),
@@ -173,9 +178,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         SettingItem(
                           onTap: () {
-                            context
-                                .read<NavigationBloc>()
-                                .add(NavigateTabEvent(tabIndex: 8, route: FAQScreen.routeName));
+                            context.read<NavigationBloc>().add(NavigateTabEvent(
+                                tabIndex: 8, route: FAQScreen.routeName));
                           },
                           rightWidget: Icon(
                             Icons.arrow_forward_ios,
@@ -205,13 +209,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Future<void> _callAlertDialog({required BuildContext context, required double height}) {
+  Future<void> _callAlertDialog(
+      {required BuildContext context, required double height}) {
     return _alertDialog(
       context: context,
       height: height,
       title: LocaleKeys.q_delete_acc.tr(),
       tapYes: () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
         _alertDialog(
           context: context,
           height: height,
@@ -219,9 +224,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           tapYes: () {
             context.read<UserBloc>().add(DeleteUsers());
             context.read<DatabaseBloc>().add(DeleteDataBaseEvent());
+            Navigator.of(context, rootNavigator: true).pop();
+            Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+              SplashScreen.routeName,
+              (_) => false,
+            );
           },
           tapNo: () {
-            Navigator.of(context).pop();
+            Navigator.of(context, rootNavigator: true).pop();
           },
           titleButtonYes: LocaleKeys.yes.tr(),
           titleButtonNo: LocaleKeys.no.tr(),
@@ -245,7 +255,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required String titleButtonNo,
   }) async {
     return showDialog(
-
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -268,28 +277,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   const SizedBox(height: 20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(AppColors.sonicSilver),
-                        ),
-                        onPressed: tapYes,
-                        child: Text(
-                          overflow: TextOverflow.ellipsis,
-                          titleButtonYes,
-                          style: AppTextStyles.whiteRegular,
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(AppColors.sonicSilver),
+                          ),
+                          onPressed: tapYes,
+                          child: Text(
+                            overflow: TextOverflow.ellipsis,
+                            titleButtonYes,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.whiteRegular,
+                          ),
                         ),
                       ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(AppColors.sonicSilver),
-                        ),
-                        onPressed: tapNo,
-                        child: Text(
-                          overflow: TextOverflow.ellipsis,
-                          titleButtonNo,
-                          style: AppTextStyles.whiteRegular,
+                      const SizedBox(width: 5,),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(AppColors.sonicSilver),
+                          ),
+                          onPressed: tapNo,
+                          child: Text(
+                            overflow: TextOverflow.ellipsis,
+                            titleButtonNo,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            style: AppTextStyles.whiteRegular,
+                          ),
                         ),
                       ),
                     ],

@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:kitty_app/models/icon_model/icon_model.dart';
 
-
 part 'statistics_model.freezed.dart';
 
 part 'statistics_model.g.dart';

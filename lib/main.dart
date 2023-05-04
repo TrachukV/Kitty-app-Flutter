@@ -6,7 +6,6 @@ import 'package:kitty_app/generated/codegen_loader.g.dart';
 import 'package:kitty_app/repository/database_repository.dart';
 import 'package:kitty_app/routes/app_routes.dart';
 
-
 import 'blocs/database_bloc/database_bloc.dart';
 import 'database/local_database.dart';
 
@@ -27,10 +26,11 @@ void main() async {
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (con) => DatabaseBloc(RepositoryProvider.of<DatabaseRepo>(con))
-                ..add(
-                  DatabaseInitialEvent(),
-                ),
+              create: (con) =>
+                  DatabaseBloc(RepositoryProvider.of<DatabaseRepo>(con))
+                    ..add(
+                      DatabaseInitialEvent(),
+                    ),
             ),
             BlocProvider(
               create: (con) => UserBloc()..add(UserInit()),
@@ -46,11 +46,14 @@ void main() async {
 class KittyApp extends StatelessWidget {
   const KittyApp({Key? key}) : super(key: key);
 
+  static final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
+      scaffoldMessengerKey: rootScaffoldMessengerKey,
       locale: context.locale,
       onGenerateRoute: AppRouter.generateRoute,
       debugShowCheckedModeBanner: false,

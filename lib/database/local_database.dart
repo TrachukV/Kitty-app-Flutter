@@ -23,7 +23,6 @@ class DBProvider {
   final String transactionTable = 'transactionTable';
   final String searches = 'searchValues';
 
-
   Future<void> _createDb(Database db, int version) async {
     await db.transaction((txn) async {
       await txn.execute('''
@@ -71,7 +70,8 @@ class DBProvider {
       new.categoryId; END;
       ''');
 
-      final List<Map<String, String>> allIcons = DatabaseData.allIcons.values.toList();
+      final List<Map<String, String>> allIcons =
+          DatabaseData.allIcons.values.toList();
       for (int i = 0; i < allIcons.length; i++) {
         await txn.insert(iconTable, {
           'iconId': i,
@@ -86,7 +86,7 @@ class DBProvider {
           'totalAmount': (0.0).toString(),
           'entries': 0,
           'iconId': i,
-          'orderNum': i+1,
+          'orderNum': i + 1,
         });
       }
       for (int i = 6; i < DatabaseData.expenseCategories.length + 6; i++,) {
@@ -96,11 +96,9 @@ class DBProvider {
           'totalAmount': 0.0.toString(),
           'entries': 0,
           'iconId': i,
-          'orderNum': i+1,
+          'orderNum': i + 1,
         });
       }
     });
-
-
   }
 }

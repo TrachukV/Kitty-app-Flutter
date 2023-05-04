@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'icon_model.freezed.dart';
@@ -10,7 +9,8 @@ class IconModel with _$IconModel {
     required int iconId,
     required String color,
     required String pathToIcon,
-}) = _IconModel;
+  }) = _IconModel;
 
-  factory IconModel.fromJson(Map<String, dynamic> json) => _$IconModelFromJson(json);
+  factory IconModel.fromJson(Map<String, dynamic> json) =>
+      _$IconModelFromJson(json);
 }

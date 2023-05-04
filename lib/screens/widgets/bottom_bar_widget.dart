@@ -27,7 +27,6 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     return Container(
-
       height: height / 10,
       decoration: BoxDecoration(
         color: AppColors.white,

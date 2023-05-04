@@ -2,13 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
 import 'package:kitty_app/screens/edit_category_screen/edit_category_screen.dart';
+import 'package:kitty_app/screens/widgets/icon_view.dart';
 
 import '../../blocs/database_bloc/database_bloc.dart';
 
@@ -62,7 +62,10 @@ class ManageScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return ListTile(
                   key: ValueKey(index),
-                  leading: SvgPicture.asset(state.expensesCategories[index].icon.pathToIcon),
+                  leading: IconView(
+                    icon: state.expensesCategories[index].icon.pathToIcon,
+                    color: state.expensesCategories[index].icon.color,
+                  ),
                   title: Text(
                     state.expensesCategories[index].title,
                     style: AppTextStyles.blackRegular,
@@ -102,7 +105,6 @@ class ManageScreen extends StatelessWidget {
                 oldIndex,
                 newIndex,
               ) {
-
                 context.read<DatabaseBloc>().add(DragCategoriesEvent(
                       oldIndex: oldIndex,
                       newIndex: newIndex,

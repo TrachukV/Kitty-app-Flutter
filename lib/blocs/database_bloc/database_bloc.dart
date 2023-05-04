@@ -17,7 +17,12 @@ part 'database_event.dart';
 part 'database_state.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
-  DatabaseBloc(this.dbRepo) : super( DatabaseState(DateTime.now(),),) {
+  DatabaseBloc(this.dbRepo)
+      : super(
+          DatabaseState(
+            DateTime.now(),
+          ),
+        ) {
     on<DatabaseInitialEvent>((event, emit) async {
       await _initial(emit);
       if (state.mapTransactions.isNotEmpty) {
@@ -38,9 +43,15 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       final dbDirectory = await getDatabasesPath();
       const dbName = 'kitty_app.db';
       final path = join(dbDirectory, dbName);
-      databaseFactory.deleteDatabase(path);
+      final database = await openDatabase(path);
+      await database.close();
+      await databaseFactory.deleteDatabase(path);
+      final initialState = DatabaseState(
+        DateTime.now(),
+      );
+      emit(initialState);
+      add(DatabaseInitialEvent());
     });
-
     on<DeleteTransactionEvent>((event, emit) async {
       await dbRepo.deleteEntry(event.transactionId);
       add(DatabaseInitialEvent());
@@ -50,10 +61,12 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       emit(state.copyWith(statisticsModels: statistics));
     });
     on<SelectMonthEvent>((event, emit) async {
-      await _calendarSwitch(command: event.screen, emit: emit, month: event.month);
+      await _calendarSwitch(
+          command: event.screen, emit: emit, month: event.month);
     });
     on<IncDecMonthEvent>((event, emit) async {
-      await _calendarArrowButton(screen: event.screen, command: event.command, emit: emit);
+      await _calendarArrowButton(
+          screen: event.screen, command: event.command, emit: emit);
     });
     on<GetCategoryEvent>((event, emit) {
       emit(state.copyWith(createdCategory: event.transactionCategory));
@@ -66,8 +79,12 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       emit(state.copyWith(selectedIcon: event.selectedIcon));
     });
     on<CreateCategoryEvent>((event, emit) async {
-      await dbRepo.createCategory(categoryName: event.categoryName, iconId: state.selectedIcon!.iconId, categoryType: event.categoryType);
+      await dbRepo.createCategory(
+          categoryName: event.categoryName,
+          iconId: state.selectedIcon!.iconId,
+          categoryType: event.categoryType);
       add(DatabaseInitialEvent());
+      add(ClearDatabaseEvent());
     });
     on<GetCreatedTransaction>((event, emit) async {
       await dbRepo.createTransaction(
@@ -82,7 +99,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       ));
     });
     on<GetMonthTransactions>((event, emit) {
-      emit(state.copyWith(mapTransactions: groupByTimeStampHelper(event.transactionsModels)));
+      emit(state.copyWith(
+          mapTransactions: groupByTimeStampHelper(event.transactionsModels)));
     });
     on<CategoriesForSearchEvent>((event, emit) async {
       await _getSearchCategories(emit);
@@ -99,7 +117,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       );
     });
     on<TransactionSearchEvent>((event, emit) async {
-      await _getSearchedTransactions(categoriesIds: [], emit: emit, searchedValue: event.searchedValue);
+      await _getSearchedTransactions(
+          categoriesIds: [], emit: emit, searchedValue: event.searchedValue);
 
       emit(state.copyWith(
         searchedValue: event.searchedValue,
@@ -109,8 +128,6 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       await _dragCategories(event.oldIndex, event.newIndex);
     });
     on<GetEditCategoryEvent>((event, emit) {
-
-
       emit(state.copyWith(editCategory: event.editCategory));
     });
     on<EditCategoryEvent>((event, emit) async {
@@ -123,34 +140,50 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       await _initial(emit);
     });
 
-    on<GetDateEventInc>((event, emit) async  {
-      final int firstDayOfMonth = DateTime.utc(event.dateTime.year, event.dateTime.month, 1).millisecondsSinceEpoch;
-      final int lastDayOfMonth = DateTime.utc(event.dateTime.year, event.dateTime.month + 1, 0).millisecondsSinceEpoch;
-      final List<TransactionModel> getRangeDate = await dbRepo.getRangeDateTransaction(firstDate: firstDayOfMonth, lastDate: lastDayOfMonth);
+    on<GetDateEventInc>((event, emit) async {
+      final int firstDayOfMonth =
+          DateTime.utc(event.dateTime.year, event.dateTime.month, 1)
+              .millisecondsSinceEpoch;
+      final int lastDayOfMonth = DateTime.utc(
+        event.dateTime.year,
+        event.dateTime.month + 1,
+      ).subtract(const Duration(minutes: 1)).millisecondsSinceEpoch;
+      final monthBalance = await dbRepo.monthBalance(
+          thisDate: firstDayOfMonth, lastDate: lastDayOfMonth);
+      final List<TransactionModel> getRangeDate =
+          await dbRepo.getRangeDateTransaction(
+              firstDate: firstDayOfMonth, lastDate: lastDayOfMonth);
       emit(state.copyWith(
-        selectedDate: event.dateTime,
+        selectedDateHome: event.dateTime,
         mapTransactions: groupByTimeStampHelper(getRangeDate),
-        balance: await dbRepo.monthBalance(thisDate: firstDayOfMonth, lastDate: lastDayOfMonth)
+        balance: monthBalance,
       ));
-
-
-
     });
 
+    on<ClearSearchList>((event, emit) async {
+      emit(state.copyWith(
+        selectedCategories: [],
+        categoriesForSearch: [],
+      ));
+      selectedCategories = [];
+    });
   }
 
-  static const IconModel zeroIcon = IconModel(iconId: -1, color: '', pathToIcon: '');
+  static const IconModel zeroIcon =
+      IconModel(iconId: -1, color: '', pathToIcon: '');
   static const TransactionsCategoriesModel zeroCategory =
-      TransactionsCategoriesModel(categoryId: -1, title: '', type: '', orderNum: -1, icon: zeroIcon);
+      TransactionsCategoriesModel(
+          categoryId: -1, title: '', type: '', orderNum: -1, icon: zeroIcon);
   DatabaseRepo dbRepo;
-  final List<int> selectedCategories = [];
+  List<int>? selectedCategories = [];
 
   Future<void> _initial(Emitter emit) async {
     final transactions = await dbRepo.getAllTransaction();
     final categories = await dbRepo.getCategories();
     final icons = await dbRepo.getAllIcons();
     final balance = await dbRepo.monthBalance(
-      thisDate: DateTime(DateTime.now().year, DateTime.now().month).millisecondsSinceEpoch,
+      thisDate: DateTime(DateTime.now().year, DateTime.now().month)
+          .millisecondsSinceEpoch,
       lastDate: DateTime(DateTime.now().year, DateTime.now().month + 1)
           .subtract(
             const Duration(days: 1),
@@ -160,8 +193,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
 
     emit(state.copyWith(
       icons: icons,
-      expensesCategories: categories.where((element) => element.type == 'Expenses').toList(),
-      incomeCategories: categories.where((element) => element.type == 'Income').toList(),
+      expensesCategories:
+          categories.where((element) => element.type == 'Expenses').toList(),
+      incomeCategories:
+          categories.where((element) => element.type == 'Income').toList(),
       balance: balance,
       transaction: transactions,
       mapTransactions: groupByTimeStampHelper(transactions),
@@ -170,19 +205,25 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     ));
   }
 
-  Future<void> _calendarSwitch({required String command, required Emitter emit, required int month}) async {
+  Future<void> _calendarSwitch(
+      {required String command,
+      required Emitter emit,
+      required int month}) async {
     switch (command) {
       case 'home':
-        final firstDate = DateTime(DateTime.now().year, month).millisecondsSinceEpoch;
+        final firstDate =
+            DateTime(DateTime.now().year, month).millisecondsSinceEpoch;
         final lastDate = DateTime(
           DateTime.now().year,
           month + 1,
         ).subtract(const Duration(days: 1)).millisecondsSinceEpoch;
-        final getRangeDate = await dbRepo.getRangeDateTransaction(firstDate: firstDate, lastDate: lastDate);
+        final getRangeDate = await dbRepo.getRangeDateTransaction(
+            firstDate: firstDate, lastDate: lastDate);
         emit(state.copyWith(
           activeMonth: month,
           mapTransactions: groupByTimeStampHelper(getRangeDate),
-          balance: await dbRepo.monthBalance(thisDate: firstDate, lastDate: lastDate),
+          balance: await dbRepo.monthBalance(
+              thisDate: firstDate, lastDate: lastDate),
         ));
         break;
       case 'statistics':
@@ -200,11 +241,15 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       case 'home':
         switch (command) {
           case 'increment':
-            final thisDate = DateTime(DateTime.now().year, state.activeMonth + 1).millisecondsSinceEpoch;
-            final lastDate = DateTime(DateTime.now().year, state.activeMonth + 2)
-                .subtract(const Duration(days: 1))
-                .millisecondsSinceEpoch;
-            final getRangeDate = await dbRepo.getRangeDateTransaction(firstDate: thisDate, lastDate: lastDate);
+            final thisDate =
+                DateTime(DateTime.now().year, state.activeMonth + 1)
+                    .millisecondsSinceEpoch;
+            final lastDate =
+                DateTime(DateTime.now().year, state.activeMonth + 2)
+                    .subtract(const Duration(days: 1))
+                    .millisecondsSinceEpoch;
+            final getRangeDate = await dbRepo.getRangeDateTransaction(
+                firstDate: thisDate, lastDate: lastDate);
             emit(state.copyWith(
               activeMonth: state.activeMonth + 1,
               mapTransactions: groupByTimeStampHelper(getRangeDate),
@@ -217,7 +262,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
             break;
 
           case 'decrement':
-            final thisDate = DateTime(DateTime.now().year, state.activeMonth - 1).millisecondsSinceEpoch;
+            final thisDate =
+                DateTime(DateTime.now().year, state.activeMonth - 1)
+                    .millisecondsSinceEpoch;
             final lastDate = DateTime(DateTime.now().year, state.activeMonth)
                 .subtract(const Duration(days: 1))
                 .millisecondsSinceEpoch;
@@ -228,7 +275,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
             emit(state.copyWith(
               activeMonth: state.activeMonth - 1,
               mapTransactions: groupByTimeStampHelper(getRangeDate),
-              balance: await dbRepo.monthBalance(thisDate: thisDate, lastDate: lastDate),
+              balance: await dbRepo.monthBalance(
+                  thisDate: thisDate, lastDate: lastDate),
             ));
 
             break;
@@ -281,10 +329,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   }
 
   void _selectedCategory(int categoryId, Emitter emit) {
-    if (selectedCategories.contains(categoryId)) {
-      selectedCategories.remove(categoryId);
+    if (selectedCategories!.contains(categoryId)) {
+      selectedCategories!.remove(categoryId);
     } else {
-      selectedCategories.add(categoryId);
+      selectedCategories!.add(categoryId);
     }
     emit(state.copyWith(selectedCategories: selectedCategories));
   }
@@ -294,7 +342,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     required Emitter emit,
     required String searchedValue,
   }) async {
-    final transactions = await dbRepo.getSearchedTransaction(categoriesIds, searchedValue);
+    final transactions =
+        await dbRepo.getSearchedTransaction(categoriesIds, searchedValue);
     emit(state.copyWith(
       mapTransactions: groupByTimeStampHelper(transactions),
     ));

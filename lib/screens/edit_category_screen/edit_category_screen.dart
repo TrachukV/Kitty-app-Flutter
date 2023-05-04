@@ -1,13 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:kitty_app/blocs/database_bloc/database_bloc.dart';
 import 'package:kitty_app/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:kitty_app/generated/locale_keys.g.dart';
 import 'package:kitty_app/resources/app_colors.dart';
 import 'package:kitty_app/resources/app_text_styles.dart';
 import 'package:kitty_app/screens/create_category_screen/create_category_screen.dart';
+import 'package:kitty_app/screens/widgets/icon_view.dart';
 
 class EditCategoryScreen extends StatelessWidget {
   const EditCategoryScreen({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class EditCategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController _categoryController = TextEditingController();
     PersistentBottomSheetController? _bottomSheetController;
+    TextEditingController realTimeController = TextEditingController();
 
     void _closeBottomSheet() {
       if (_bottomSheetController != null) {
@@ -28,6 +30,7 @@ class EditCategoryScreen extends StatelessWidget {
     final double height = MediaQuery.of(context).size.height;
     return BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, state) {
+        realTimeController = _categoryController;
         return Scaffold(
           floatingActionButton: ValueListenableBuilder(
             valueListenable: _categoryController,
@@ -92,7 +95,7 @@ class EditCategoryScreen extends StatelessWidget {
                   height: height / 20,
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
@@ -112,17 +115,23 @@ class EditCategoryScreen extends StatelessWidget {
                               );
                             });
                       },
-                      child: SvgPicture.asset(
-                        state.selectedIcon!.pathToIcon.isEmpty
+                      child: IconView(
+                        icon: state.selectedIcon!.pathToIcon.isEmpty
                             ? state.editCategory!.icon.pathToIcon
                             : state.selectedIcon!.pathToIcon,
+                        color: state.selectedIcon!.pathToIcon.isEmpty
+                            ? state.editCategory!.icon.color
+                            : state.selectedIcon!.color,
                       ),
+
                     ),
                     SizedBox(
                       height: height / 12,
                       width: width / 1.5,
                       child: TextFormField(
-                        controller: _categoryController..text = state.editCategory!.title,
+                        controller: realTimeController.text.isNotEmpty
+                            ? realTimeController
+                            : (_categoryController..text = state.editCategory!.title),
                         textInputAction: TextInputAction.go,
                         style: AppTextStyles.blackRegular,
                         decoration: InputDecoration(
